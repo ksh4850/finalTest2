@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 	
+ 	<typeAliases>
+ 		<typeAlias alias="CorpDTO" type="com.finalproj.missingitnow.system.model.dto.CorpDTO"/>
+ 		<typeAlias alias="CorpLvDTO" type="com.finalproj.missingitnow.system.model.dto.CorpLvDTO"/>
+ 		<typeAlias alias="CorpPageDTO" type="com.finalproj.missingitnow.system.model.dto.CorpPageDTO"/>
+ 		<typeAlias alias="DepositDTO" type="com.finalproj.missingitnow.system.model.dto.DepositDTO"/>
+ 		<typeAlias alias="DepositPageDTO" type="com.finalproj.missingitnow.system.model.dto.DepositPageDTO"/>
+ 		<typeAlias alias="OrderDTO" type="com.finalproj.missingitnow.system.model.dto.OrderDTO"/>
+ 		<typeAlias alias="ProductDTO" type="com.finalproj.missingitnow.system.model.dto.ProductDTO"/>
+ 		<typeAlias alias="UserDTO" type="com.finalproj.missingitnow.system.model.dto.UserDTO"/>
+ 		<typeAlias alias="CategoryDTO" type="com.finalproj.missingitnow.system.model.dto.CategoryDTO"/>
+ 		<typeAlias alias="OrderPageDTO" type="com.finalproj.missingitnow.system.model.dto.OrderPageDTO"/>
+ 		<typeAlias alias="CorpSellPageDTO" type="com.finalproj.missingitnow.system.model.dto.CorpSellPageDTO"/>
+ 		
+ 	</typeAliases>
+ </configuration>
