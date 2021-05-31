@@ -611,7 +611,103 @@
 	</select>
 	
 	
+	<select id="selectAjaxDaySalseInfo" resultMap="daysalseResultMAp" parameterType="CorpSellPageDTO">
+		SELECT 
+		       C.DATE2  SUM_DATE
+			 , NVL(SUM_PRICE,0) SUM_PRICE
+		  FROM (SELECT
+			            TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD')  DATE1
+			          , SUM(A.ORDER_PRICE) AS SUM_PRICE
+			        FROM TBL_ORDER A
+			        JOIN TBL_CORP_USER D ON(A.CORP_NO =  D.CORP_NO)
+			        WHERE A.DEALING_STATUS = '완료'
+				    <if test="condition == 'corpNo'">
+					  AND D.CORP_NO LIKE '%' || #{ corpSellText } || '%'
+				    </if>
+					<if test="condition == 'corpId'">
+					  AND D.CORP_ID LIKE '%' || #{ corpSellText } || '%'
+					</if>
+				    <if test="condition == 'corpName'">
+					  AND D.CORP_NAME LIKE '%' || #{ corpSellText } || '%'
+					</if> 
+			        AND A.ORDER_STATUS = 'Y'
+			         <![CDATA[
+			        AND TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD') >= TO_CHAR(TO_DATE(#{startDate},'YYYY-MM-DD') , 'YYYY-MM-DD')
+			        AND  TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD') <=TO_CHAR(TO_DATE(#{endDate},'YYYY-MM-DD') , 'YYYY-MM-DD')
+			        GROUP BY TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD')  
+			        )B
+			     ,
+			      (SELECT TO_CHAR( TO_DATE(#{startDate},'YYYY-MM-DD') + LEVEL - 1 ,'YYYY-MM-DD')  DATE2
+			           FROM dual 
+			        CONNECT BY LEVEL <= ( TO_DATE(#{endDate} ,'YYYY-MM-DD') +1 )
+			                            - ( TO_DATE(#{startDate} ,'YYYY-MM-DD') )  ) C 
+			WHERE C.DATE2 = B.DATE1(+) 
+					]]>
+			ORDER BY C.DATE2
+	</select>
 	
+		<select  id="selectAjaxProductTopInfo" resultMap="productTopInfoMap" parameterType="CorpSellPageDTO">
+		SELECT
+		      ROWNUM
+		   ,  D.P_NAME
+		   ,  D.P_COUNT
+		FROM(SELECT     
+			       C.PROD_NAME P_NAME
+			     , COUNT(A.PROD_NO) P_COUNT
+			  FROM TBL_ORDER A
+			   JOIN TBL_CORP_USER B ON(A.CORP_NO =  B.CORP_NO)
+			   JOIN TBL_PRODUCT C ON(A.PROD_NO = C.PROD_NO)
+			  WHERE A.DEALING_STATUS = '완료'
+				AND A.ORDER_STATUS = 'Y'
+			    <if test="condition == 'corpNo'">
+					AND B.CORP_NO LIKE '%' || #{ corpSellText } || '%'
+				</if>
+				<if test="condition == 'corpId'">
+					AND B.CORP_ID LIKE '%' || #{ corpSellText } || '%'
+				</if>
+				 <if test="condition == 'corpName'">
+					 AND B.CORP_NAME LIKE '%' || #{ corpSellText } || '%'
+				</if>  
+			    <![CDATA[
+			    AND TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD') >= TO_CHAR(TO_DATE(#{startDate},'YYYY-MM-DD') , 'YYYY-MM-DD')
+			    AND TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD') <= TO_CHAR(TO_DATE(#{endDate},'YYYY-MM-DD') , 'YYYY-MM-DD')
+			 GROUP BY C.PROD_NAME 
+			 ORDER BY P_COUNT DESC ) D
+		 WHERE ROWNUM <= 5
+				 ]]>
+	</select>
+	
+	<select  id="selectAjaxCategoryInfo" resultMap="categoryTopInfoMap" parameterType="CorpSellPageDTO">
+		SELECT
+		      ROWNUM
+		   ,  D.P_CATEGORY
+		   ,  D.P_COUNT
+		FROM(SELECT     
+			       F.PROD_CTG_NAME P_CATEGORY
+			     , COUNT(A.PROD_NO) P_COUNT
+			  FROM TBL_ORDER A
+			   JOIN TBL_CORP_USER B ON(A.CORP_NO =  B.CORP_NO)
+			   JOIN TBL_PRODUCT C ON(A.PROD_NO = C.PROD_NO)
+			   JOIN TBL_PROD_CATEGORY F ON (C.PROD_CTG_NO =F.PROD_CTG_NO)
+			  WHERE A.DEALING_STATUS = '완료'
+				AND A.ORDER_STATUS = 'Y'
+			    <if test="condition == 'corpNo'">
+					AND B.CORP_NO LIKE '%' || #{ corpSellText } || '%'
+				</if>
+				<if test="condition == 'corpId'">
+					AND B.CORP_ID LIKE '%' || #{ corpSellText } || '%'
+				</if>
+				 <if test="condition == 'corpName'">
+					 AND B.CORP_NAME LIKE '%' || #{ corpSellText } || '%'
+				</if>  
+			    <![CDATA[
+			    AND TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD') >= TO_CHAR(TO_DATE(#{startDate},'YYYY-MM-DD') , 'YYYY-MM-DD')
+			    AND TO_CHAR(A.ORDER_DATE,'YYYY-MM-DD') <= TO_CHAR(TO_DATE(#{endDate},'YYYY-MM-DD') , 'YYYY-MM-DD')
+				GROUP BY  F.PROD_CTG_NAME
+				ORDER BY P_COUNT DESC ) D
+		 	WHERE ROWNUM <= 5
+				 ]]>
+	</select>
 	
 	
 

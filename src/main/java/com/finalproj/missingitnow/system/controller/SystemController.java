@@ -1,6 +1,7 @@
 package com.finalproj.missingitnow.system.controller;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -169,7 +170,7 @@ public class SystemController {
 		return "system/deposit";
 	}
 	
-	@GetMapping("orderInfo")
+	@GetMapping("orderInfo" )
 	public String getSelectOrderInfo(Model model, @ModelAttribute OrderPageDTO orderPage) {
 		
 //		System.out.println(orderPage.getStartDate());
@@ -224,7 +225,7 @@ public class SystemController {
 		
 		orderPage.setPageInfo(Pagenation.getPageInfo(pageNo, totalCount, limit, buttonAmount));
 
-		System.out.println(orderPage);
+//		System.out.println(orderPage);
 		
 	
 		model.addAttribute("orderList", systemService.selectSystemOrderInfo(orderPage));
@@ -237,14 +238,14 @@ public class SystemController {
 		return "system/orderInfo";
 	}
 	
-	@GetMapping("corpSalesInfo")
+	@GetMapping(value="corpSalesInfo" , produces="application/json; charset=UTF-8")
 	public String getSelectCorpSalesInfo(Model model , @ModelAttribute CorpSellPageDTO corpSellPage ) {
 		
+//		System.out.println(corpSellPage.getStartDate());
+//		System.out.println(corpSellPage.getEndDate());
+//		System.out.println(corpSellPage.getCondition());
+//		System.out.println(corpSellPage.getCorpSellText());
 		
-		System.out.println(corpSellPage.getStartDate());
-		System.out.println(corpSellPage.getEndDate());
-		System.out.println(corpSellPage.getCondition());
-		System.out.println(corpSellPage.getCorpSellText());
 		
 		if(corpSellPage.getStartDate() == null ) {
 			
@@ -271,40 +272,140 @@ public class SystemController {
 		
 		int todaySalse =  systemService.selectTodaySalse(corpSellPage);
 		
-		System.out.println(todaySalse);
+//		System.out.println(todaySalse);
 		
 		int oneMonthSalse = systemService.selectOneMonthSalse(corpSellPage);
 		
-		System.out.println(oneMonthSalse);
+//		System.out.println(oneMonthSalse);
 		
 		
 		List<Map<String , String>> daySalseInfo = systemService.selectDaySalseInfo(corpSellPage);
 		
 		
-		System.out.println(daySalseInfo);
+//		System.out.println(daySalseInfo);
 		
-		List<Map<String, String>> productTopInfo = systemService.selectProductTopInfo(corpSellPage);
+		List<Map<String, Object>> productTopInfo = systemService.selectProductTopInfo(corpSellPage);
+		
+		int ptopSize = 5 - productTopInfo.size() ;
+		
+		Map<String ,Object> addMap =  null;
+		
+		if(ptopSize > 0 ) {
+			for(int i =0; i < ptopSize ; i++) {
+				 addMap =new HashMap<>();
+				 addMap.put("productName", "");
+				 addMap.put("productCount", 0);
+				 
+				 productTopInfo.add(addMap);
+			}
+		}
 		
 		
-		System.out.println(productTopInfo);
+//		System.out.println(productTopInfo);
 		
-		List<Map<String,String>> categoryTopInfo = systemService.selectCategoryInfo(corpSellPage);
+		List<Map<String,Object>> categoryTopInfo = systemService.selectCategoryInfo(corpSellPage);
 		
-		System.out.println(categoryTopInfo);
 		
+		int ctopSize = 5 - categoryTopInfo.size() ;
+
+				if(ctopSize > 0 ) {
+					for(int i =0; i < ctopSize ; i++) {
+						 addMap =new HashMap<>();
+						 addMap.put("categoryName", "");
+						 addMap.put("categoryCount", 0);
+						 
+						 categoryTopInfo.add(addMap);
+					}
+				}
+		
+		
+//		System.out.println("인초"+categoryTopInfo );
+		
+		Map<String ,Object> map = new HashMap<>();
+		
+		map.put("daySalseInfo", daySalseInfo);
+		map.put("productTopInfo", productTopInfo);
+		map.put("categoryTopInfo", categoryTopInfo);
+		
+		 String selseJson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setPrettyPrinting().create().toJson(map);
+		
+//		 System.out.println(selseJson); 
 		
 		model.addAttribute("todaySalse",todaySalse);
 		model.addAttribute("oneMonthSalse",oneMonthSalse);
 		model.addAttribute("daySalseInfo",daySalseInfo);
 		model.addAttribute("productTopInfo",productTopInfo);
 		model.addAttribute("categoryTopInfo",categoryTopInfo);
+		model.addAttribute("selseJson",selseJson);
 		model.addAttribute("corpSellPage",corpSellPage);
 		
-		
-		
-		
-		
 		return "system/corpSalesInfo";
+	}
+	
+	
+	
+	@GetMapping(value="ajaxSalseInfo" , produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxSalseInfo(@ModelAttribute CorpSellPageDTO corpSellPage) {
+		
+		System.out.println(corpSellPage.getStartDate());
+		System.out.println(corpSellPage.getEndDate());
+		System.out.println(corpSellPage.getCondition());
+		System.out.println(corpSellPage.getCorpSellText());
+		
+		
+       List<Map<String , String>> daySalseInfo = systemService.selectAjaxDaySalseInfo(corpSellPage);
+		
+		
+//		System.out.println(daySalseInfo);
+		
+		List<Map<String, Object>> productTopInfo = systemService.selectAjaxProductTopInfo(corpSellPage);
+		
+		int ptopSize = 5 - productTopInfo.size() ;
+		
+		Map<String ,Object> addMap =  null;
+		
+		if(ptopSize > 0 ) {
+			for(int i =0; i < ptopSize ; i++) {
+				 addMap =new HashMap<>();
+				 addMap.put("productName", "");
+				 addMap.put("productCount", 0);
+				 
+				 productTopInfo.add(addMap);
+			}
+		}
+		
+		
+//		System.out.println(productTopInfo);
+		
+		List<Map<String,Object>> categoryTopInfo = systemService.selectAjaxCategoryInfo(corpSellPage);
+		
+		
+		int ctopSize = 5 - categoryTopInfo.size() ;
+
+				if(ctopSize > 0 ) {
+					for(int i =0; i < ctopSize ; i++) {
+						 addMap =new HashMap<>();
+						 addMap.put("categoryName", "");
+						 addMap.put("categoryCount", 0);
+						 
+						 categoryTopInfo.add(addMap);
+					}
+				}
+		
+		
+//		System.out.println("인초"+categoryTopInfo );
+		
+		Map<String ,Object> map = new HashMap<>();
+		
+		map.put("daySalseInfo", daySalseInfo);
+		map.put("productTopInfo", productTopInfo);
+		map.put("categoryTopInfo", categoryTopInfo);
+		
+		String selseJson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setPrettyPrinting().create().toJson(map);
+		System.out.println(selseJson);
+		
+		return selseJson;
 	}
 
 	

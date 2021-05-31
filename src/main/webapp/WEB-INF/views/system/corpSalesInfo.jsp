@@ -235,7 +235,7 @@
             
             
             <select name="condition" id="condition">
-                <option value="" <c:if test="${empty corpSellPage.condition }">selected</c:if> >전체<option>
+                <option value=""<c:if test="${empty corpSellPage.condition }">selected</c:if> >전체</option>
                 <option value="corpNo" <c:if test="${ corpSellPage.condition eq 'corpNo' }">selected</c:if> >기업회원번호</option>
                 <option value="corpId" <c:if test="${ corpSellPage.condition eq 'corpId'}">selected</c:if> >기업회원ID</option>
                 <option value="corpName" <c:if test="${ corpSellPage.condition eq 'corpName' }">selected</c:if> >회사이름</option>
@@ -434,7 +434,7 @@
 		var sysDate = dateformat(date);
 		var agoDate = dateformat(new Date(date.setDate(date.getDate() - 7)));
 		
-		console.log($("#startDate").val() == "")
+		
 		
 		if($("#startDate").val() == ""){
 			$("#startDate").val(agoDate);
@@ -473,166 +473,291 @@
 			var startDate = new Date( $(this).parent().find("#startDate").val());
 			var endDate =  new Date( $(this).parent().find("#endDate").val());
 			
+			
 			var startChangDate = dateformat(new Date(startDate.setDate(startDate.getDate() - 7)));
 			var endChangDate = dateformat(new Date(endDate.setDate(endDate.getDate() - 7)));
 			 
 			 $(this).parent().find("#startDate").val(startChangDate);
 			 $(this).parent().find("#endDate").val(endChangDate);
+			 
+			 
+			 ajaxSalseInfo(startChangDate , endChangDate);
 
 			
 		})
 		
+		
+		
+		
 		$("#nextweek").click(function(){
 			
-			var startDate = new Date( $(this).parent().find("#startDate").val());
-			var endDate =  new Date( $(this).parent().find("#endDate").val());
-			
-			
+			 var startDate = new Date( $(this).parent().find("#startDate").val());
+			 var endDate =  new Date( $(this).parent().find("#endDate").val());
 			
 			 var startChangDate = dateformat(new Date(startDate.setDate(startDate.getDate() + 7)));
 			 var endChangDate = dateformat(new Date(endDate.setDate(endDate.getDate() + 7)));
 			 
-			
-			 
 			 $(this).parent().find("#startDate").val(startChangDate);
 			 $(this).parent().find("#endDate").val(endChangDate);
 			
-			
+			 ajaxSalseInfo(startChangDate , endChangDate);
 			
 		})
+		
+		
+		
+	function ajaxSalseInfo(startChangDate ,endChangDate){
+			
+			var condition = $("#condition").val();
+			
+			var corpSellText = $("#corpSellText").val(); 
+			
+			/* console.log(startChangDate +" " +endChangDate + " " + condition + " " + corpSellText); */
+			
+			 $.ajax({
+          	   type:"GET",
+          	   url: "${ pageContext.servletContext.contextPath}/system/ajaxSalseInfo",
+          	   data: {startDate:startChangDate ,
+          		      endDate : endChangDate,
+          		      condition : condition,
+          		      corpSellText : corpSellText
+          		     },
+          	   success:function(data){
+          		   
+          		   
+          		  var $info1 =  $("#system-comSell-sellInfo3");
+          		  var $info2 =  $("#sellInfo4");
+          		  var $info3 =  $("#sellInfo5");
+          		  
+          		  $info1.html(""); 
+          		  $info2.html("");
+          		  /*$info3.html(""); */
+          		  
+          		 
+          		 google.charts.load('current', {'packages':['corechart']});
+          		 google.charts.setOnLoadCallback(drawDaySalseInfo1);
+          		 google.charts.setOnLoadCallback(drawDayProductTopInfo1);
+          		 google.charts.setOnLoadCallback(drawDayCategoryTopInfo1);
+          		  
+          		 function drawDaySalseInfo1() {
+          			 
+          	        console.log(data.daySalseInfo.length); 
+          	        
+          	      	
+          	      var data1 = new google.visualization.DataTable();
+
+	          	        data1.addColumn('string' , '일');
+	          	        data1.addColumn('number' , '매출');
+	          	        data1.addColumn({type:'string', role:'style'}); 
+	          	    		 
+	          	    		
+	          	       var arr = new Array();
+	          	       for(var i=0 ; i < data.daySalseInfo.length ; i++){
+	        				 arr[i] = [data.daySalseInfo[i].sumDate , data.daySalseInfo[i].sumPrice , 'color: #775eee'];
+	        					
+	        		    } 
+	          	       	 data1.addRows(arr); 
+	          	    		
+	
+	          	         var options1 = {
+	          	             title : '매출 내역',
+	          	             vAxis: {title: '매출(원)'},
+	          	             hAxis: {title: '일'},
+	          	             seriesType: 'bars',
+	          	           };
+	
+	          	        var chart = new google.visualization.ComboChart(document.getElementById('system-comSell-sellInfo3'));
+	          	        chart.draw(data1, options1);
+          	        
+          	      } 
+          		 
+          		 
+                
+                function drawDayProductTopInfo1() {
+                    
+               	 var data2 =  new google.visualization.DataTable();
+               		
+                    
+	                 data2.addColumn('string' , '상품명');
+	              	 data2.addColumn('number' , '판매수량');
+	              	 data2.addColumn({type:'string', role:'style'});    
+	                   
+	              	 var arr = new Array();
+	        	       for(var i=0 ; i < data.productTopInfo.length ; i++){
+	      				 arr[i] = [data.productTopInfo[i].productName ,data.productTopInfo[i].productCount , 'color: #775eee'];
+	      					
+	      		    	} 
+	        	     data2.addRows(arr);    	
+	                    	
+	                  var options2 = {
+	                      title : '상품 판매 순위',
+	                      vAxis: {title: '판매수량'},
+	                      hAxis: {title: '상품명'},
+	                      seriesType: 'bars',
+	                        
+	                      };
+	
+	                   var chart = new google.visualization.ComboChart(document.getElementById('sellInfo4'));
+	                   chart.draw(data2, options2);
+               }
+                
+                
+                
+                function drawDayCategoryTopInfo1() {
+          	     	  
+                	 var data3 = new google.visualization.DataTable();
+                	  data3.addColumn('string' , '카테고리명');
+ 	              	  data3.addColumn('number' , '판매수량');
+ 	              	  data3.addColumn({type:'string', role:'style'}); 
+                	 
+ 	              	  
+ 	              	 var arr = new Array();
+	        	       for(var i=0 ; i < data.categoryTopInfo.length ; i++){
+	      				 arr[i] = [data.categoryTopInfo[i].categoryName ,data.categoryTopInfo[i].categoryCount , 'color: #775eee'];
+	      					
+	      		    	} 
+	        	     data3.addRows(arr);
+                
+
+                       var options3 = {
+                         title : '카테고리별 판매 순위',
+                         vAxis: {title: '판매수량'},
+                         hAxis: {title: '카테고리명'},
+                         seriesType: 'bars',
+                         
+                        
+                       };
+
+                    var chart = new google.visualization.ComboChart(document.getElementById('sellInfo5'));
+                    chart.draw(data3, options3);
+                  }
+          		 
+
+          	   },
+          	   error:function(error){
+          		   console.log(error)
+          	   }
+             }) 
+			
+			
+		
+			
+		}
 		
 	  google.charts.load('current', {'packages':['corechart']});
       google.charts.setOnLoadCallback(drawDaySalseInfo);
       google.charts.setOnLoadCallback(drawDayProductTopInfo);
       google.charts.setOnLoadCallback(drawDayCategoryTopInfo);
       
+      
+     
+      
+     
+      
 
-      function drawDaySalseInfo() {
+      function drawDaySalseInfo( ) {
+ 
+        var selseJson =  ${selseJson}; 
         
-    	  
-    	 var endDate =  new Date( $(this).parent().find("#endDate").val());
-    	  
-    	 var data1 = google.visualization.arrayToDataTable([
-             ['일', '매출',  { role: 'style' }],
-            <c:choose>
-         	<c:when test="${empty daySalseInfo }">
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() - 6))),  0 ,'color: #775eee'],
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() - 5))),  0 ,'color: #775eee'],
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() - 4))),  0 ,'color: #775eee'],
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() - 3))),  0 ,'color: #775eee'],
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() - 2))),  0 ,'color: #775eee'],
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() - 1))),  0 ,'color: #775eee'],
-         	 [dateformat(new Date(startDate.setDate(startDate.getDate() ))),  0 ,'color: #775eee'],
-	         	
-         	</c:when>
-         	<c:otherwise>
-         	 <c:forEach var="info" items="${daySalseInfo}">
-            	 ["${info.sumDate}",  Number("${info.sumPrice}") ,'color: #775eee'],
-			   	      
-			  </c:forEach> 
-         	</c:otherwise>
-         </c:choose>
-            
-            
-           ]);
+        var data1 = new google.visualization.DataTable();
 
-           var options1 = {
-             title : '매출 내역',
-             vAxis: {title: '매출(원)'},
-             hAxis: {title: '일'},
-             seriesType: 'bars',
-             
-            
-           };
+	        data1.addColumn('string' , '일');
+	        data1.addColumn('number' , '매출');
+	        data1.addColumn({type:'string', role:'style'}); 
+	    		 
+	    		
+	       var arr = new Array();
+	       for(var i=0 ; i < selseJson.daySalseInfo.length ; i++){
+			 arr[i] = [selseJson.daySalseInfo[i].sumDate , selseJson.daySalseInfo[i].sumPrice , 'color: #775eee'];
+				
+	    } 
+	       	 data1.addRows(arr); 
+	    		
 
-        var chart = new google.visualization.ComboChart(document.getElementById('system-comSell-sellInfo3'));
-        chart.draw(data1, options1);
+	         var options1 = {
+	             title : '매출 내역',
+	             vAxis: {title: '매출(원)'},
+	             hAxis: {title: '일'},
+	             seriesType: 'bars',
+	           };
+
+	        var chart = new google.visualization.ComboChart(document.getElementById('system-comSell-sellInfo3'));
+	        chart.draw(data1, options1);
+        
       }
+      
+      
+     
       
       function drawDayProductTopInfo() {
           
-    	  
-     	
-     	  
-     	 var data2 = google.visualization.arrayToDataTable([
-              ['일', '상품명',  { role: 'style' }],
-           <c:choose>
-          	<c:when test="${empty productTopInfo }">
-          	
-          	[ 1+"번 상품" ,  0 ,'color: #775eee'],
-          	[ 2+"번 상품" ,  0 ,'color: #775eee'],
-          	[ 3+"번 상품" ,  0 ,'color: #775eee'],
-          	[ 4+"번 상품" ,  0 ,'color: #775eee'],
-          	[ 5+"번 상품" ,  0 ,'color: #775eee'],
-          	
-          	</c:when>
-          	<c:otherwise>
-          	
-          	 <c:forEach var="info" items="${productTopInfo}">
-             	 ["${info.productName}",  Number("${info.productCount}") ,'color: #775eee'],
- 			   	      
- 			  </c:forEach> 
-             	 
-          	</c:otherwise>
-          </c:choose>
-
-            ]);
-
-            var options2 = {
+    	 var selseJson =  ${selseJson};
+    	 
+    	 var data2 =  new google.visualization.DataTable();
+    		
+         
+         data2.addColumn('string' , '상품명');
+      	 data2.addColumn('number' , '판매수량');
+      	 data2.addColumn({type:'string', role:'style'});    
+           
+      	 var arr = new Array();
+	       for(var i=0 ; i < selseJson.productTopInfo.length ; i++){
+				 arr[i] = [selseJson.productTopInfo[i].productName , selseJson.productTopInfo[i].productCount , 'color: #775eee'];
+					
+		    	} 
+	     data2.addRows(arr);    	
+            	
+          var options2 = {
               title : '상품 판매 순위',
               vAxis: {title: '판매수량'},
               hAxis: {title: '상품명'},
               seriesType: 'bars',
-              
-             
-            };
+                
+              };
 
-         var chart = new google.visualization.ComboChart(document.getElementById('sellInfo4'));
-         chart.draw(data2, options2);
+           var chart = new google.visualization.ComboChart(document.getElementById('sellInfo4'));
+           chart.draw(data2, options2);
+     	
        }
       
       
       function drawDayCategoryTopInfo() {
           
+    	  var selseJson =  ${selseJson}; 
     	  
-       	
-     	  
-      	 var data2 = google.visualization.arrayToDataTable([
-               ['일', '상품명',  { role: 'style' }],
-            <c:choose>
-           	<c:when test="${empty categoryTopInfo }">
-           	
-           	[ 1+"번 상품" ,  0 ,'color: #775eee'],
-           	[ 2+"번 상품" ,  0 ,'color: #775eee'],
-           	[ 3+"번 상품" ,  0 ,'color: #775eee'],
-           	[ 4+"번 상품" ,  0 ,'color: #775eee'],
-           	[ 5+"번 상품" ,  0 ,'color: #775eee'],
-           	
-           	</c:when>
-           	<c:otherwise>
-           	
-           	 <c:forEach var="info" items="${categoryTopInfo}">
-              	 ["${info.categoryName}",  Number("${info.categoryCount}") ,'color: #775eee'],
-  			   	      
-  			  </c:forEach> 
-              	 
-           	</c:otherwise>
-           </c:choose>
+    	  var data3 = new google.visualization.DataTable();
+    	  data3.addColumn('string' , '카테고리명');
+       	  data3.addColumn('number' , '판매수량');
+       	  data3.addColumn({type:'string', role:'style'}); 
+    	 
+       	  
+       	 var arr = new Array();
+	       for(var i=0 ; i < selseJson.categoryTopInfo.length ; i++){
+				 arr[i] = [selseJson.categoryTopInfo[i].categoryName ,selseJson.categoryTopInfo[i].categoryCount , 'color: #775eee'];
+					
+		    	} 
+	     data3.addRows(arr);
+    
 
-             ]);
+           var options3 = {
+             title : '카테고리별 판매 순위',
+             vAxis: {title: '판매수량'},
+             hAxis: {title: '카테고리명'},
+             seriesType: 'bars',
+             
+            
+           };
 
-             var options2 = {
-               title : '카테고리별 판매 순위',
-               vAxis: {title: '판매수량'},
-               hAxis: {title: '카테고리명'},
-               seriesType: 'bars',
-               
-              
-             };
-
-          var chart = new google.visualization.ComboChart(document.getElementById('sellInfo5'));
-          chart.draw(data2, options2);
+        var chart = new google.visualization.ComboChart(document.getElementById('sellInfo5'));
+        chart.draw(data3, options3);
+	     	  
         }
+      
+      
+      
+      
+      
+      
 		
 		
        

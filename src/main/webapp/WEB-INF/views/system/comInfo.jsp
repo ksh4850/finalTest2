@@ -179,7 +179,7 @@
                    	<c:if test="${corp.corpRegstAccpeted eq 'N' }">
                      	<td><input type="button" class="RegstAccpet" value="승인하기"></td>
                    	</c:if>
-                     <td><input type="button" class="corpModify" value="회원정보 수정">
+                     <td><input type="button" class="corpSalesInfoBtn" value="기업 매출 정보">
                         <input type="button" class="corpOrderInfo" value="주문내역">
                         <input type="button" class="corpSettlement" value="정산내역">
                         <input type="button" class="corpDepositInfo" value="예치금내역">
@@ -278,6 +278,13 @@
 		var corpId = $(this).parent().parent().children().eq(1).text();
 		
 		location.href = "${ pageContext.servletContext.contextPath }/system/orderInfo?condition=corpId&orderInfoText=" + corpId;
+	})
+	
+	$(document).on('click',".corpSalesInfoBtn" , function(){
+		
+		var corpNo = $(this).parent().parent().children().eq(0).text();
+		
+		location.href = "${ pageContext.servletContext.contextPath }/system/corpSalesInfo?condition=corpNo&corpSellText=" + corpNo;
 	})
 	
 	
