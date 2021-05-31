@@ -428,23 +428,19 @@
 			}) */
 			
 			
-			 $(function(){
-		var date = new Date();
-		
-		var sysDate = dateformat(date);
-		var agoDate = dateformat(new Date(date.setDate(date.getDate() - 7)));
-		
-		
-		
-		if($("#startDate").val() == ""){
-			$("#startDate").val(agoDate);
-		}
-		
-		if($("#endDate").val() == ""){
-			$("#endDate").val(sysDate);
-		}
-		
-		
+		 $(function(){
+			var date = new Date();
+			
+			var sysDate = dateformat(date);
+			var agoDate = dateformat(new Date(date.setDate(date.getDate() - 7)));
+			
+			if($("#startDate").val() == ""){
+				$("#startDate").val(agoDate);
+			}
+			
+			if($("#endDate").val() == ""){
+				$("#endDate").val(sysDate);
+			}
 		
 		})
 		
@@ -512,8 +508,6 @@
 			
 			var corpSellText = $("#corpSellText").val(); 
 			
-			/* console.log(startChangDate +" " +endChangDate + " " + condition + " " + corpSellText); */
-			
 			 $.ajax({
           	   type:"GET",
           	   url: "${ pageContext.servletContext.contextPath}/system/ajaxSalseInfo",
@@ -531,7 +525,7 @@
           		  
           		  $info1.html(""); 
           		  $info2.html("");
-          		  /*$info3.html(""); */
+          		  $info3.html(""); 
           		  
           		 
           		 google.charts.load('current', {'packages':['corechart']});
@@ -649,12 +643,6 @@
       google.charts.setOnLoadCallback(drawDayProductTopInfo);
       google.charts.setOnLoadCallback(drawDayCategoryTopInfo);
       
-      
-     
-      
-     
-      
-
       function drawDaySalseInfo( ) {
  
         var selseJson =  ${selseJson}; 
