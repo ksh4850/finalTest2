@@ -57,7 +57,8 @@
 			advice-ref="txAdvice" />
 	</aop:config> 
 	
-	  <mybatis-spring:scan base-package="com.finalproj.missingitnow.system.model.dao" />
+	  <mybatis-spring:scan base-package="com.finalproj.missingitnow.system.model.dao,
+	  									com.finalproj.missingitnow.communty.model.dao" />
 	 		
 </beans>
 

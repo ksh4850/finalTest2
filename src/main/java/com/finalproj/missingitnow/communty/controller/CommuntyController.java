@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +22,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
+import com.finalproj.missingitnow.communty.model.service.CommuntyService;
 import com.google.gson.GsonBuilder;
 
 @Controller
 @RequestMapping("/communty/*")
 public class CommuntyController {
+	
+	private final CommuntyService communtyService;
+	
+	@Autowired
+	public CommuntyController(CommuntyService communtyService) {
+		this.communtyService = communtyService;
+	}
+	
 	
 	@GetMapping("communtyRegist")
 	public String getCommuntyRegist() {
