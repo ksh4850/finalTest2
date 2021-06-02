@@ -148,6 +148,10 @@
             top: 10px;
         }
         
+        #imgName{
+        	display: none;
+        }
+        
  
 
     </style>
@@ -246,11 +250,11 @@
                 <input type="button" name="" id="postSubmit" value="등록하기">
             </div>
 
-
-
+				<input type="text" name="imgName" id="imgName" >
+				<input type="file" name="imgfile" id="imgfile" multiple>
         </form>
         
-        <input type="file" name="imgfile" id="imgfile" multiple>
+        
     </section>
     
     
@@ -321,8 +325,6 @@
 							$thumDiv.append($thumbImg).append($itag2);
 							$thumb.append($thumDiv);
 							
-							/* $detail.append($('<img class="detailImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].saveName).css("width","500px").css("height","500px"));   
-							$thumb.append($('<img class="thumbImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].saveName).css("width","120px").css("height","120px"));    */
 						} 
 						
 						
@@ -338,10 +340,41 @@
        	 var $re =  $("#detail").html();
        	 $("#postDetail").val($re); 
        	 var txt = $("#postDetail").val();
-       	 console.log(txt); 
+       	 
+       	var arr = new Array() ;
+      	 $(".detailImg").filter(function(){
+      		var i = $(this).attr("src");
+      		var re = i.substring(i.lastIndexOf("/"));
+      		
+      		arr.push(re.substring(1));         
+        }) 
+        
+     console.log(arr);
+       	 
+       	 $("#imgName").val(arr);
+       	 console.log($("#imgName").val());
        	 
        	 $("#communtyRegist").submit();
 
+        })
+        
+        $("#tt").click(function(){
+        	 console.log("하이!!!"); 
+			
+        	 /* originFileName.substring(originFileName.lastIndexOf(".")) */
+        	 
+        	 var arr = new Array() ;
+           	 $(".detailImg").filter(function(){
+           		var i = $(this).attr("src");
+           		var re = i.substring(i.lastIndexOf("/"));
+           		
+           		arr.push(re.substring(1));         
+             }) 
+             
+          console.log(arr);
+           	 
+           	 $("#imgName").val(arr);
+           	 console.log($("#imgName").val());
         })
         
         $(document).on('click',".thum-div i" , function(){

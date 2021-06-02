@@ -43,21 +43,23 @@ public class CommuntyController {
 	}
 	
 	@PostMapping("communtyRegist")
-	public String postCommuntyRegist(@ModelAttribute SPostDTO postDTO ,Model model) {
+	public void postCommuntyRegist(@ModelAttribute SPostDTO postDTO ,Model model ,@RequestParam String imgName ) {
 		
 		System.out.println(postDTO.getHousingType());
 		System.out.println(postDTO.getAcreage());
 		System.out.println(postDTO.getResidenceType());
 		System.out.println(postDTO.getCost());
 		System.out.println(postDTO.getPostDetail());
+		System.out.println(imgName);
+		
+		String[] fileNames= imgName.split(",");
 		
 		
 		model.addAttribute("postDTO",postDTO);
 		
 		
 		
-		
-		return "communty/test";
+//		return "communty/test";
 		
 	}
 	
@@ -130,7 +132,7 @@ public class CommuntyController {
 	
 	@GetMapping(value="ajaxDelete" , produces ="text/plain; charset=UTF-8")
 	@ResponseBody
-	public String getAjaxImgDelete(@RequestParam String saveName , HttpServletRequest request) {
+	public String getAjaxImgDelete(@RequestParam String saveName , HttpServletRequest request ) {
 		
 		
 		
