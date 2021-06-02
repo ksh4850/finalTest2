@@ -2,21 +2,21 @@ package com.finalproj.missingitnow.system.model.dto;
 
 import java.sql.Date;
 
-public class DepositDTO {
+public class SDepositDTO {
 	
 	
 	private String depositNo;
-	private CorpDTO corp;
+	private SCorpDTO corp;
 	private String depositSort;
 	private int amount;
 	private java.sql.Date depositDate;
 	private String depositDetails;
 	
-	public DepositDTO() {
+	public SDepositDTO() {
 		
 	}
 	
-	public DepositDTO(String depositNo, CorpDTO corp, String depositSort, int amount, Date depositDate,
+	public SDepositDTO(String depositNo, SCorpDTO corp, String depositSort, int amount, Date depositDate,
 			String depositDetails) {
 		super();
 		this.depositNo = depositNo;
@@ -32,10 +32,10 @@ public class DepositDTO {
 	public void setDepositNo(String depositNo) {
 		this.depositNo = depositNo;
 	}
-	public CorpDTO getCorp() {
+	public SCorpDTO getCorp() {
 		return corp;
 	}
-	public void setCorp(CorpDTO corp) {
+	public void setCorp(SCorpDTO corp) {
 		this.corp = corp;
 	}
 	public String getDepositSort() {

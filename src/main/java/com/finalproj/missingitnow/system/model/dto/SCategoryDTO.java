@@ -1,15 +1,15 @@
 package com.finalproj.missingitnow.system.model.dto;
 
-public class CategoryDTO {
+public class SCategoryDTO {
 	
 	private String prodCtgNo;
 	private String prodCtgName;
 	
-	public CategoryDTO() {
+	public SCategoryDTO() {
 		
 	}
 	
-	public CategoryDTO(String prodCtgNo, String prodCtgName) {
+	public SCategoryDTO(String prodCtgNo, String prodCtgName) {
 		super();
 		this.prodCtgNo = prodCtgNo;
 		this.prodCtgName = prodCtgName;

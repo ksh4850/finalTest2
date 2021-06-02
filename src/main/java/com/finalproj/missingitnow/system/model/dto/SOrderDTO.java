@@ -2,11 +2,11 @@ package com.finalproj.missingitnow.system.model.dto;
 
 import java.sql.Timestamp;
 
-public class OrderDTO {
+public class SOrderDTO {
 	
 	private String orderNo;
-	private CorpDTO corp;
-	private ProductDTO product;
+	private SCorpDTO corp;
+	private SProductDTO product;
 	private UserDTO user;
 	private int orderPrice;
 	private String dealingStatus;
@@ -14,11 +14,11 @@ public class OrderDTO {
 	private int quantity;
 	private java.sql.Timestamp orderDate;
 	
-	public OrderDTO() {
+	public SOrderDTO() {
 		
 	}
 
-	public OrderDTO(String orderNo, CorpDTO corp, ProductDTO product, UserDTO user, int orderPrice,
+	public SOrderDTO(String orderNo, SCorpDTO corp, SProductDTO product, UserDTO user, int orderPrice,
 			String dealingStatus, String orderStatus, int quantity, Timestamp orderDate) {
 		super();
 		this.orderNo = orderNo;
@@ -40,19 +40,19 @@ public class OrderDTO {
 		this.orderNo = orderNo;
 	}
 
-	public CorpDTO getCorp() {
+	public SCorpDTO getCorp() {
 		return corp;
 	}
 
-	public void setCorp(CorpDTO corp) {
+	public void setCorp(SCorpDTO corp) {
 		this.corp = corp;
 	}
 
-	public ProductDTO getProduct() {
+	public SProductDTO getProduct() {
 		return product;
 	}
 
-	public void setProduct(ProductDTO product) {
+	public void setProduct(SProductDTO product) {
 		this.product = product;
 	}
 

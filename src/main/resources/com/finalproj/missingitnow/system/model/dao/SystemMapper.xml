@@ -4,7 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.finalproj.missingitnow.system.model.dao.SystemMapper">
 
-	<resultMap type="CorpDTO" id="corpResultMap">
+	<resultMap type="SCorpDTO" id="ScorpResultMap">
 		<id property="corpNo" column="CORP_NO"/>
 		<result property="corpId" column="CORP_ID"/>
 		<result property="corpPwd" column="CORP_PWD"/>
@@ -18,15 +18,15 @@
 		<result property="corpRegstDate" column="CORP_REGST_DATE"/>
 		<result property="corpRegstAccpeted" column="CORP_REGST_ACCPETED"/>
 		<result property="corpLeaveChk" column="CORP_LEAVE_CHK"/>
-		<association property="corpLv" resultMap="corpLvResultMap"></association>
+		<association property="corpLv" resultMap="ScorpLvResultMap"></association>
 	</resultMap>
 	
-	<resultMap type="CorpLvDTO" id="corpLvResultMap">
+	<resultMap type="SCorpLvDTO" id="ScorpLvResultMap">
 		<id property="corpLvNo" column="CORP_LV_NO"/>
 		<result property="corpLvName" column="CORP_LV_NAME"/>
 	</resultMap>
 	
-	<select id="selectSystemCorp" resultMap="corpResultMap" parameterType="CorpPageDTO">
+	<select id="selectSystemCorp" resultMap="ScorpResultMap" parameterType="CorpPageDTO">
 		 SELECT
 		        C.*
 		  FROM (SELECT
@@ -147,7 +147,7 @@
  
 	</select>
 	
-	<select id="selectAjaxSystemCorp" resultMap="corpResultMap" parameterType="CorpPageDTO">
+	<select id="selectAjaxSystemCorp" resultMap="ScorpResultMap" parameterType="CorpPageDTO">
 	SELECT
       		  A.CORP_NO
      		, A.CORP_ID
@@ -193,13 +193,13 @@
  
 	</select>
 	
-	<resultMap type="DepositDTO" id="DepositResultMap">
+	<resultMap type="SDepositDTO" id="SDepositResultMap">
 		<id property="depositNo" column="DEPOSIT_NO" />
 		<result property="depositSort" column="DEPOSIT_SORT"/>
 		<result property="amount" column="AMOUNT"/>
 		<result property="depositDate" column="DEPOSIT_DATE"/>
 		<result property="depositDetails" column="DEPOSIT_DETAILS"/>
-		<association property="corp" resultMap="corpResultMap"></association>
+		<association property="corp" resultMap="ScorpResultMap"></association>
 	</resultMap>
 	
 	
@@ -237,7 +237,7 @@
  		</where>
 	</select>
 	
-	<select id="selectSystemDepositList" parameterType="DepositPageDTO" resultMap="DepositResultMap" >
+	<select id="selectSystemDepositList" parameterType="DepositPageDTO" resultMap="SDepositResultMap" >
 		    SELECT
 		        C.*
 			  FROM (SELECT
@@ -285,7 +285,7 @@
 		
 	</select>
 	
-	<resultMap type="ProductDTO" id="ProductResultMap">
+	<resultMap type="SProductDTO" id="SProductResultMap">
 		<id property="prodNo" column="PROD_NO"/>
 		<result property="prodName" column="PROD_NAME"/>
 		<result property="prodPrice" column="PROD_PRICE"/>
@@ -300,10 +300,10 @@
 		<result property="prodCtgNo" column="PROD_CTG_NO"/>
 		<result property="corpNo" column="CORP_NO"/>
 		<result property="prodHits" column="PROD_HITS"/>
-		<association property="category" resultMap="CategoryResultMap"></association>
+		<association property="category" resultMap="SCategoryResultMap"></association>
 	</resultMap>
 	
-	<resultMap type="CategoryDTO" id="CategoryResultMap">
+	<resultMap type="SCategoryDTO" id="SCategoryResultMap">
 		<id property="prodCtgNo" column="PROD_CTG_NO"/>	
 		<result property="prodCtgName" column="PROD_CTG_NAME"/>	
 	</resultMap>
@@ -324,15 +324,15 @@
 	
 
 	
-	<resultMap type="OrderDTO" id="OrderResultMap">
+	<resultMap type="SOrderDTO" id="SOrderResultMap">
 		<id property="orderNo" column="ORDER_NO"/>
 		<result property="orderPrice" column="ORDER_PRICE"/>
 		<result property="dealingStatus" column="DEALING_STATUS"/>
 		<result property="orderStatus" column="ORDER_STATUS"/>
 		<result property="quantity" column="ORDER_QUANTITY"/>
 		<result property="orderDate" column="ORDER_DATE"/>
-		<association property="corp" resultMap="corpResultMap"></association>
-		<association property="product" resultMap="ProductResultMap"></association>
+		<association property="corp" resultMap="ScorpResultMap"></association>
+		<association property="product" resultMap="SProductResultMap"></association>
 		<association property="user" resultMap="UserResultMap" ></association>
 	</resultMap>
 	
@@ -383,7 +383,7 @@
 		   </if>
 	</select>
 		
-	<select id="selectSystemOrderInfo" parameterType="OrderPageDTO" resultMap="OrderResultMap">
+	<select id="selectSystemOrderInfo" parameterType="OrderPageDTO" resultMap="SOrderResultMap">
 		 SELECT
 		        G.*
 		  FROM (SELECT

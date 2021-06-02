@@ -3,13 +3,13 @@ package com.finalproj.missingitnow.system.model.service;
 import java.util.List;
 import java.util.Map;
 
-import com.finalproj.missingitnow.system.model.dto.CorpDTO;
 import com.finalproj.missingitnow.system.model.dto.CorpPageDTO;
 import com.finalproj.missingitnow.system.model.dto.CorpSellPageDTO;
-import com.finalproj.missingitnow.system.model.dto.DepositDTO;
 import com.finalproj.missingitnow.system.model.dto.DepositPageDTO;
-import com.finalproj.missingitnow.system.model.dto.OrderDTO;
 import com.finalproj.missingitnow.system.model.dto.OrderPageDTO;
+import com.finalproj.missingitnow.system.model.dto.SCorpDTO;
+import com.finalproj.missingitnow.system.model.dto.SDepositDTO;
+import com.finalproj.missingitnow.system.model.dto.SOrderDTO;
 
 
 
@@ -17,7 +17,7 @@ public interface SystemService {
 
 	
 
-	List<CorpDTO> selectSystemCorp(CorpPageDTO corpPage);
+	List<SCorpDTO> selectSystemCorp(CorpPageDTO corpPage);
 
 	int selectCorpTotalCount(CorpPageDTO corpPage);
 
@@ -25,15 +25,15 @@ public interface SystemService {
 
 	int selectAjaxCorpTotalCount(CorpPageDTO corpPage);
 
-	List<CorpDTO> selectAjaxSystemCorp(CorpPageDTO corpPage);
+	List<SCorpDTO> selectAjaxSystemCorp(CorpPageDTO corpPage);
 
 	int selectDepositCount(DepositPageDTO depositPage);
 
-	List<DepositDTO> selectSystemDepositList(DepositPageDTO depositPage);
+	List<SDepositDTO> selectSystemDepositList(DepositPageDTO depositPage);
 
 	int selectOrderInfoCount(OrderPageDTO orderPage);
 
-	List<OrderDTO> selectSystemOrderInfo(OrderPageDTO orderPage);
+	List<SOrderDTO> selectSystemOrderInfo(OrderPageDTO orderPage);
 
 	int selectTodaySalse(CorpSellPageDTO corpSellPage);
 

@@ -2,7 +2,7 @@ package com.finalproj.missingitnow.system.model.dto;
 
 import java.sql.Date;
 
-public class ProductDTO {
+public class SProductDTO {
 	
 	private String prodNo;
 	private String prodName;
@@ -18,16 +18,16 @@ public class ProductDTO {
 	private String prodCtgNo;
 	private String corpNo;
 	private int prodHits;
-	private CategoryDTO category;
+	private SCategoryDTO category;
 	
-	public ProductDTO() {
+	public SProductDTO() {
 		
 	}
 
-	public ProductDTO(String prodNo, String prodName, int prodPrice, String prodDetails, Date prodUploadDate,
+	public SProductDTO(String prodNo, String prodName, int prodPrice, String prodDetails, Date prodUploadDate,
 			Date prodTerminateDate, int prodDiscountRate, Date prodDiscountPeriod, String prodManufacturer,
 			int stockQuantity, String prodDisplayChk, String prodCtgNo, String corpNo, int prodHits,
-			CategoryDTO category) {
+			SCategoryDTO category) {
 		super();
 		this.prodNo = prodNo;
 		this.prodName = prodName;
@@ -159,11 +159,11 @@ public class ProductDTO {
 		this.prodHits = prodHits;
 	}
 
-	public CategoryDTO getCategory() {
+	public SCategoryDTO getCategory() {
 		return category;
 	}
 
-	public void setCategory(CategoryDTO category) {
+	public void setCategory(SCategoryDTO category) {
 		this.category = category;
 	}
 

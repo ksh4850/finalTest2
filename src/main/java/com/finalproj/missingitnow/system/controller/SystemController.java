@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.finalproj.missingitnow.common.page.Pagenation;
-import com.finalproj.missingitnow.system.model.dto.CorpDTO;
 import com.finalproj.missingitnow.system.model.dto.CorpPageDTO;
 import com.finalproj.missingitnow.system.model.dto.CorpSellPageDTO;
 import com.finalproj.missingitnow.system.model.dto.DepositPageDTO;
 import com.finalproj.missingitnow.system.model.dto.OrderPageDTO;
+import com.finalproj.missingitnow.system.model.dto.SCorpDTO;
 import com.finalproj.missingitnow.system.model.service.SystemService;
 import com.google.gson.GsonBuilder;
 
@@ -84,7 +84,7 @@ public class SystemController {
 		
 		int result = systemService.modifyRegstAccpet(corpNo);
 		
-		List<CorpDTO> corpList = null;
+		List<SCorpDTO> corpList = null;
 		
 		if(result > 0 ) {
 			

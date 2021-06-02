@@ -1,14 +1,14 @@
 package com.finalproj.missingitnow.system.model.dto;
 
-public class CorpLvDTO {
+public class SCorpLvDTO {
 	
 	private String corpLvNo;
 	private String corpLvName;
 	
-	public CorpLvDTO() {
+	public SCorpLvDTO() {
 		
 	}
-	public CorpLvDTO(String corpLvNo, String corpLvName) {
+	public SCorpLvDTO(String corpLvNo, String corpLvName) {
 		super();
 		this.corpLvNo = corpLvNo;
 		this.corpLvName = corpLvName;

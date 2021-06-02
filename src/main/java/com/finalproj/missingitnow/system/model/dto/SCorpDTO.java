@@ -2,7 +2,7 @@ package com.finalproj.missingitnow.system.model.dto;
 
 import java.sql.Date;
 
-public class CorpDTO implements java.io.Serializable {
+public class SCorpDTO implements java.io.Serializable {
 	
 	
 
@@ -15,19 +15,19 @@ public class CorpDTO implements java.io.Serializable {
 	private String corpAddress;
 	private String corpEmail;
 	private String corpRegistrationNo;
-	private CorpLvDTO corpLv;
+	private SCorpLvDTO corpLv;
 	private double corpCommission;
 	private int depositAtm;
 	private java.sql.Date corpRegstDate;
 	private String corpRegstAccpeted;
 	private String corpLeaveChk;
 	
-	public CorpDTO() {
+	public SCorpDTO() {
 		
 	}
 
-	public CorpDTO(String corpNo, String corpId, String corpPwd, String corpName, String corpContacts,
-			String corpAddress, String corpEmail, String corpRegistrationNo, CorpLvDTO corpLv, double corpCommission,
+	public SCorpDTO(String corpNo, String corpId, String corpPwd, String corpName, String corpContacts,
+			String corpAddress, String corpEmail, String corpRegistrationNo, SCorpLvDTO corpLv, double corpCommission,
 			int depositAtm, Date corpRegstDate, String corpRegstAccpeted, String corpLeaveChk) {
 		super();
 		this.corpNo = corpNo;
@@ -110,11 +110,11 @@ public class CorpDTO implements java.io.Serializable {
 		this.corpRegistrationNo = corpRegistrationNo;
 	}
 
-	public CorpLvDTO getCorpLv() {
+	public SCorpLvDTO getCorpLv() {
 		return corpLv;
 	}
 
-	public void setCorpLv(CorpLvDTO corpLv) {
+	public void setCorpLv(SCorpLvDTO corpLv) {
 		this.corpLv = corpLv;
 	}
 

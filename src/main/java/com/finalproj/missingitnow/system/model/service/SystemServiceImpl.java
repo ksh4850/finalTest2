@@ -6,13 +6,13 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.finalproj.missingitnow.system.model.dao.SystemMapper;
-import com.finalproj.missingitnow.system.model.dto.CorpDTO;
 import com.finalproj.missingitnow.system.model.dto.CorpPageDTO;
 import com.finalproj.missingitnow.system.model.dto.CorpSellPageDTO;
-import com.finalproj.missingitnow.system.model.dto.DepositDTO;
 import com.finalproj.missingitnow.system.model.dto.DepositPageDTO;
-import com.finalproj.missingitnow.system.model.dto.OrderDTO;
 import com.finalproj.missingitnow.system.model.dto.OrderPageDTO;
+import com.finalproj.missingitnow.system.model.dto.SCorpDTO;
+import com.finalproj.missingitnow.system.model.dto.SDepositDTO;
+import com.finalproj.missingitnow.system.model.dto.SOrderDTO;
 
 
 
@@ -29,7 +29,7 @@ public class SystemServiceImpl implements SystemService {
 	}
 
 	@Override
-	public List<CorpDTO> selectSystemCorp(CorpPageDTO corpPage) {
+	public List<SCorpDTO> selectSystemCorp(CorpPageDTO corpPage) {
 		
 		return systemMapper.selectSystemCorp(corpPage);
 	}
@@ -52,7 +52,7 @@ public class SystemServiceImpl implements SystemService {
 	}
 
 	@Override
-	public List<CorpDTO> selectAjaxSystemCorp(CorpPageDTO corpPage) {
+	public List<SCorpDTO> selectAjaxSystemCorp(CorpPageDTO corpPage) {
 		return systemMapper.selectAjaxSystemCorp(corpPage);
 	}
 
@@ -62,7 +62,7 @@ public class SystemServiceImpl implements SystemService {
 	}
 
 	@Override
-	public List<DepositDTO> selectSystemDepositList(DepositPageDTO depositPage) {
+	public List<SDepositDTO> selectSystemDepositList(DepositPageDTO depositPage) {
 		return systemMapper.selectSystemDepositList(depositPage);
 	}
 
@@ -72,7 +72,7 @@ public class SystemServiceImpl implements SystemService {
 	}
 
 	@Override
-	public List<OrderDTO> selectSystemOrderInfo(OrderPageDTO orderPage) {
+	public List<SOrderDTO> selectSystemOrderInfo(OrderPageDTO orderPage) {
 		return systemMapper.selectSystemOrderInfo(orderPage);
 	}
 
