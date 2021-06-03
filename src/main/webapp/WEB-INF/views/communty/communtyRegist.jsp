@@ -62,7 +62,12 @@
             overflow-y: auto; 
             outline-style: none;
              float: left;
+             
             
+        }
+        
+        .communty-regist-datail *{
+        	margin : 5px;
         }
 
 
@@ -148,7 +153,11 @@
             top: 10px;
         }
         
-        #imgName{
+        #reName{
+        	display: none;
+        }
+        
+          #originName{
         	display: none;
         }
         
@@ -250,7 +259,8 @@
                 <input type="button" name="" id="postSubmit" value="등록하기">
             </div>
 
-				<input type="text" name="imgName" id="imgName" >
+				<input type="text" name="reName" id="reName" >
+				<input type="text" name="originName" id="originName" >
 				<input type="file" name="imgfile" id="imgfile" multiple>
         </form>
         
@@ -316,10 +326,10 @@
 							var $detailImgDiv  =$("<div class='detailImg-div'>");
 							var $itag1 = $('<i class="xi-close xi-2x">');
 							var $itag2 = $('<i class="xi-close xi-2x">');
-							var $detailImg = $('<img class="detailImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].saveName).css("width","500px").css("height","500px");
-							var $thumbImg = $('<img class="thumbImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].saveName).css("width","120px").css("height","120px");
+							var $detailImg = $('<img class="detailImg" >').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","500px").css("height","500px").attr('id',data[i].originFileName);
+							var $thumbImg = $('<img class="thumbImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","120px").css("height","120px");
 							
-							$detailImgDiv.append($detailImg).append($itag1);
+							$detailImgDiv.append($detailImg).append($itag1).append("<p>&nbsp;</p>");
 							$detail.append($detailImgDiv);
 							
 							$thumDiv.append($thumbImg).append($itag2);
@@ -341,20 +351,32 @@
        	 $("#postDetail").val($re); 
        	 var txt = $("#postDetail").val();
        	 
-       	var arr = new Array() ;
+       	var reNameArr = new Array() ;
+       	var originNameArr = new Array() ;
       	 $(".detailImg").filter(function(){
-      		var i = $(this).attr("src");
-      		var re = i.substring(i.lastIndexOf("/"));
+      		var reName = $(this).attr("src");
+      		 var originName = $(this).attr("id"); 
+      		var re = reName.substring(reName.lastIndexOf("/"));
       		
-      		arr.push(re.substring(1));         
+      		
+      		reNameArr.push(re.substring(1));         
+      		 originNameArr.push(originName);    
         }) 
         
-     console.log(arr);
+	     	console.log(reNameArr);
+	     	 console.log(originNameArr); 
        	 
-       	 $("#imgName").val(arr);
-       	 console.log($("#imgName").val());
+       	 $("#reName").val(reNameArr);
+       	  $("#originName").val(originNameArr); 
        	 
-       	 $("#communtyRegist").submit();
+       	  if(reNameArr.length > 0){
+       		$("#communtyRegist").submit();
+       	  }else{
+       		  alert("사진을 등록해주세요");
+       	  }
+       	  
+       	 
+       	 
 
         })
         
@@ -379,10 +401,10 @@
         
         $(document).on('click',".thum-div i" , function(){
 
-                var saveName =  $(this).parent().find("img").attr("src");
+                var reName =  $(this).parent().find("img").attr("src");
                 $(this).parent().remove();
                 $(".detailImg").filter(function(){
-                    return $(this).attr("src") == saveName;          
+                    return $(this).attr("src") == reName;          
                  }).parent().remove();
 
                  
@@ -390,7 +412,7 @@
                  $.ajax({
                 	 type:"GET",
               	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
-              	      data: {saveName:saveName},
+              	      data: {reName:reName},
               	   success:function(data){
               		   var length =  $(".thumbImg").length;
               		    if(length == 0 ){
@@ -411,11 +433,11 @@
 		  
           $(document).on('click',".detailImg-div i" , function(){
 
-            var saveName =  $(this).parent().find("img").attr("src");
-            var reSaveName = saveName;
+            var reName =  $(this).parent().find("img").attr("src");
+           /*  var reSaveName = saveName; */
             $(this).parent().remove();
             $(".thumbImg").filter(function(){
-                return $(this).attr("src") == saveName;          
+                return $(this).attr("src") == reName;          
             }).parent().remove();
 
            
@@ -424,7 +446,7 @@
             $.ajax({
            	 type:"GET",
          	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
-         	      data: {saveName:saveName},
+         	      data: {reName:reName},
          	   success:function(data){
          		  var length =  $(".thumbImg").length;
         		  if(length == 0 ){

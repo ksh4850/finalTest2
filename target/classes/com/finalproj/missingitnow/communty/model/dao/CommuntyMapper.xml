@@ -4,5 +4,76 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  <mapper namespace="com.finalproj.missingitnow.communty.model.dao.CommuntyMapper">
  
+ 	
+ 	<insert id="insertCommuntyRegist" parameterType="SPostDTO">
+ 		INSERT
+ 		  INTO TBL_POST A
+ 		  (
+ 		  	A.POST_NO
+		  , A.USER_NO
+		  , A.POST_DETAILS
+		  ,	A.POST_DATE
+		  ,	A.POST_STATUS
+		  , A.POST_HITS
+		  ,	A.POST_LIKES
+		  ,	A.POST_HUSING_TYPE
+		  ,	A.POST_ACREAGE
+		  ,	A.POST_RESIDENCE_TYPE
+		  ,	A.POST_COST
+ 		  )
+ 		  VALUES
+ 		  (
+ 		  	'POST' || LPAD(SEQ_POST.NEXTVAL,4,0)
+ 		  , #{user.userNo}
+ 		  , #{postDetail}
+ 		  , #{postDate}
+ 		  , DEFAULT
+ 		  , DEFAULT
+ 		  , DEFAULT
+ 		  , #{housingType}
+ 		  , #{acreage}
+ 		  , #{residenceType}
+ 		  , #{cost}
+ 		  )
+ 		 	
+ 	
+ 	</insert>
+ 	
+ 	<update id="insertPostImg" parameterType="java.util.List" >
+ 	<selectKey keyProperty="postNoSEQ" order="BEFORE" resultType="String">
+    		SELECT
+    			 'POST' || LPAD(SEQ_POST.NEXTVAL,4,0)
+    		FROM DUAL
+    	</selectKey>
+    		
+    	   
+ 		    INTO TBL_POST_IMG B
+ 		  (
+ 		  	B.POST_IMG_NO
+ 		  ,	B.POST_IMG_ORIGIN_NAME
+		  ,	B.POST_IMG_THN_NAME
+		  ,	B.POST_IMG_PATH
+		  ,	B.POST_IMG_RENAME
+		  ,	B.POST_NO
+ 		  )
+ 		   
+ 		   SELECT
+                   'POSI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0)
+ 		  		   , A.*
+ 		  	FROM ( 
+ 		  	<foreach collection="list" item="item" index="index" separator="UNION ALL " >
+ 		  	SELECT
+				  ${item.originName} AS originName 
+				, ${item.thnbName} AS thnbName 
+				, ${item.path} AS imgPath 
+				, ${item.reName} AS reNameA
+				, #{postNoSEQ} AS postNo
+				FROM DUAL
+ 	  </foreach>
+ 		 ) A 
+ 	
+ 	</update>
+ 	
+ 	
  
  </mapper>

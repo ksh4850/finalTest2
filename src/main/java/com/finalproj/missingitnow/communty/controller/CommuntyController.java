@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
+import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
 import com.finalproj.missingitnow.communty.model.service.CommuntyService;
+import com.finalproj.missingitnow.system.model.dto.UserDTO;
 import com.google.gson.GsonBuilder;
 
 @Controller
@@ -43,19 +45,54 @@ public class CommuntyController {
 	}
 	
 	@PostMapping("communtyRegist")
-	public void postCommuntyRegist(@ModelAttribute SPostDTO postDTO ,Model model ,@RequestParam String imgName ) {
+	public void postCommuntyRegist(@ModelAttribute SPostDTO post  ,Model model ,@RequestParam String reName  , @RequestParam String originName ,HttpServletRequest request) {
 		
-		System.out.println(postDTO.getHousingType());
-		System.out.println(postDTO.getAcreage());
-		System.out.println(postDTO.getResidenceType());
-		System.out.println(postDTO.getCost());
-		System.out.println(postDTO.getPostDetail());
-		System.out.println(imgName);
+		System.out.println(post.getHousingType());
+		System.out.println(post.getAcreage());
+		System.out.println(post.getResidenceType());
+		System.out.println(post.getCost());
+		System.out.println(post.getPostDetail());
+		System.out.println(reName);
+		System.out.println(originName);
 		
-		String[] fileNames= imgName.split(",");
+		String[] reNames= reName.split(",");
+		String[] originNames= originName.split(",");
+		
+		String filePath = request.getSession().getServletContext().getRealPath("resources") + "\\uploadFiles";
+		
+		List<SPostImgDTO> imgList =  new ArrayList<>();
+		
+		for(int i = 0 ; i < reNames.length ; i++) {
+			SPostImgDTO img = new SPostImgDTO();
+			img.setOriginName(originNames[i]);
+			img.setReName(reNames[i]);
+			img.setPath(filePath);
+			img.setThnbName("추가예정");
+			
+			imgList.add(img);
+			
+		}
 		
 		
-		model.addAttribute("postDTO",postDTO);
+		//세션 불러와서 넣기 일단은 임의의 값으로 처리
+		
+		post.setUser(new UserDTO());
+		post.getUser().setUserNo("USER0001");
+		
+		
+		post.setPostDate(new java.sql.Timestamp(System.currentTimeMillis()));
+		
+		int postResult = 0;
+		int imgResult = 0;
+		
+		postResult = communtyService.insertCommuntyRegist(post);
+		
+		if(postResult > 0) {
+			 imgResult = communtyService.insertPostImg(imgList); 
+		}
+		
+		
+		model.addAttribute("post",post);
 		
 		
 		
@@ -67,7 +104,6 @@ public class CommuntyController {
 	@PostMapping(value="imgUpload" , produces ="application/json; charset=UTF-8")
 	@ResponseBody
 	public String uploadFiles(List<MultipartFile> uploadFiles ,HttpServletRequest request) throws IOException {
-		System.out.println("컨트롤러");
 		
 		
 		String root = request.getSession().getServletContext().getRealPath("resources");
@@ -85,24 +121,27 @@ public class CommuntyController {
 			
 			String originFileName = uploadFiles.get(i).getOriginalFilename();
 			String ext = originFileName.substring(originFileName.lastIndexOf("."));
-			String saveName = UUID.randomUUID().toString().replace("-", "") + ext;
+			String reName = UUID.randomUUID().toString().replace("-", "") + ext;
 			
 			
 			Map<String, String> file = new HashMap<>();
 			file.put("originFileName", originFileName);
-			file.put("saveName", saveName);
+			file.put("reName", reName);
 			file.put("filePath", filePath);
 			
 			files.add(file);
 		}
 		
 		
+		
+		
 		try {
 			for(int i = 0 ; i < uploadFiles.size() ; i++) {
 				Map<String, String> file = files.get(i);
 
-				uploadFiles.get(i).transferTo(new File(filePath + "\\" + file.get("saveName")));
+				uploadFiles.get(i).transferTo(new File(filePath + "\\" + file.get("reName")));
 			}
+			
 			
 			
 		} catch (IllegalStateException | IOException e) {
@@ -112,18 +151,15 @@ public class CommuntyController {
 			for(int i = 0 ; i < uploadFiles.size(); i++) {
 				Map<String, String> file = files.get(i);
 				
-				new File(filePath + "\\" + file.get("saveName")).delete();
+				new File(filePath + "\\" + file.get("reName")).delete();
+			
 			}
-			
-			
 		}
 		
-		
-		String gson = new GsonBuilder().create().toJson(files);
+		 
+		String  gson = new GsonBuilder().create().toJson(files);
 		
 //		System.out.println(gson);
-		
-		
 		
 		return gson;
 
@@ -132,13 +168,13 @@ public class CommuntyController {
 	
 	@GetMapping(value="ajaxDelete" , produces ="text/plain; charset=UTF-8")
 	@ResponseBody
-	public String getAjaxImgDelete(@RequestParam String saveName , HttpServletRequest request ) {
+	public String getAjaxImgDelete(@RequestParam String reName , HttpServletRequest request ) {
 		
 		
 		
 		
 		
-		String reName = saveName.substring(saveName.lastIndexOf("/"));
+		String deleteName = reName.substring(reName.lastIndexOf("/"));
 		
 //		System.out.println(reName);
 		String root = request.getSession().getServletContext().getRealPath("resources");
@@ -147,7 +183,7 @@ public class CommuntyController {
 		
 //		System.out.println(filePath);
 		
-		new File(filePath + "\\" + reName).delete();
+		new File(filePath + "\\" + deleteName).delete();
 		
 		return "삭제완료";
 	}
