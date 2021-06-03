@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
 import com.finalproj.missingitnow.communty.model.service.CommuntyService;
-import com.finalproj.missingitnow.system.model.dto.UserDTO;
+import com.finalproj.missingitnow.system.model.dto.SUserDTO;
 import com.google.gson.GsonBuilder;
 
 @Controller
@@ -76,27 +76,24 @@ public class CommuntyController {
 		
 		//세션 불러와서 넣기 일단은 임의의 값으로 처리
 		
-		post.setUser(new UserDTO());
+		post.setUser(new SUserDTO());
 		post.getUser().setUserNo("USER0001");
 		
 		
 		post.setPostDate(new java.sql.Timestamp(System.currentTimeMillis()));
 		
 		int postResult = 0;
-		int imgResult = 0;
-		
-		postResult = communtyService.insertCommuntyRegist(post);
-		
-		if(postResult > 0) {
-			 imgResult = communtyService.insertPostImg(imgList); 
-		}
 		
 		
+		postResult = communtyService.insertCommuntyRegist(post , imgList);
+		
+		
+		
+	
 		model.addAttribute("post",post);
 		
 		
-		
-//		return "communty/test";
+
 		
 	}
 	

@@ -308,7 +308,7 @@
 		<result property="prodCtgName" column="PROD_CTG_NAME"/>	
 	</resultMap>
 	
-	<resultMap type="UserDTO" id="UserResultMap">
+	<resultMap type="SUserDTO" id="SUserResultMap">
 		<id property="userNo" column="USER_NO"/>
 		<result property="userId" column="USER_ID"/>
 		<result property="pwd" column="USER_PWD"/>
@@ -333,7 +333,7 @@
 		<result property="orderDate" column="ORDER_DATE"/>
 		<association property="corp" resultMap="ScorpResultMap"></association>
 		<association property="product" resultMap="SProductResultMap"></association>
-		<association property="user" resultMap="UserResultMap" ></association>
+		<association property="user" resultMap="SUserResultMap" ></association>
 	</resultMap>
 	
 	

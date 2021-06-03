@@ -58,7 +58,8 @@
 	</aop:config> 
 	
 	  <mybatis-spring:scan base-package="com.finalproj.missingitnow.system.model.dao,
-	  									com.finalproj.missingitnow.communty.model.dao" />
+	  									com.finalproj.missingitnow.communty.model.dao,
+	  									com.finalproj.missingitnow.member.model.dao" />
 	 		
 </beans>
 

@@ -16,10 +16,10 @@
 		  ,	A.POST_STATUS
 		  , A.POST_HITS
 		  ,	A.POST_LIKES
-		  ,	A.POST_HUSING_TYPE
+		  ,	A.POST_HOUSING_TYPE
 		  ,	A.POST_ACREAGE
 		  ,	A.POST_RESIDENCE_TYPE
-		  ,	A.POST_COST
+		  ,	A.POST_COST_TYPE
  		  )
  		  VALUES
  		  (
@@ -39,40 +39,53 @@
  	
  	</insert>
  	
- 	<update id="insertPostImg" parameterType="java.util.List" >
- 	<selectKey keyProperty="postNoSEQ" order="BEFORE" resultType="String">
-    		SELECT
-    			 'POST' || LPAD(SEQ_POST.NEXTVAL,4,0)
-    		FROM DUAL
-    	</selectKey>
-    		
-    	   
- 		    INTO TBL_POST_IMG B
- 		  (
- 		  	B.POST_IMG_NO
- 		  ,	B.POST_IMG_ORIGIN_NAME
-		  ,	B.POST_IMG_THN_NAME
-		  ,	B.POST_IMG_PATH
-		  ,	B.POST_IMG_RENAME
-		  ,	B.POST_NO
- 		  )
- 		   
- 		   SELECT
-                   'POSI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0)
- 		  		   , A.*
- 		  	FROM ( 
- 		  	<foreach collection="list" item="item" index="index" separator="UNION ALL " >
- 		  	SELECT
-				  ${item.originName} AS originName 
-				, ${item.thnbName} AS thnbName 
-				, ${item.path} AS imgPath 
-				, ${item.reName} AS reNameA
-				, #{postNoSEQ} AS postNo
-				FROM DUAL
- 	  </foreach>
- 		 ) A 
+ 	<insert id="insertPostImg" parameterType="SPostImgDTO" >
  	
- 	</update>
+ 		 <selectKey keyProperty="postNo" order="BEFORE" resultType="String">
+    		SELECT
+    			 'POST' || LPAD(SEQ_POST.CURRVAL,4,0)
+    		FROM DUAL
+    	</selectKey> 
+    		
+    	   INSERT
+ 		    INTO TBL_POST_IMG 
+ 		  (
+ 		  	POST_IMG_NO
+		  ,	POST_NO
+		  ,	P_IMG_ORIGIN_NAME
+		  ,	P_IMG_RENAME
+		  ,	P_IMG_THN_NAME
+		  ,	P_IMG_PATH
+ 		  )
+ 		  VALUES
+ 		  (
+ 		  	'POSI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0)
+ 		  , #{postNo}
+		  , #{originName} 
+		  , #{reName} 
+		  , #{thnbName}
+		  , #{path} 
+ 		  )
+ 		  
+ 		 <!--   SELECT
+                   'POSI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0) as imgNo
+ 		  		   , A.*
+ 		  	FROM 
+ 		  	( 
+ 		  	<foreach collection="list" item="item" index="index" separator="UNION ALL" >
+ 		  	SELECT
+ 		  	
+ 		  		  'POST0001' AS postNo
+				, ${item.originName} AS originName 
+				, ${item.reName} AS reNameA
+				, ${item.thnbName} AS thnbName 
+				, ${item.path} AS imgPath
+				 
+				FROM DUAL </foreach> ) A 
+ 	 -->
+ 	</insert>
+ 	
+ 	
  	
  	
  

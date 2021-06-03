@@ -9,8 +9,7 @@ import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
 public interface CommuntyService {
 
 
-	int insertCommuntyRegist(SPostDTO post);
+	int insertCommuntyRegist(SPostDTO post, List<SPostImgDTO> imgList);
 
-	int insertPostImg(List<SPostImgDTO> imgList);
 
 }

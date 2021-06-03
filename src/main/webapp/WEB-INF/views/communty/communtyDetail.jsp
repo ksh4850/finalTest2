@@ -264,16 +264,9 @@
             </div>
 
             <div class="communty-detail-detail">
-                <img src="flower1.PNG" alt="" class="">
-                <img src="빈회원.jpg" alt="" class="">
-                <img src="flower1.PNG" alt="" class="">
+                
 
-                <div class="communty-detail-contents">
-                    시험 공부를 준비중인데
-                심플하면서도 살짝 파스텔톤의 핑크빛 느낌의 가구 배치를 하고 싶어요 ㅠㅠ
-                그런데 원룸 구조가 앞뒤로 다 주방이나 화장실, 현관 문이 있어서 가구 배치를 도저히 어떻게 하면 좋을지 모르겠어요..
-                정말 예쁘게 오래 거주할 곳이라 이번에 예쁘게 인테리어 해보고 싶은데 도와주세요ㅠ
-                </div>
+        		
             </div>
 
 

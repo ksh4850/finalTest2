@@ -2,7 +2,7 @@ package com.finalproj.missingitnow.system.model.dto;
 
 import java.sql.Date;
 
-public class UserDTO {
+public class SUserDTO {
 	
 	private String userNo;
 	private String userId;
@@ -16,11 +16,11 @@ public class UserDTO {
 	private java.sql.Date regstDate;
 	private String userLeave;
 	
-	public UserDTO() {
+	public SUserDTO() {
 		
 	}
 	
-	public UserDTO(String userNo, String userId, String pwd, String userName, Date birth, String address,
+	public SUserDTO(String userNo, String userId, String pwd, String userName, Date birth, String address,
 			String contacts, String email, String mktAccept, Date regstDate, String userLeave) {
 		super();
 		this.userNo = userNo;

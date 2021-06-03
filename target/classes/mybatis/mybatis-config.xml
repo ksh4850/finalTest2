@@ -12,12 +12,15 @@
  		<typeAlias alias="DepositPageDTO" type="com.finalproj.missingitnow.system.model.dto.DepositPageDTO"/>
  		<typeAlias alias="SOrderDTO" type="com.finalproj.missingitnow.system.model.dto.SOrderDTO"/>
  		<typeAlias alias="SProductDTO" type="com.finalproj.missingitnow.system.model.dto.SProductDTO"/>
- 		<typeAlias alias="UserDTO" type="com.finalproj.missingitnow.system.model.dto.UserDTO"/>
+ 		<typeAlias alias="SUserDTO" type="com.finalproj.missingitnow.system.model.dto.SUserDTO"/>
  		<typeAlias alias="SCategoryDTO" type="com.finalproj.missingitnow.system.model.dto.SCategoryDTO"/>
  		<typeAlias alias="OrderPageDTO" type="com.finalproj.missingitnow.system.model.dto.OrderPageDTO"/>
  		<typeAlias alias="CorpSellPageDTO" type="com.finalproj.missingitnow.system.model.dto.CorpSellPageDTO"/>
  		<typeAlias alias="SPostImgDTO" type="com.finalproj.missingitnow.communty.model.dto.SPostImgDTO"/>
  		<typeAlias alias="SPostDTO" type="com.finalproj.missingitnow.communty.model.dto.SPostDTO"/>
+ 		
+ 		
+ 		<typeAlias alias="privateMemeberDTO" type="com.finalproj.missingitnow.member.model.dto.PrivateMemberDTO" />
  		
  	</typeAliases>
  </configuration>

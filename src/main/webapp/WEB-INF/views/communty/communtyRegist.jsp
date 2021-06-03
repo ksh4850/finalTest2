@@ -9,7 +9,7 @@
    <link rel="stylesheet" href="${ pageContext.servletContext.contextPath }/resources/css/reset.css">
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-   
+    
     <title>Document</title>
 
     <style>
@@ -17,7 +17,7 @@
             font-size: 35px;
             margin-left: 300px;
             width: 800px;
-            margin-top: 20px;
+            margin-top: 150px;
             border-bottom: 1px solid rgb(119, 94, 238);
             color: rgb(119, 94, 238);
         }
@@ -167,6 +167,7 @@
 </head>
 <body>
     <header>
+	<jsp:include page="../common/header.jsp"/>
 
     </header>
 
@@ -253,6 +254,7 @@
 	            </div>
             </div> 
 
+			  <br clear="both">
 
             <div class="communty-regist-btn">
                 <input type="button" name="" id="tt" value="등록취소">

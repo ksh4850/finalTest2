@@ -29,14 +29,26 @@ public class CommuntyServiceImpl implements CommuntyService{
 	 * return communtyMapper.insertIngUpload(map); }
 	 */
 
-	@Override
-	public int insertCommuntyRegist(SPostDTO post) {
-		return communtyMapper.insertCommuntyRegist(post);
-	}
 
 	@Override
-	public int insertPostImg(List<SPostImgDTO> imgList) {
-		return communtyMapper.insertPostImg(imgList);
+	public int insertCommuntyRegist(SPostDTO post, List<SPostImgDTO> imgList) {
+		
+		int result = 0;
+		
+		int postResult = communtyMapper.insertCommuntyRegist(post);
+		
+		int imgResult = 0;
+		
+		for(int i = 0 ; i < imgList.size() ; i++) {
+			imgResult += communtyMapper.insertPostImg(imgList.get(i));
+		}
+		
+		if(postResult > 0 && imgResult == imgList.size()) {
+			result = 1;
+		}
+		
+		
+		return result;
 	}
 
 	

@@ -2,11 +2,11 @@ package com.finalproj.missingitnow.communty.model.dto;
 
 import java.sql.Timestamp;
 
-import com.finalproj.missingitnow.system.model.dto.UserDTO;
+import com.finalproj.missingitnow.system.model.dto.SUserDTO;
 
 public class SPostDTO {
 	private String postNo;
-	private UserDTO user;
+	private SUserDTO user;
 	private String housingType;
 	private String acreage;
 	private String residenceType;
@@ -21,7 +21,7 @@ public class SPostDTO {
 		
 	}
 	
-	public SPostDTO(String postNo, UserDTO user, String housingType, String acreage, String residenceType, String cost,
+	public SPostDTO(String postNo, SUserDTO user, String housingType, String acreage, String residenceType, String cost,
 			String postDetail, Timestamp postDate, String postStatus, int postHits, int postLikes) {
 		super();
 		this.postNo = postNo;
@@ -42,10 +42,10 @@ public class SPostDTO {
 	public void setPostNo(String postNo) {
 		this.postNo = postNo;
 	}
-	public UserDTO getUser() {
+	public SUserDTO getUser() {
 		return user;
 	}
-	public void setUser(UserDTO user) {
+	public void setUser(SUserDTO user) {
 		this.user = user;
 	}
 	public String getHousingType() {

@@ -7,7 +7,7 @@ public class SOrderDTO {
 	private String orderNo;
 	private SCorpDTO corp;
 	private SProductDTO product;
-	private UserDTO user;
+	private SUserDTO user;
 	private int orderPrice;
 	private String dealingStatus;
 	private String orderStatus;
@@ -18,7 +18,7 @@ public class SOrderDTO {
 		
 	}
 
-	public SOrderDTO(String orderNo, SCorpDTO corp, SProductDTO product, UserDTO user, int orderPrice,
+	public SOrderDTO(String orderNo, SCorpDTO corp, SProductDTO product, SUserDTO user, int orderPrice,
 			String dealingStatus, String orderStatus, int quantity, Timestamp orderDate) {
 		super();
 		this.orderNo = orderNo;
@@ -56,11 +56,11 @@ public class SOrderDTO {
 		this.product = product;
 	}
 
-	public UserDTO getUser() {
+	public SUserDTO getUser() {
 		return user;
 	}
 
-	public void setUser(UserDTO user) {
+	public void setUser(SUserDTO user) {
 		this.user = user;
 	}
 
