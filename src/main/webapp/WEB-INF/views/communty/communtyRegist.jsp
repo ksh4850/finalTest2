@@ -287,7 +287,12 @@
     		
     		
 		  $("#imgfile").change(function(){
+			  
+			 var imgLangth =  $(".detailImg").length;
+			 console.log(imgLangth);
+			 
 			
+				
 			var formData = new FormData();
 			var inputFile = $('#imgfile');
 			var files=inputFile[0].files;
@@ -342,7 +347,10 @@
 						
 					}
 				});
-			});  
+			}); 
+		  
+		 
+		  
 		});
     	
     	

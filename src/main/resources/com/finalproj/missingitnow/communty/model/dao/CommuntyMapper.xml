@@ -59,7 +59,7 @@
  		  )
  		  VALUES
  		  (
- 		  	'POSI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0)
+ 		  	'PSTI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0)
  		  , #{postNo}
 		  , #{originName} 
 		  , #{reName} 
@@ -67,23 +67,159 @@
 		  , #{path} 
  		  )
  		  
- 		 <!--   SELECT
-                   'POSI'||LPAD(SEQ_POST_IMG.NEXTVAL , 4 , 0) as imgNo
- 		  		   , A.*
- 		  	FROM 
- 		  	( 
- 		  	<foreach collection="list" item="item" index="index" separator="UNION ALL" >
- 		  	SELECT
- 		  	
- 		  		  'POST0001' AS postNo
-				, ${item.originName} AS originName 
-				, ${item.reName} AS reNameA
-				, ${item.thnbName} AS thnbName 
-				, ${item.path} AS imgPath
-				 
-				FROM DUAL </foreach> ) A 
- 	 -->
+ 	
  	</insert>
+ 	
+ 	
+ 	<resultMap type="SPostDTO" id="SPostResultMap">
+ 		<id property="postNo" column="POST_NO"/>
+ 		<result property="housingType" column="POST_HOUSING_TYPE"/>
+ 		<result property="acreage" column="POST_ACREAGE"/>
+ 		<result property="residenceType" column="POST_RESIDENCE_TYPE"/>
+ 		<result property="cost" column="POST_COST_TYPE"/>
+ 		<result property="postDetail" column="POST_DETAILS"/>
+ 		<result property="postDate" column="POST_DATE"/>
+ 		<result property="postStatus" column="POST_STATUS"/>
+ 		<result property="postHits" column="POST_HITS"/>
+ 		<result property="postLikes" column="POST_LIKES"/>
+ 		<association property="user" resultMap="SmemberResulMap"></association>
+ 		<collection property="commentList" resultMap="SPCommentMap"></collection>
+ 	</resultMap>
+ 	
+ 	<resultMap id="SmemberResulMap" type="privateMemeberDTO">
+		<id column="USER_NO" property="userNo" />
+		<result column="USER_ID" property="userId" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="USER_NAME" property="userName" />
+		<result column="USER_BIRTH" property="userBirth" />
+		<result column="USER_ADDRESS" property="userAddress" />
+		<result column="USER_CONTACTS" property="userContacts" />
+		<result column="USER_EMAIL" property="userEmail" />
+		<result column="USER_MKT_ACCEPT_CHK" property="user_Mkt_Accepct_Chk" />
+		<result column="USER_REGST_DATE" property="user_Regst_Date" />
+		<result column="USER_LEAVE_CHK" property="user_Leave_Chk" />
+	</resultMap>
+ 	
+ 	
+ 	<resultMap type="SPostImgDTO" id="SPostImgResultMap">
+ 		<id property="imgNo" column="POST_IMG_NO"/>
+ 		<result property="postNo" column="POST_NO"/>
+ 		<result property="originName" column="P_IMG_ORIGIN_NAME"/>
+ 		<result property="reName" column="P_IMG_RENAME"/>
+ 		<result property="thnbName" column="P_IMG_THN_NAME"/>
+ 		<result property="path" column="P_IMG_PATH"/>
+ 	</resultMap>
+ 	
+ 	
+ 	<resultMap type="SPCommentDTO" id="SPCommentMap">
+ 		<id property="comtNo" column="POST_COMT_NO"/>
+ 		<result property="comtDetail" column="POST_COMT_DETAILS"/>
+ 		<result property="comtDate" column="POST_COMT_DATE"/>
+ 		<result property="comtStatus" column="POST_COMT_STATUS"/>
+ 		<association property="user" resultMap="SmemberResulMap"></association>
+ 		<association property="post" resultMap="SPostResultMap"></association>
+ 		<collection property="reCommentList" resultMap="SPReCommentResultMap"></collection>
+ 	</resultMap>
+ 	
+ 	<resultMap type="SPReCommentDTO" id="SPReCommentResultMap">
+ 		<id property="reComtNo" column="POST_RECOMT_NO"/>
+ 		<result property="reComtDetail" column="POST_RECOMT_DETAILS"/>
+ 		<result property="reComtDate" column="POST_RECOMT_DATE"/>
+ 		<result property="reComtStatus" column="POST_RECOMT_STATUS"/>
+ 		<association property="user" resultMap="SmemberResulMap"></association>
+ 		<!-- <association property="comment" resultMap="SPCommentMap"></association> -->
+ 	</resultMap>
+ 	
+ 	
+   <resultMap type="SPostListDTO" id="SPostListResultMap">
+   
+ 		<id property="postNo" column="POST_NO"/>
+ 		<result property="housingType" column="POST_HOUSING_TYPE"/>
+ 		<result property="acreage" column="POST_ACREAGE"/>
+ 		<result property="residenceType" column="POST_RESIDENCE_TYPE"/>
+ 		<result property="cost" column="POST_COST_TYPE"/>
+ 		<result property="postDetail" column="POST_DETAILS"/>
+ 		<result property="postDate" column="POST_DATE"/>
+ 		<result property="postStatus" column="POST_STATUS"/>
+ 		<result property="postHits" column="POST_HITS"/>
+ 		<result property="postLikes" column="POST_LIKES"/>
+ 		<association property="user" resultMap="SmemberResulMap"></association>
+ 		<collection property="imgList" resultMap="SPostImgResultMap"></collection>
+ 	</resultMap>
+ 	
+ 	
+ 	<select id="selectPostList" resultMap="SPostListResultMap">
+ 		SELECT
+		       A.POST_NO
+		    <!--  , A.POST_DETAILS -->
+		     , A.POST_DATE
+		     , A.POST_STATUS
+		     , A.POST_HITS
+		     , A.POST_LIKES
+		     , A.POST_HOUSING_TYPE
+		     , A.POST_ACREAGE
+		     , A.POST_RESIDENCE_TYPE
+		     , A.POST_COST_TYPE
+		     , B.USER_NO
+		     , B.USER_ID
+		     , C.P_IMG_RENAME
+		  FROM TBL_POST A
+		  JOIN TBL_USER B ON(A.USER_NO = B.USER_NO)
+		  JOIN TBL_POST_IMG C ON(A.POST_NO = C.POST_NO)
+		   WHERE A.POST_STATUS = 'Y'
+            AND  A.POST_NO IN (SELECT
+                                    E.POST_NO
+                                FROM (SELECT
+                                            ROWNUM RUNM
+                                           , D.POST_NO
+                                        FROM TBL_POST D
+                                        ORDER BY POST_NO DESC
+                                ) E
+                                 WHERE E.RUNM BETWEEN 1 AND 3
+                                ) 
+ 	</select>
+ 	
+ 	<select id="selectAajxPostList" parameterType="hashmap" resultMap="SPostListResultMap">
+ 			SELECT
+		       A.POST_NO
+		     <!-- , A.POST_DETAILS -->
+		     , A.POST_DATE
+		     , A.POST_STATUS
+		     , A.POST_HITS
+		     , A.POST_LIKES
+		     , A.POST_HOUSING_TYPE
+		     , A.POST_ACREAGE
+		     , A.POST_RESIDENCE_TYPE
+		     , A.POST_COST_TYPE
+		     , B.USER_NO
+		     , B.USER_ID
+		     , C.P_IMG_RENAME
+		  FROM TBL_POST A
+		  JOIN TBL_USER B ON(A.USER_NO = B.USER_NO)
+		  JOIN TBL_POST_IMG C ON(A.POST_NO = C.POST_NO)
+		   WHERE A.POST_STATUS = 'Y'
+            AND  A.POST_NO IN (SELECT
+                                    E.POST_NO
+                                FROM (SELECT
+                                            ROWNUM RUNM
+                                           , D.POST_NO
+                                        FROM TBL_POST D
+                                        ORDER BY POST_NO DESC
+                                ) E
+                                 WHERE E.RUNM BETWEEN #{startNum} AND #{endNum}
+                                ) 
+ 	
+ 	</select>
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+
+
  	
  	
  	

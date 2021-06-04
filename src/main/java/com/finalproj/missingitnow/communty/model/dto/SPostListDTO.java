@@ -5,7 +5,8 @@ import java.util.List;
 
 import com.finalproj.missingitnow.member.model.dto.PrivateMemberDTO;
 
-public class SPostDTO {
+public class SPostListDTO {
+	
 	private String postNo;
 	private PrivateMemberDTO user;
 	private String housingType;
@@ -17,15 +18,16 @@ public class SPostDTO {
 	private String postStatus;
 	private int postHits;
 	private int postLikes;
-	private List<SPCommentDTO> commentList;
-	
-	public SPostDTO() {
+	private List<SPostImgDTO> imgList;
+	private int communtCount;
+
+	public SPostListDTO() {
 		
 	}
 
-	public SPostDTO(String postNo, PrivateMemberDTO user, String housingType, String acreage, String residenceType,
+	public SPostListDTO(String postNo, PrivateMemberDTO user, String housingType, String acreage, String residenceType,
 			String cost, String postDetail, Timestamp postDate, String postStatus, int postHits, int postLikes,
-			List<SPCommentDTO> commentList) {
+			List<SPostImgDTO> imgList, int communtCount) {
 		super();
 		this.postNo = postNo;
 		this.user = user;
@@ -38,7 +40,8 @@ public class SPostDTO {
 		this.postStatus = postStatus;
 		this.postHits = postHits;
 		this.postLikes = postLikes;
-		this.commentList = commentList;
+		this.imgList = imgList;
+		this.communtCount = communtCount;
 	}
 
 	public String getPostNo() {
@@ -129,26 +132,33 @@ public class SPostDTO {
 		this.postLikes = postLikes;
 	}
 
-	public List<SPCommentDTO> getCommentList() {
-		return commentList;
+	public List<SPostImgDTO> getImgList() {
+		return imgList;
 	}
 
-	public void setCommentList(List<SPCommentDTO> commentList) {
-		this.commentList = commentList;
+	public void setImgList(List<SPostImgDTO> imgList) {
+		this.imgList = imgList;
+	}
+
+	public int getCommuntCount() {
+		return communtCount;
+	}
+
+	public void setCommuntCount(int communtCount) {
+		this.communtCount = communtCount;
 	}
 
 	@Override
 	public String toString() {
-		return "SPostDTO [postNo=" + postNo + ", user=" + user + ", housingType=" + housingType + ", acreage=" + acreage
-				+ ", residenceType=" + residenceType + ", cost=" + cost + ", postDetail=" + postDetail + ", postDate="
-				+ postDate + ", postStatus=" + postStatus + ", postHits=" + postHits + ", postLikes=" + postLikes
-				+ ", commentList=" + commentList + "]";
+		return "SPostListDTO [postNo=" + postNo + ", user=" + user + ", housingType=" + housingType + ", acreage="
+				+ acreage + ", residenceType=" + residenceType + ", cost=" + cost + ", postDetail=" + postDetail
+				+ ", postDate=" + postDate + ", postStatus=" + postStatus + ", postHits=" + postHits + ", postLikes="
+				+ postLikes + ", imgList=" + imgList + ", communtCount=" + communtCount + "]";
 	}
-
-
 	
 	
-
+	
+	
 	
 	
 	

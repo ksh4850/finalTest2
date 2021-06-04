@@ -29,7 +29,7 @@
         ) 
 		VALUES
 		(
-		  SEQ_USER_NO.NEXTVAL, #{ userId }, #{ userPwd }
+		  SEQ_USER.NEXTVAL, #{ userId }, #{ userPwd }
 		, #{ userName }, #{ userBirth }, #{ userAddress }
 		, #{ userContacts }, #{ userEmail }, #{ user_Mkt_Accepct_Chk }
 		, SYSDATE , DEFAULT

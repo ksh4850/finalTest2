@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"   %> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,26 +15,37 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
    
     <style>
+    	.communty-list-section{
+    		  margin-top: 150px;
+    	}
 
         .communty-list-div{
-            border: 2px solid rgb(119, 94, 238);
+            border: 2px solid rgb(119, 94, 238); 
             width: 700px;
-            margin-left: 450px;
-            margin-top: 20px;
+            margin-left: 320px;
+            margin-top: 40px;
             border-radius: 10px;
+        }
+        
+        
+        hr{
+        
+         border-bottom: 2px solid rgb(119, 94, 238);
+         margin-top : 20px
         }
 
         .communty-list-info{
             margin-top: 10px;
             margin-left: 20px;
             height: 60px;
-           
+          
 
         }
         
         .communty-info{
             width: 300px;
             display: inline-block;
+            
            
         }
 
@@ -44,15 +58,20 @@
             width: 60px;
             height: 60px;
             border-radius: 20px;
-            overflow: hidden;
+            /* overflow: hidden; */
+            object-fit: cover;
         }
+        
+      
 
-        .communty-list-imgOne img {
+        .communty-list-imgOne>img {
             margin-top: 10px;
-             width: 690;
+  			 
+             width: 680;
              height: 500px;
-             overflow: hidden;
-             
+             /* overflow: hidden; */
+              object-fit: cover;
+            
         }
 
         .communty-list-detail{
@@ -60,10 +79,11 @@
             margin-left: 20px;
             margin-bottom: 10px;
             width: 650px;
+            
         }
 
         .communty-list-imgTwo{
-            display: inline-block;
+            /* display: inline-block; */
         }
 
         .communty-list-imgTwo img{
@@ -71,32 +91,74 @@
             margin-top: 10px;
             width: 330px;
             height: 400px;
+            /* overflow: hidden; */
+            object-fit: cover;
+            
         }
         .communty-list-imgThree{
             margin-top: 10px;
             display: inline-block;
         }
 
-        .communty-list-imgThree img:nth-child(1){
+        .communty-list-imgThree>img:nth-child(1){
             margin-left: 10px;
             width: 680px;
             height: 300px;
+            object-fit: cover;
 
         }
 
-        .communty-list-imgThree img:nth-child(2){
+        .communty-list-imgThree>img:nth-child(2){
             width: 330px;
             height: 300px;
             margin-top: 10px;
             margin-left: 10px;
+            object-fit: cover;
         }
-
-        .communty-list-imgThree img:nth-child(3){
+        
+        .communty-list-imgThree>img:nth-child(3){
             width: 330px;
             height: 300px;
             margin-top: 10px;
             margin-left: 10px;
+            object-fit: cover;
         }
+        
+         .imgThree-addNum{
+        	 display: inline-block;
+        	 position: relative;
+        }
+        
+        .imgThree-addNum span{
+        	position: absolute;
+        	background: rgba(0, 0, 0, 0.72);
+        	color: white;
+        	top:8px;
+        	right:1px;
+        	botton:0px;
+        	font-size:30px;
+        	/* padding-top: 135px;
+        	padding-left: 165px;
+        	padding-right: 150px;
+        	padding-bottom: 135px; */
+        	width:330px;
+        	height:300px;
+   			text-align: center;
+   			line-height:300px;
+
+        }
+        
+        .imgThree-addNum>img{
+        	width: 330px;
+            height: 300px;
+            margin-top: 10px;
+            margin-left: 10px;
+            background: rgba(0, 0, 0, 0.72);
+            object-fit: cover;
+        }
+        
+
+        
 
         .communty-list-count{
             margin-top: 20px;
@@ -128,94 +190,225 @@
             
         }
         
+        .communty-regist-btn1{
+            position: relative;
+            position:  fixed;
+            width: 80px;
+            background-color: rgb(119, 94, 238);
+            color: white;
+            border-radius: 10px ;
+           bottom: 80px;
+            right: 400px;
+            z-index : 3;
+            text-align: center;
+            font-size: 20px;
+            padding: 8px;
+        }
+        
+       
     </style>
 </head>
 
  
 <body>
     <header>
-
+	<jsp:include page="../common/header.jsp"/>
     </header>
 
     <aside>
 
     </aside>
     <section>
-        <div class="communty-list-div">
-            <div class="communty-list-info">
-                <img src="빈회원.jpg" alt="">
-                <div class="communty-info">
-                    <p>이름</p>
-                    <p>시간</p>
-                </div>
-            </div>
-            <div class="communty-list-imgOne">
-                <img src="flower1.PNG" alt="">
-            </div>
-            <div class="communty-list-detail">
-                시험 공부를 준비중인데
-                심플하면서도 살짝 파스텔톤의 핑크빛 느낌의 가구 배치를 하고 싶어요 ㅠㅠ
-                그런데 원룸 구조가 앞뒤로 다 주방이나 화장실, 현관 문이 있어서 가구 배치를 도저히 어떻게 하면 좋을지 모르겠어요..
-                정말 예쁘게 오래 거주할 곳이라 이번에 예쁘게 인테리어 해보고 싶은데 도와주세요ㅠ
-            </div>
-            <div class="communty-list-count" align="center"> 
-                <div><i class="xi-heart xi-2x"></i><p>0</p></div>
-                <div><i class="xi-comment-o xi-2x"></i><p>0</p></div>
-            </div>
-           
-        </div>
+    	<c:if test="${!empty sessionScope.loginMember }">
+    		<div class="communty-regist-btn1">+글작성</div>
+    	</c:if>
+    	<div class="communty-list-section">
+    	
+    	
+    	
+    	<c:forEach var="post" items="${postList}">
+	        <div class="communty-list-div" id="${post.postNo}">
+	            <div class="communty-list-info">
+	                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
+	                <div class="communty-info">
+	                    <p><c:out value="${post.user.userId} "></c:out></p>
+	                    <p><fmt:formatDate value="${post.postDate }" pattern="yyyy-MM-dd HH:mm:ss"/></p>
+	                </div>
+	            </div>
+	            
+	            
+	            <hr>
+	            
+	            
+	            <c:if test="${fn:length(post.imgList) eq 1}">
+		            <div class="communty-list-imgOne">
+		                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[0].reName}" alt="">
+		            </div>
+		        </c:if>
+		        <c:if test="${fn:length(post.imgList) eq 2}">
+		           
+			            <div class="communty-list-imgTwo">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[0].reName}" alt="" class="">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[1].reName}" alt="" class="">
+			            </div>
+			            
+		        </c:if>
+		          <c:if test="${fn:length(post.imgList) eq 3}">
+		           
+			            <div class="communty-list-imgThree">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[0].reName}" alt="" class="">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[1].reName}" alt="" class="">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[2].reName}" alt="" class="">
+			            </div>
+			            
+		        </c:if>
+		        
+		         <c:if test="${fn:length(post.imgList) gt 3}">
+		           
+			            <div class="communty-list-imgThree">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[0].reName}" alt="" class="">
+			                <img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[1].reName}" alt="" class="">
+			                <div class="imgThree-addNum"><img src="${ pageContext.servletContext.contextPath }/resources/uploadFiles/${post.imgList[2].reName}" alt="" class=""><span>+${fn:length(post.imgList) - 3}</span></div>
+			            </div>
+			            
+		        </c:if>
+		        
+		        <hr>
+		        
+	            <div class="communty-list-count" align="center"> 
+	                <div><i class="xi-heart xi-2x"></i><p> <c:out value="${post.postLikes} "></c:out> </p></div>
+	                <div><i class="xi-comment-o xi-2x"></i><p> <c:out value="0"></c:out> </p></div>
+	            </div>
+	        </div> 
+	        
+	      </c:forEach>
 
-        <div class="communty-list-div">
-            <div class="communty-list-info">
-                <img src="빈회원.jpg" alt="">
-                <div class="communty-info">
-                    <p>이름</p>
-                    <p>시간</p>
-                </div>
-            </div>
-            <div class="communty-list-imgTwo">
-                <img src="flower1.PNG" alt="" class="">
-                <img src="flower1.PNG" alt="" class="">
-            </div>
-            <div class="communty-list-detail">
-                시험 공부를 준비중인데
-                심플하면서도 살짝 파스텔톤의 핑크빛 느낌의 가구 배치를 하고 싶어요 ㅠㅠ
-                그런데 원룸 구조가 앞뒤로 다 주방이나 화장실, 현관 문이 있어서 가구 배치를 도저히 어떻게 하면 좋을지 모르겠어요..
-                정말 예쁘게 오래 거주할 곳이라 이번에 예쁘게 인테리어 해보고 싶은데 도와주세요ㅠ
-            </div>
-
-            <div class="communty-list-count" align="center"> 
-                <div><i class="xi-heart-o xi-2x"></i><p>0</p></div>
-                <div><i class="xi-comment-o xi-2x"></i><p>0</p></div>
-            </div>
-          
-        </div>
-        <div class="communty-list-div">
-            <div class="communty-list-info">
-                <img src="빈회원.jpg" alt="">
-                <div class="communty-info">
-                    <p>이름</p>
-                    <p>시간</p>
-                </div>
-            </div>
-            <div class="communty-list-imgThree">
-                <img src="flower1.PNG" alt="" class="">
-                <img src="flower1.PNG" alt="" class="">
-                <img src="flower1.PNG" alt="" class="">
-            </div>
-            <div class="communty-list-detail">
-                시험 공부를 준비중인데
-                심플하면서도 살짝 파스텔톤의 핑크빛 느낌의 가구 배치를 하고 싶어요 ㅠㅠ
-                그런데 원룸 구조가 앞뒤로 다 주방이나 화장실, 현관 문이 있어서 가구 배치를 도저히 어떻게 하면 좋을지 모르겠어요..
-                정말 예쁘게 오래 거주할 곳이라 이번에 예쁘게 인테리어 해보고 싶은데 도와주세요ㅠ
-            </div>
-
-            <div class="communty-list-count" align="center"> 
-                <div><i class="xi-heart-o xi-2x"></i><p>0</p></div>
-                <div><i class="xi-comment-o xi-2x"></i><p>0</p></div>
-            </div>
-            
+        
         </div>
     </section>
+    
+    <script>
+		    $(function(){
+				var pageNo = 1;
+				console.log('pageNo : ' + pageNo);
+					
+				$(window).scroll(function(){   
+					
+					if($(window).scrollTop() >= $(document).height() - $(window).height()){
+
+						pageNo++;	
+						console.log('pageNo : ' + pageNo);
+		
+		     			$.ajax({
+		     				url : '${pageContext.servletContext.contextPath}/communty/ajaxCommuntyList',
+		    		        type : 'get',  
+		    		        data : { 
+		    		        		pageNo: pageNo
+		    		        		},
+		    		        success : function(data) {
+		    		        	
+		    		        	console.log(data);
+		    		        	
+		    		        	var $listsection = $(".communty-list-section");
+		    		        	
+		    		        	for(var i in data){
+		    		        		
+		    		        	
+		    		        		 $listdiv = $("<div class='communty-list-div'>").attr('id',data[i].postNo);
+		    		        		
+		    		        		 $listinfo = $("<div class='communty-list-info'>");	
+		    		        		 $info = $("<div class='communty-info'>");	
+		    		        		
+		    		        		 $img1 =  $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/images/profile.png');
+		    		        		 $nameP = $("<p>").text(data[i].user.userId);
+		    		        		 $dateP = $("<p>").text(data[i].postDate);
+		    		        		 
+		    		        		 $info.append($nameP).append($dateP);
+		    		        	     $listinfo.append($img1).append($info);
+		    		        		 $listdiv.append($listinfo);
+		    		        		 
+		    		        		 $listimgOne = $("<div class='communty-list-imgOne'>");
+		    		        		 $listimgTwo = $("<div class='communty-list-imgTwo'>");
+		    		        		 $listimgThree = $("<div class='communty-list-imgThree'>"); 
+		    		        		
+		    		        		
+		    		        		
+		    		        		 $listcount = $("<div class='communty-list-count' align='center'> ");
+		    		        		 $divC1 = $("<div>");
+		    		        		 $divC2 = $("<div>");
+		    		        		 
+		    		        		 $iheart = $("<i class='xi-heart xi-2x'>");
+		    		        		 $icomment = $("<i class='xi-comment-o xi-2x'>");
+		    		        		 
+		    		        		 $pLike = $("<p>").text(data[i].postLikes);
+		    		        		 $pLike = $("<p>").text(data[i].communtCount);
+		    		        		 
+		    		        		 $divC1.append($iheart).append($pLike);
+		    		        		 $divC2.append($icomment).append($pLike);
+		    		        		 
+		    		        		 $listcount.append($divC1).append($divC2);
+		    		        		 $listdiv.append($listinfo).append($listcount);
+		    		        		
+		    		        		 if(data[i].imgList.length == 1 ){
+		    		        			 $Img = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[0].reName).css("width","680px").css("height","500px").css("margin-left",'10px');
+		    		        			 $listimgOne.append($Img);
+		    		        			 
+		    		        			 $listdiv.append($listinfo).append("<hr>").append($listimgOne).append("<hr>").append($listcount);
+		    		        			 
+		    		        		 }else if(data[i].imgList.length == 2){
+		    		        			 $Img1 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[0].reName);
+		    		        			 $Img2 = $('<img >').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[1].reName);
+		    		        			 $listimgTwo.append($Img1).append($Img2);
+		    		        			 
+		    		        			 $listdiv.append($listinfo).append("<hr>").append($listimgTwo).append("<hr>").append($listcount);
+		    		        			 
+		    		        		 }else if(data[i].imgList.length == 3){
+		    		        			 $Img1 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[0].reName);
+		    		        			 $Img2 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[1].reName);
+		    		        			 $Img3 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[2].reName);
+		    		        			 $listimgThree.append($Img1).append($Img2).append($Img3);
+		    		        			 
+		    		        			 $listdiv.append($listinfo).append("<hr>").append($listimgThree).append("<hr>").append($listcount);
+		    		        			 
+		    		        		 }else if(data[i].imgList.length > 3){
+		    		        			 $Img1 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[0].reName);
+		    		        			 $Img2 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[1].reName);
+		    		        			 
+		    		        			 $addNum = $("<div class='imgThree-addNum'>");
+		    		        			 $Img3 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].imgList[2].reName);
+		    		        			 $span1 = $("<span>").text("+" + (data[i].imgList.length - 3));
+		    		        			 
+		    		        			 $addNum.append($Img3).append($span1);
+		    		        			 $listimgThree.append($Img1).append($Img2).append($addNum);
+		    		        			 
+		    		        			 /* $listdiv.append($listinfo).append($listimgThree).append($listcount); */
+		    		        			 $listdiv.append($listinfo).append("<hr>").append($listimgThree).append("<hr>").append($listcount);
+		    		        		 } 
+		    		        		 
+		    		        		
+		    		        		 
+		    		        		 $listsection.append($listdiv);
+		    		        		 
+		    		        		
+		    		        	}
+		    		        		
+		    		        	
+		    		        },
+		    		        error : function(error) {
+		    		        	
+		    		        }
+		     			});		
+					}
+				})		
+			});	
+		    
+		    
+		    $(".communty-regist-btn1").click(function(){
+		    	location.href="${ pageContext.servletContext.contextPath }/communty/communtyRegist";
+		    })
+		    
+		    
+    
+    </script>
 </body>
 </html>

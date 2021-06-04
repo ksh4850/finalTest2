@@ -23,8 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
+import com.finalproj.missingitnow.communty.model.dto.SPostListDTO;
 import com.finalproj.missingitnow.communty.model.service.CommuntyService;
-import com.finalproj.missingitnow.system.model.dto.SUserDTO;
+import com.finalproj.missingitnow.member.model.dto.PrivateMemberDTO;
 import com.google.gson.GsonBuilder;
 
 @Controller
@@ -45,15 +46,15 @@ public class CommuntyController {
 	}
 	
 	@PostMapping("communtyRegist")
-	public void postCommuntyRegist(@ModelAttribute SPostDTO post  ,Model model ,@RequestParam String reName  , @RequestParam String originName ,HttpServletRequest request) {
+	public String postCommuntyRegist(@ModelAttribute SPostDTO post  ,Model model ,@RequestParam String reName  , @RequestParam String originName ,HttpServletRequest request) {
 		
-		System.out.println(post.getHousingType());
-		System.out.println(post.getAcreage());
-		System.out.println(post.getResidenceType());
-		System.out.println(post.getCost());
-		System.out.println(post.getPostDetail());
-		System.out.println(reName);
-		System.out.println(originName);
+//		System.out.println(post.getHousingType());
+//		System.out.println(post.getAcreage());
+//		System.out.println(post.getResidenceType());
+//		System.out.println(post.getCost());
+//		System.out.println(post.getPostDetail());
+//		System.out.println(reName);
+//		System.out.println(originName);
 		
 		String[] reNames= reName.split(",");
 		String[] originNames= originName.split(",");
@@ -71,14 +72,18 @@ public class CommuntyController {
 			
 			imgList.add(img);
 			
+			
+			
+			
 		}
-		
 		
 		//세션 불러와서 넣기 일단은 임의의 값으로 처리
 		
-		post.setUser(new SUserDTO());
-		post.getUser().setUserNo("USER0001");
+		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
+	 
+	 	System.out.println("user" + user);
 		
+		post.setUser(user);
 		
 		post.setPostDate(new java.sql.Timestamp(System.currentTimeMillis()));
 		
@@ -93,7 +98,7 @@ public class CommuntyController {
 		model.addAttribute("post",post);
 		
 		
-
+		return "communty/communtyDetail";
 		
 	}
 	
@@ -168,9 +173,6 @@ public class CommuntyController {
 	public String getAjaxImgDelete(@RequestParam String reName , HttpServletRequest request ) {
 		
 		
-		
-		
-		
 		String deleteName = reName.substring(reName.lastIndexOf("/"));
 		
 //		System.out.println(reName);
@@ -183,6 +185,50 @@ public class CommuntyController {
 		new File(filePath + "\\" + deleteName).delete();
 		
 		return "삭제완료";
+	}
+	
+	
+	@GetMapping("communtyList")
+	public String getCommuntyList(Model model) {
+		
+		int pageNo = 0;
+		
+		
+		List<SPostListDTO> postList = communtyService.selectPostList();
+		
+		/*
+		 * for(SPostListDTO post : postList) { System.out.println(post); }
+		 */
+		
+		model.addAttribute("postList", postList);
+		
+		return "communty/communtyList";
+	}
+	
+	
+	@GetMapping(value="ajaxCommuntyList" , produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxCommuntyList(@RequestParam int pageNo) {
+		
+		System.out.println("pageNo"+pageNo);
+		
+		int startNum = (pageNo - 1 ) * 3 + 1;
+		int endNum = pageNo * 3;
+		
+		Map<String , Integer> map = new HashMap(); 
+		
+		map.put("startNum", startNum);
+		map.put("endNum", endNum);
+		
+		List<SPostListDTO> postList = communtyService.selectAajxPostList(map);
+		
+		
+		 for(SPostListDTO post : postList) { System.out.println(post); }
+		 
+		 String gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(postList);
+		 
+		return gson;
+		
 	}
 	
 	

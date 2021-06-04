@@ -1,6 +1,7 @@
 package com.finalproj.missingitnow.communty.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.finalproj.missingitnow.communty.model.dao.CommuntyMapper;
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
+import com.finalproj.missingitnow.communty.model.dto.SPostListDTO;
 
 @Service
 public class CommuntyServiceImpl implements CommuntyService{
@@ -49,6 +51,16 @@ public class CommuntyServiceImpl implements CommuntyService{
 		
 		
 		return result;
+	}
+
+	@Override
+	public List<SPostListDTO> selectPostList() {
+		return communtyMapper.selectPostList();
+	}
+
+	@Override
+	public List<SPostListDTO> selectAajxPostList(Map<String, Integer> map) {
+		return communtyMapper.selectAajxPostList(map);
 	}
 
 	

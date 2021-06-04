@@ -302,10 +302,10 @@
 	
 	
 
-        <footer id="footer">
+      <%--   <footer id="footer">
         <jsp:include page="../common/footer.jsp"/>
             <!-- 이부분에 만들어논 footer부분을 include하면됨 -->
-        </footer>
+        </footer> --%>
     
 						
 	
