@@ -174,7 +174,8 @@
         }
 
         .communty-list-count p {
-            display: inline-block;
+             display: inline-block; 
+           
             font-size: 20px;
             margin-top: 5px;
             margin-left: 10px;
@@ -276,7 +277,15 @@
 		        <hr>
 		        
 	            <div class="communty-list-count" align="center"> 
-	                <div><i class="xi-heart xi-2x"></i><p> <c:out value="${post.postLikes} "></c:out> </p></div>
+	            <c:if test="${empty post.likeStatus }">
+	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	             </c:if>
+	             <c:if test="${post.likeStatus eq 'N' }">
+	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	             </c:if>
+	             <c:if test="${post.likeStatus eq 'Y' }">
+	                <div id="${post.likeStatus }"><i class="xi-heart xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	             </c:if>
 	                <div><i class="xi-comment-o xi-2x"></i><p> <c:out value="${post.communtCount}"></c:out> </p></div>
 	            </div>
 	        </div> 
@@ -334,17 +343,28 @@
 		    		        		
 		    		        		
 		    		        		 $listcount = $("<div class='communty-list-count' align='center'> ");
-		    		        		 $divC1 = $("<div>");
+		    		        		 $divC1 = $("<div id='" + data[i].likeStatus + "'>");
 		    		        		 $divC2 = $("<div>");
 		    		        		 
-		    		        		 $iheart = $("<i class='xi-heart xi-2x'>");
+		    		        		 $iheart = "";
+		    		        		 
+		    		        		 if(data[i].likeStatus == 'Y'){
+		    		        			 $iheart = $("<i class='xi-heart xi-2x' id='likeBtn' >");
+		    		        		 }else if(data[i].likeStatus == 'N'){
+		    		        			 $iheart = $("<i class='xi-heart-o xi-2x' id='likeBtn'>");
+		    		        		 }else{
+		    		        			 $iheart = $("<i class='xi-heart-o xi-2x' id='likeBtn'>");
+		    		        		 }
+		    		        			
+		    		        		 
+		    		        		 
 		    		        		 $icomment = $("<i class='xi-comment-o xi-2x'>");
 		    		        		 
 		    		        		 $pLike = $("<p>").text(data[i].postLikes);
-		    		        		 $pLike = $("<p>").text(data[i].communtCount);
+		    		        		 $pcount = $("<p>").text(data[i].communtCount);
 		    		        		 
 		    		        		 $divC1.append($iheart).append($pLike);
-		    		        		 $divC2.append($icomment).append($pLike);
+		    		        		 $divC2.append($icomment).append($pcount);
 		    		        		 
 		    		        		 $listcount.append($divC1).append($divC2);
 		    		        		 $listdiv.append($listinfo).append($listcount);
@@ -411,6 +431,80 @@
 		    	var postNo = $(this).attr('id');
 		    	
 		    	location.href="${ pageContext.servletContext.contextPath }/communty/communtyDetail?postNo=" +postNo;
+		    })
+		    
+		      $(document).on('click',"#likeBtn" , function(e){
+		    	  
+		    	  e.stopPropagation();
+		    	  
+		    	  var likeStatus = $(this).parent().attr('id');
+		    	  var $like = $(this).parent().children('p');
+		    	  var postNo = $(this).parents(".communty-list-div").attr('id');
+		    	  var $likeItg = $(this);
+		    	  
+		    	 
+		    	  
+		    	  if(likeStatus == 'Y' || likeStatus == 'N'){
+		    		 
+		    			$.ajax({
+	                 		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeModify',
+	         		        type : 'get',  
+	         		        data : { 
+	         		        		postNo: postNo,
+	         		        		likeStatus : likeStatus
+	         		        		
+	         		        		},
+	         		        success : function(data) {
+	         		        	
+	         		        	if(likeStatus == 'Y'){
+	         		        		 $likeItg.attr('class','xi-heart-o xi-2x');
+	         		        		 $likeItg.parent().attr('id','N');
+	         		        	}else{
+	         		        		 $likeItg.attr('class','xi-heart xi-2x');
+	         		        		 $likeItg.parent().attr('id','Y');
+	         		        	}
+	         		        	  
+	         		        	 $like.text(data);
+	         		        	 
+	         		      
+	         		        	
+	         		        	
+	         		        },
+	         		        error: function(error){
+	         		        	
+	         		        }
+	                 	}) 
+		    		  
+		    	  }else{
+		    		  console.log("인설트");
+		    		  
+		    		  $.ajax({
+	                 		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeinsert',
+	         		        type : 'get',  
+	         		        data : { 
+	         		        		postNo: postNo,
+	         		        		
+	         		        		},
+	         		        success : function(data) {
+	         		        	
+	         		        	 $likeItg.attr('class','xi-heart xi-2x');
+	         		        	 $likeItg.parent().attr('id','Y');
+	         		        	 $like.text(data);
+	         		        	 
+	         		      
+	         		        	
+	         		        	
+	         		        },
+	         		        error: function(error){
+	         		        	
+	         		        }
+	                 	}) 
+		    		  
+		    		  
+		    		  
+		    	  }
+		    	  
+		    	
 		    })
 		    
 		    

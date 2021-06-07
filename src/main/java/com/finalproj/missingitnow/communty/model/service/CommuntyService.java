@@ -33,6 +33,14 @@ public interface CommuntyService {
 	int modifyAjaxCommentDetail(SPCommentDTO comment);
 
 	int modifyAjaxResponsetDetail(SPReCommentDTO recomment);
+
+	String selectLikeStatus(Map<String, String> map);
+
+	int modifyLikeStatus(Map<String, String> map);
+
+	int selectAjaxLike(String postNo);
+
+	int insertLikeStatus(Map<String, String> map);
 	
 
 	

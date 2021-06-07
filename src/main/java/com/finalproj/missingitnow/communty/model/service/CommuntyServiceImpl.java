@@ -136,6 +136,26 @@ public class CommuntyServiceImpl implements CommuntyService{
 		return communtyMapper.modifyAjaxResponsetDetail(recomment);
 	}
 
+	@Override
+	public String selectLikeStatus(Map<String,String> map) {
+		return communtyMapper.selectLikeStatus(map);
+	}
+
+	@Override
+	public int modifyLikeStatus(Map<String, String> map) {
+		return communtyMapper.modifyLikeStatus(map);
+	}
+
+	@Override
+	public int selectAjaxLike(String postNo) {
+		return communtyMapper.selectAjaxLike(postNo);
+	}
+
+	@Override
+	public int insertLikeStatus(Map<String, String> map) {
+		return communtyMapper.insertLikeStatus(map);
+	}
+
 	
 
 }

@@ -80,7 +80,7 @@ public class CommuntyController {
 			
 		}
 		
-		//세션 불러와서 넣기 일단은 임의의 값으로 처리
+		
 		
 		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
 	 
@@ -192,13 +192,26 @@ public class CommuntyController {
 	
 	
 	@GetMapping("communtyList")
-	public String getCommuntyList(Model model) {
+	public String getCommuntyList(Model model , HttpServletRequest request) {
 		
 		int pageNo = 0;
+		
+		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
 		
 		
 		List<SPostListDTO> postList = communtyService.selectPostList();
 		
+		if(user != null) {
+			for(int i = 0 ; i < postList.size()  ;i ++) {
+				SPostListDTO post = postList.get(i);
+				
+				Map<String ,String> map = new HashMap<>();
+				map.put("postNo", post.getPostNo());
+				map.put("userNo", user.userNo);
+				post.setLikeStatus(communtyService.selectLikeStatus(map));
+				
+			}
+		}
 		/*
 		 * for(SPostListDTO post : postList) { System.out.println(post); }
 		 */
@@ -405,6 +418,68 @@ public class CommuntyController {
 		return gson;
 	
 	}
+	
+	@GetMapping(value="ajaxLikeModify" ,produces="text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxLikeStatusModify(@RequestParam String likeStatus , @RequestParam String postNo , HttpServletRequest request) {
+		
+		
+		System.out.println(likeStatus);
+		
+		if(likeStatus.equals("Y")) {
+			likeStatus = "N";
+		}else {
+			likeStatus = "Y";
+		}
+		
+		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
+		
+		Map<String ,String > map = new HashMap<>();
+		map.put("likeStatus", likeStatus);
+		map.put("userNo", user.getUserNo());
+		map.put("postNo", postNo);
+		
+		int result = communtyService.modifyLikeStatus(map);
+		
+		String like = "";
+		
+		if(result > 0) {
+			like = communtyService.selectAjaxLike(postNo) + "";
+					
+		}
+		
+		 
+		return like;
+	
+	}
+	
+	@GetMapping(value="ajaxLikeinsert" ,produces="text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxLikeStatusInsert(  @RequestParam String postNo , HttpServletRequest request) {
+		
+		
+		
+		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
+		
+		Map<String ,String > map = new HashMap<>();
+		
+		map.put("userNo", user.getUserNo());
+		map.put("postNo", postNo);
+		
+		int result = communtyService.insertLikeStatus(map);
+		
+		String like = "";
+		
+		if(result > 0) {
+			like = communtyService.selectAjaxLike(postNo) + "";
+					
+		}
+		
+		 
+		return like;
+	
+	}
+	
 	
 
 }

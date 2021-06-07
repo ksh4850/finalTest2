@@ -147,7 +147,7 @@
         }
 
         .detailImg-div i{
-            
+            display: none;
             position: absolute;
             right: 25px;
             top: 10px;
@@ -331,7 +331,7 @@
 							
 							var $thumDiv  =$("<div class='thum-div'>");
 							var $detailImgDiv  =$("<div class='detailImg-div'>");
-							var $itag1 = $('<i class="xi-close xi-2x">');
+							var $itag1 = $('<i class="xi-close xi-2x">').css('display',"none");
 							var $itag2 = $('<i class="xi-close xi-2x">');
 							var $detailImg = $('<img class="detailImg" >').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","500px").css("height","500px").attr('id',data[i].originFileName);
 							var $thumbImg = $('<img class="thumbImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","120px").css("height","120px");
@@ -472,6 +472,24 @@
 
             })
             
+            
+            
+            
+              $(document).on('mouseover',".detailImg-div" , function(e){
+            	  
+            	  
+            	  
+            	  $(this).parent().find("i").css("display","inline-block");
+            	  
+              })
+              
+               $(document).on('mouseout',".detailImg-div" , function(e){
+            	  
+            	  
+            	  
+            	  $(this).parent().find("i").css("display","none");
+            	  
+              })
             
             
             

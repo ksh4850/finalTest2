@@ -177,6 +177,7 @@
                                 ) E
                                  WHERE E.RUNM BETWEEN 1 AND 3
                                 ) 
+            ORDER BY  A.POST_NO DESC
  	</select>
  	
  	<select id="selectAajxPostList" parameterType="hashmap" resultMap="SPostListResultMap">
@@ -208,6 +209,7 @@
                                 ) E
                                  WHERE E.RUNM BETWEEN #{startNum} AND #{endNum}
                                 ) 
+            ORDER BY  A.POST_NO DESC
  	
  	</select>
  	
@@ -228,7 +230,7 @@
  	
  	<resultMap id="SmemberResulMap1" type="privateMemeberDTO">
 		<id column="POST_USER_NO" property="userNo" />
-		<result column="POST_USER_NO" property="userId" />
+		<result column="POST_USER_ID" property="userId" />
 	</resultMap>
  	
  	<resultMap type="SPCommentDTO" id="SPDCommentMap">
@@ -321,6 +323,7 @@
 				  FROM TBL_POST A
 		          JOIN TBL_USER B ON(A.USER_NO = B.USER_NO) 
 		          WHERE A.POST_NO =  #{postNo}
+		          
 		           ) G 
 		           ,
                    (SELECT
@@ -335,7 +338,7 @@
 			          JOIN TBL_USER E ON(C.USER_NO = E.USER_NO)
 			          WHERE  C.POST_NO =  #{postNo}
 			            AND  C.POST_COMT_STATUS = 'Y'
-			            ORDER BY C.POST_COMT_NO DESC) H
+			            ORDER BY  C.POST_COMT_NO DESC) H
 			        ,
 			      (SELECT
 			               D.POST_RECOMT_NO
@@ -351,7 +354,7 @@
 			          WHERE  C.POST_NO =  #{postNo}
 			            AND  C.POST_COMT_STATUS = 'Y'
 			            AND  D.POST_RECOMT_STATUS='Y'
-			            ORDER BY C.POST_COMT_NO DESC) I
+			            ) I
        WHERE G.POST_NO = H.POST_NO(+)
         AND  H.POST_COMT_NO = I.POST_COMT_NO(+)
  	</select>
@@ -405,7 +408,7 @@
 		          WHERE  A.POST_NO = #{postNo}
 		            AND  A.POST_COMT_STATUS = 'Y'
 		            AND  B.POST_RECOMT_STATUS='Y'
-		            ORDER BY A.POST_COMT_NO DESC) F
+		            ) F
 		     WHERE  E.POST_COMT_NO = F.POST_COMT_NO(+)     
 		            
  	
@@ -478,6 +481,47 @@
 		           ) F
  	
  	</select>
+ 	
+ 	
+ 	<select id="selectLikeStatus" resultType="string" parameterType="hashmap">
+ 	
+ 		SELECT
+ 				A.POST_LIKE_STATUS
+ 		  FROM TBL_POST_LIKE A
+ 		  WHERE A.POST_NO =#{postNo}
+ 		    AND A.USER_NO =#{userNo}
+ 	
+ 	
+ 	</select>
+ 	
+ 	<update id="modifyLikeStatus" parameterType="hashmap" >
+ 		UPDATE TBL_POST_LIKE
+		  SET POST_LIKE_STATUS = #{likeStatus}
+		  WHERE POST_NO = #{postNo}
+		   AND USER_NO = #{userNo}
+ 	</update>
+ 	
+ 	<select id="selectAjaxLike" resultType="_int" parameterType="string">
+ 		SELECT
+ 		   	   A.POST_LIKES
+ 		  FROM TBL_POST A
+ 		  WHERE A.POST_NO = #{postNo}
+ 	</select>
+ 	
+ 	<insert id="insertLikeStatus" parameterType="hashmap" >
+ 		INSERT 
+ 		  INTO TBL_POST_LIKE 
+ 		  VALUES 
+ 		  (
+ 		  	'PSTL'||LPAD(SEQ_POST_LIKE.NEXTVAL , 4 , 0)
+ 		  , #{postNo}
+ 		  , #{userNo}
+ 		  ,'Y'
+ 		  ,SYSDATE
+ 		  
+ 		  )
+ 
+ 	</insert>
  	
  	
  	

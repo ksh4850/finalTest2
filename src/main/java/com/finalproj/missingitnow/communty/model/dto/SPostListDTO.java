@@ -20,6 +20,7 @@ public class SPostListDTO {
 	private int postLikes;
 	private List<SPostImgDTO> imgList;
 	private int communtCount;
+	private String likeStatus;
 
 	public SPostListDTO() {
 		
@@ -27,7 +28,7 @@ public class SPostListDTO {
 
 	public SPostListDTO(String postNo, PrivateMemberDTO user, String housingType, String acreage, String residenceType,
 			String cost, String postDetail, Timestamp postDate, String postStatus, int postHits, int postLikes,
-			List<SPostImgDTO> imgList, int communtCount) {
+			List<SPostImgDTO> imgList, int communtCount, String likeStatus) {
 		super();
 		this.postNo = postNo;
 		this.user = user;
@@ -42,6 +43,7 @@ public class SPostListDTO {
 		this.postLikes = postLikes;
 		this.imgList = imgList;
 		this.communtCount = communtCount;
+		this.likeStatus = likeStatus;
 	}
 
 	public String getPostNo() {
@@ -148,13 +150,24 @@ public class SPostListDTO {
 		this.communtCount = communtCount;
 	}
 
+	public String getLikeStatus() {
+		return likeStatus;
+	}
+
+	public void setLikeStatus(String likeStatus) {
+		this.likeStatus = likeStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "SPostListDTO [postNo=" + postNo + ", user=" + user + ", housingType=" + housingType + ", acreage="
 				+ acreage + ", residenceType=" + residenceType + ", cost=" + cost + ", postDetail=" + postDetail
 				+ ", postDate=" + postDate + ", postStatus=" + postStatus + ", postHits=" + postHits + ", postLikes="
-				+ postLikes + ", imgList=" + imgList + ", communtCount=" + communtCount + "]";
+				+ postLikes + ", imgList=" + imgList + ", communtCount=" + communtCount + ", likeStatus=" + likeStatus
+				+ "]";
 	}
+
+	
 	
 	
 	

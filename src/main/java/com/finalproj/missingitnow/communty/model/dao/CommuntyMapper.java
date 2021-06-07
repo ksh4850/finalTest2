@@ -40,4 +40,12 @@ public interface CommuntyMapper {
 
 	int selectCommentCounnt(String postNo);
 
+	String selectLikeStatus(Map<String, String> map);
+
+	int modifyLikeStatus(Map<String, String> map);
+
+	int selectAjaxLike(String postNo);
+
+	int insertLikeStatus(Map<String, String> map);
+
 }
