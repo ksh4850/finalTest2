@@ -16,7 +16,6 @@
 
     <style>
         .communty-detail-div{
-           
             width: 700px;
             /* border: 2px solid rgb(119, 94, 238); */
             margin-left: 300px;
@@ -303,7 +302,7 @@
 
             <div class="communty-comment-count" > 
                 <div><i class="xi-heart-o xi-2x"></i><p><c:out value="${post.postLikes }"/></p></div>
-                <div><i class="xi-comment-o xi-2x"></i><p><c:out value="${post.postHits }"/></p></div>
+                <div><i class="xi-comment-o xi-2x"></i><p><c:out value="${post.communtCount }"/></p></div>
             </div>
 			<c:if test="${!empty sessionScope.loginMember }">
              <div class="communty-comment-regist">

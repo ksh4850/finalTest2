@@ -459,7 +459,25 @@
  	</update>
  	
  	
+ 	<select id="selectCommentCounnt" parameterType="string" resultType="_int">
+ 		SELECT
+		      E.COUNT1 + F.COUNT2
+		 FROM (SELECT
+				     count(*) as COUNT1
+		          FROM TBL_POST_COMMENTS A
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y') E
+		        ,
+		      (SELECT
+		              count(*) as COUNT2
+		          FROM TBL_POST_COMMENTS A
+		          JOIN TBL_POST_RECOMMENT B ON(A.POST_COMT_NO = B.POST_COMT_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+		            AND  B.POST_RECOMT_STATUS='Y'
+		           ) F
  	
+ 	</select>
  	
  	
  	

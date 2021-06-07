@@ -57,17 +57,39 @@ public class CommuntyServiceImpl implements CommuntyService{
 
 	@Override
 	public List<SPostListDTO> selectPostList() {
-		return communtyMapper.selectPostList();
+		
+		List<SPostListDTO> postList = communtyMapper.selectPostList();
+		
+		for(int i= 0 ;  i < postList.size() ; i++) {
+			postList.get(i).setCommuntCount(communtyMapper.selectCommentCounnt( postList.get(i).getPostNo()));
+		}
+		
+		
+		return postList;
 	}
 
 	@Override
 	public List<SPostListDTO> selectAajxPostList(Map<String, Integer> map) {
-		return communtyMapper.selectAajxPostList(map);
+		
+	 List<SPostListDTO> postList = communtyMapper.selectAajxPostList(map);
+		
+		for(int i= 0 ;  i < postList.size() ; i++) {
+			postList.get(i).setCommuntCount(communtyMapper.selectCommentCounnt( postList.get(i).getPostNo()));
+			
+		}
+		
+		return 	 postList;
 	}
 
 	@Override
 	public SPostDTO selectCommunryDetail(String postNo) {
-		return communtyMapper.selectCommunryDetail(postNo);
+		
+		SPostDTO post = communtyMapper.selectCommunryDetail(postNo);
+		
+		post.setCommuntCount(communtyMapper.selectCommentCounnt( post.getPostNo()));
+		
+		
+		return post;
 	}
 
 	@Override

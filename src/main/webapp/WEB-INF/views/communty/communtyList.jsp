@@ -277,7 +277,7 @@
 		        
 	            <div class="communty-list-count" align="center"> 
 	                <div><i class="xi-heart xi-2x"></i><p> <c:out value="${post.postLikes} "></c:out> </p></div>
-	                <div><i class="xi-comment-o xi-2x"></i><p> <c:out value="0"></c:out> </p></div>
+	                <div><i class="xi-comment-o xi-2x"></i><p> <c:out value="${post.communtCount}"></c:out> </p></div>
 	            </div>
 	        </div> 
 	        

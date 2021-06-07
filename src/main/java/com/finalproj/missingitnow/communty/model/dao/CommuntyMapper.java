@@ -38,4 +38,6 @@ public interface CommuntyMapper {
 
 	int modifyAjaxResponsetDetail(SPReCommentDTO recomment);
 
+	int selectCommentCounnt(String postNo);
+
 }
