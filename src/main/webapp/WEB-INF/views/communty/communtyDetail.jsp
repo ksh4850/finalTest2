@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%> 
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +19,8 @@
            
             width: 700px;
             /* border: 2px solid rgb(119, 94, 238); */
-            margin-left: 600px;
+            margin-left: 300px;
+            margin-top: 130px;
         }
 
         .communty-detail-header{
@@ -224,13 +227,33 @@
         .communty-response-div{
             display: none;
         }
+        
+         .communty-comment-div{
+        	margin-bottom: 70px;
+        }
+        
+        .modify-comment input[type="text"]{
+             margin-top : 8px;
+             line-height: 2;
+             width:400px;
+        	 border: 1px solid rgb(119, 94, 238);
+        }
+        
+        .modify-comment input[type="button"]{
+        	background-color:  rgb(119, 94, 238);
+            line-height: 2;
+            border-radius: 5px;
+            color: white;
+            margin-left: 15px;
+            width: 60px;
+        }
 
 
     </style>
 </head>
 <body>
     <header>
-
+		<jsp:include page="../common/header.jsp"/>
     </header>
 
     <aside>
@@ -238,170 +261,137 @@
     </aside>
     <section>
         <div class="communty-detail-div">
-            <div class="communty-detail-header">
-                <img src="빈회원.jpg" alt="">
+            <div class="communty-detail-header" id="${post.postNo}">
+               	 <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
                 <div class="communty-info">
-                    <p>이름</p>
-                    <p>시간</p>
+                    <p><c:out value="${post.user.userId}"></c:out></p>
+                    <p><fmt:formatDate value="${post.postDate}" pattern="yyyy-MM-dd HH:mm:ss"/></p>
+                    
                 </div>
             </div>
-
+			
+			
             <div class="communty-info2">
                 <table>
+                <c:if test="${!empty post.housingType  or !empty post.acreage }">
                     <tr>
                         <td width="100px";>기본정보</td>
-                        <td>10평미만 / 원룸</td>
+                        <td>${post.housingType } / ${post.acreage}  </td>
                     </tr>
+                </c:if>
+                 <c:if test="${!empty post.residenceType }">
                     <tr>
                         <td width="100px">주거형태</td>
-                        <td>혼자사는집</td>
+                        <td><c:out value="${post.residenceType }"/></td>
                     </tr>
+                  </c:if>
+                   <c:if test="${!empty post.cost }">   
                     <tr>
                         <td width="100px">가구/소품비</td>
-                        <td>50만원</td>
+                        <td><c:out value="${post.cost }"/>만원</td>
                     </tr>
+                   </c:if>
                 </table>
             </div>
-
+		 
             <div class="communty-detail-detail">
-                
+                ${post.postDetail }
 
         		
             </div>
 
 
             <div class="communty-comment-count" > 
-                <div><i class="xi-heart-o xi-2x"></i><p>0</p></div>
-                <div><i class="xi-comment-o xi-2x"></i><p>0</p></div>
+                <div><i class="xi-heart-o xi-2x"></i><p><c:out value="${post.postLikes }"/></p></div>
+                <div><i class="xi-comment-o xi-2x"></i><p><c:out value="${post.postHits }"/></p></div>
             </div>
-
+			<c:if test="${!empty sessionScope.loginMember }">
              <div class="communty-comment-regist">
-                <input type="text"><input type="button" value="등록하기">
+                <input type="text" id="commentText"><input type="button" value="등록하기" id="commentRegistBtn">
              </div>
+            </c:if>
+            
+            <c:if test="${empty sessionScope.loginMember }">
+             <div class="communty-comment-regist">
+                <input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">
+             </div>
+            </c:if>
 
              <div class="communty-comment-div">
-
-                <div class="communty-comment">
-                    <img src="빈회원.jpg" alt="" class="">
-                    <p>아이디</p>
-                    <p>작성시간</p>
-                    <div class="comment-detail">
-                        저도 집꾸미는데에 초보지만.. '기타' 사진을 보니.. 옷들이 많아보이는데 행거로 사용하기보다는 비싸지만. 
-                        큰 옷장을 사서 거기에 정리해보는것도 괜찮을거같아요..ㅠ 제가 행거 쓰다가 옷장을 샀는데 진짜 방이 엄청 깔끔해졌거든요... 
-                        또 고양이를 키우시니 계단형 수납이라고 1단, 2단, 3단 수납함을 구매하셔서 수납 윗칸은 아무것도 올리지 마시고 애들올라가게끔 
-                        캣타워용도로 쓰는것도 좋을거같습니다. 만약 캣타워를 사야겠다고 하시면 캣타워보다는 자리를 덜 차지하는 캣폴이 어떠세요..?ㅠㅠ 
-                        비싸지만 캣타워에서 캣폴로 변경하니깐 훨씬 공간이 넓어져서 추천해드리고싶어요ㅠㅠ
+			
+			<c:forEach var="comm" items="${post.commentList}">
+                <div class="communty-comment" id="${comm.comtNo}">
+                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
+                    <p><c:out value="${comm.user.userId }"></c:out></p>
+                    <p><fmt:formatDate value="${comm.comtDate }" pattern="yyyy-MM-dd HH:mm:ss"/></p>
+                    <c:if test="${sessionScope.loginMember.userNo eq  comm.user.userNo }">
+                    <p id="commentModifyBtn">수정 / </p> <p id="commentDeleteBtn">삭제</p>
+                    </c:if>
+                    <div class="comment-detail1">
+              			<c:out value="${comm.comtDetail }"></c:out>
                     </div>
 
                      <input type="button" value="답글달기" class="responseBtn">
                      
 
-                    
-                        <div class="communty-response-div">
-                            <div class="communty-response">
-                                <i class="xi-subdirectory"></i><img src="빈회원.jpg" alt="" class="">
-                                <p>아이디</p>
-                                <p>작성시간</p>
+               
+               
+               <div class="communty-response-div" >
+              
+               <c:if test="${!empty comm.reCommentList }">
+               
+               <c:forEach var="reco" items="${comm.reCommentList}"> 
+                            <div class="communty-response" id="${reco.reComtNo }">
+                            
+                                <i class="xi-subdirectory"></i><img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
+                                <p><c:out value="${reco.user.userId }"></c:out></p>
+                                <p><fmt:formatDate value="${reco.reComtDate  }" pattern="yyyy-MM-dd HH:mm:ss"/> </p>
+                                 <c:if test="${sessionScope.loginMember.userNo eq  reco.user.userNo }">
+	                             	<p id="responseModifyBtn">수정 / </p><p id="responseDeleteBtn">삭제</p>	
+	                             </c:if>
                                 <div class="comment-detail">
-                                    저도 집꾸미는데에 초보지만.. '기타' 사진을 보니.. 옷들이 많아보이는데 행거로 사용하기보다는 비싸지만. 
-                                    큰 옷장을 사서 거기에 정리해보는것도 괜찮을거같아요..ㅠ 제가 행거 쓰다가 옷장을 샀는데 진짜 방이 엄청 깔끔해졌거든요... 
-                                    또 고양이를 키우시니 계단형 수납이라고 1단, 2단, 3단 수납함을 구매하셔서 수납 윗칸은 아무것도 올리지 마시고 애들올라가게끔 
-                                    캣타워용도로 쓰는것도 좋을거같습니다. 만약 캣타워를 사야겠다고 하시면 캣타워보다는 자리를 덜 차지하는 캣폴이 어떠세요..?ㅠㅠ 
-                                    비싸지만 캣타워에서 캣폴로 변경하니깐 훨씬 공간이 넓어져서 추천해드리고싶어요ㅠㅠ
-                                </div>
-                            </div>
-                            <div class="communty-response">
-                                <i class="xi-subdirectory"></i><img src="빈회원.jpg" alt="" class="">
-                                <p>아이디</p>
-                                <p>작성시간</p>
-                                <div class="comment-detail">
-                                    기본적으로 장판 벽지 문 틀 부터 바꿔야 할것 같습니다...
-                                </div>
-                            </div>
-                            <div class="communty-response">
-                                <i class="xi-subdirectory"></i><img src="빈회원.jpg" alt="" class="">
-                                <p>아이디</p>
-                                <p>작성시간</p>
-                                <div class="comment-detail">
-                                    가구배치나 인테리어 원하시면 문의 주세요. 제가 도와드릴께요^^ kkkang282@naver.com이예요~
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="response-regist">
-                                <i class="xi-subdirectory"></i><input type="text"><input type="button" value="등록하기">
-                        </div>
-                </div>
-
-                <div class="communty-comment">
-                        <img src="빈회원.jpg" alt="" class="">
-                        <p>아이디</p>
-                        <p>작성시간</p>
-                        <div class="comment-detail">
-                            저도 집꾸미는데에 초보지만.. '기타' 사진을 보니.. 옷들이 많아보이는데 행거로 사용하기보다는 비싸지만. 
-                            큰 옷장을 사서 거기에 정리해보는것도 괜찮을거같아요..ㅠ 제가 행거 쓰다가 옷장을 샀는데 진짜 방이 엄청 깔끔해졌거든요... 
-                            또 고양이를 키우시니 계단형 수납이라고 1단, 2단, 3단 수납함을 구매하셔서 수납 윗칸은 아무것도 올리지 마시고 애들올라가게끔 
-                            캣타워용도로 쓰는것도 좋을거같습니다. 만약 캣타워를 사야겠다고 하시면 캣타워보다는 자리를 덜 차지하는 캣폴이 어떠세요..?ㅠㅠ 
-                            비싸지만 캣타워에서 캣폴로 변경하니깐 훨씬 공간이 넓어져서 추천해드리고싶어요ㅠㅠ
-                        </div>
-    
-                         <input type="button" value="답글달기" class="responseBtn">
-                         
-    
-                        
-                            <div class="communty-response-div">
-                                <div class="communty-response">
-                                    <i class="xi-subdirectory"></i><img src="빈회원.jpg" alt="" class="">
-                                    <p>아이디</p>
-                                    <p>작성시간</p>
-                                    <div class="comment-detail">
-                                        저도 집꾸미는데에 초보지만.. '기타' 사진을 보니.. 옷들이 많아보이는데 행거로 사용하기보다는 비싸지만. 
-                                        큰 옷장을 사서 거기에 정리해보는것도 괜찮을거같아요..ㅠ 제가 행거 쓰다가 옷장을 샀는데 진짜 방이 엄청 깔끔해졌거든요... 
-                                        또 고양이를 키우시니 계단형 수납이라고 1단, 2단, 3단 수납함을 구매하셔서 수납 윗칸은 아무것도 올리지 마시고 애들올라가게끔 
-                                        캣타워용도로 쓰는것도 좋을거같습니다. 만약 캣타워를 사야겠다고 하시면 캣타워보다는 자리를 덜 차지하는 캣폴이 어떠세요..?ㅠㅠ 
-                                        비싸지만 캣타워에서 캣폴로 변경하니깐 훨씬 공간이 넓어져서 추천해드리고싶어요ㅠㅠ
-                                    </div>
-                                </div>
-                                <div class="communty-response">
-                                    <i class="xi-subdirectory"></i><img src="빈회원.jpg" alt="" class="">
-                                    <p>아이디</p>
-                                    <p>작성시간</p>
-                                    <div class="comment-detail">
-                                        기본적으로 장판 벽지 문 틀 부터 바꿔야 할것 같습니다...
-                                    </div>
-                                </div>
-                                <div class="communty-response">
-                                    <i class="xi-subdirectory"></i><img src="빈회원.jpg" alt="" class="">
-                                    <p>아이디</p>
-                                    <p>작성시간</p>
-                                    <div class="comment-detail">
-                                        가구배치나 인테리어 원하시면 문의 주세요. 제가 도와드릴께요^^ kkkang282@naver.com이예요~
-                                    </div>
-                                </div>
-                            </div>
-    
-                            <div class="response-regist">
-                                    <i class="xi-subdirectory"></i><input type="text"><input type="button" value="등록하기">
-                            </div>
-                </div>
-
+                                 <c:out value="${reco.reComtDetail }"></c:out>
+                                </div>  
+                            </div> 
+                     		
+                 </c:forEach>
+              	</c:if>     
+				
+				</div>
+						<c:if test="${!empty sessionScope.loginMember }">
+	                        <div class="response-regist">
+	                                <i class="xi-subdirectory"></i><input type="text" id="reposeRegistText"><input type="button" id="reposeRegistBtn" value="등록하기">
+	                        </div>
+                    	</c:if>
+                    	<c:if test="${empty sessionScope.loginMember }">
+	                        <div class="response-regist">
+	                                <i class="xi-subdirectory"></i><input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">
+	                        </div>
+                    	</c:if>
+                
+				
              </div>
-
+		</c:forEach>
 
 
 
 
         </div>
 
-          
+     </div>     
 
+    <br>
 
+	
        
     </section>
+    
+    
 
 
     <script>
-        $(".responseBtn").click(function(){
+    $(document).on('click',".responseBtn" , function(){
+       
 
             if( $(this).parent().children(".response-regist").css("display") == "none"){
                 
@@ -413,6 +403,371 @@
             }
             
         })
+        
+        //댓글 달기
+        $("#commentRegistBtn").click(function(){
+        	
+        	var postNo = $(".communty-detail-header").attr('id');
+        	var commentText = $("#commentText").val();
+        	
+        	if(commentText){
+        	$.ajax({
+        		url : '${pageContext.servletContext.contextPath}/communty/ajaxcommentRegist',
+		        type : 'get',  
+		        data : { 
+		        		postNo: postNo ,
+		        		commentText:commentText
+		        		},
+		        success : function(data) {
+		        	
+		        	/* console.log(data); */
+		        	 $("#commentText").text("");
+		        	 $(".communty-comment-div").html("");
+		        	comment(data);
+		        	
+		        	
+		        },
+		        error: function(error){
+		        	
+		        }
+        	})
+        	
+        	}
+        	
+        })
+        
+        //탑글달기
+         $(document).on('click',"#reposeRegistBtn" , function(){
+        	 
+        	 
+        	 var postNo = $(".communty-detail-header").attr('id');
+        	 var comtNo = $(this).parent().parent().attr('id');
+        	 var reposeRegistText =  $(this).parent().find("#reposeRegistText").val();
+
+        	 
+        	 if(reposeRegistText){
+             	$.ajax({
+             		url : '${pageContext.servletContext.contextPath}/communty/ajaxresponseRegist',
+     		        type : 'get',  
+     		        data : { 
+     		        		postNo: postNo,
+     		        		comtNo : comtNo ,
+     		        		reposeRegistText : reposeRegistText
+     		        		},
+     		        success : function(data) {
+     		        	
+     		        	/* console.log(data); */
+     		        	
+     		        	 $(".communty-comment-div").html("");
+     		        	comment(data);
+     		        	
+     		        	
+     		        },
+     		        error: function(error){
+     		        	
+     		        }
+             	})
+             	
+             	}
+        	 
+        	 
+         })
+         
+         //댓글 삭제
+          $(document).on('click',"#commentDeleteBtn" , function(e){
+        	 var postNo = $(".communty-detail-header").attr('id');
+        	 var comtNo = $(this).parent().attr('id');
+        	
+        	 console.log(comtNo);
+        	 e.stopPropagation();
+        	 
+        	 if(reposeRegistText){
+             	$.ajax({
+             		url : '${pageContext.servletContext.contextPath}/communty/ajaxcommentDelete',
+     		        type : 'get',  
+     		        data : { 
+     		        		postNo: postNo,
+     		        		comtNo : comtNo 
+     		        		},
+     		        success : function(data) {
+     		        	
+     		        	/* console.log(data); */
+     		        	
+     		        	 $(".communty-comment-div").html("");
+     		        	comment(data);
+     		        	
+     		        	
+     		        },
+     		        error: function(error){
+     		        	
+     		        }
+             	})
+             	
+             	}
+        	 
+        	 
+         })
+         
+         
+         //답글삭제
+          $(document).on('click',"#responseDeleteBtn" , function(e){
+        	 var postNo = $(".communty-detail-header").attr('id');
+        	 var reComtNo = $(this).parents(".communty-response").attr('id');
+        	 
+        	 e.stopPropagation();
+        	 
+        	 if(reposeRegistText){
+             	$.ajax({
+             		url : '${pageContext.servletContext.contextPath}/communty/ajaxresponseDelete',
+     		        type : 'get',  
+     		        data : { 
+     		        		postNo: postNo,
+     		        		reComtNo : reComtNo 
+     		        		},
+     		        success : function(data) {
+     		        	
+     		        	/* console.log(data); */
+     		        	
+     		        	 $(".communty-comment-div").html("");
+     		        	comment(data);
+     		        	
+     		        	
+     		        },
+     		        error: function(error){
+     		        	
+     		        }
+             	})
+             	
+             	}
+        	 
+        	 
+         })
+         
+         //댓글 수정
+           $(document).on('click',"#commentModifyBtn" , function(e){
+        	 var postNo = $(".communty-detail-header").attr('id');
+        	 var reComtNo = $(this).parents(".communty-response").attr('id');
+        	 var detail = $(this).parent().find(".comment-detail1").text();
+        	
+        	 
+        	 e.stopPropagation();
+
+        	 
+        	 
+        	 $modiv = $('<div class="modify-comment">');
+        	 $motext = $('<input type="text" id="modifyCommentText" value="'+ detail.trim() +'">');
+        	 $registBtn = $('<input type="button" id="modifyCommentBtn" value="수정하기">');
+        	 $cancelBtn = $('<input type="button" id="modifyCancelBtn" value="수정 취소">');
+        	 
+        	 
+        	 var $de = $(this).parent().find(".comment-detail1");
+        	 $de.html("");
+        	 $modiv.append($motext).append($registBtn).append($cancelBtn)
+        	 $de.append($modiv);
+        	 
+        	
+        	 
+        	 $(document).on('click',"#modifyCommentBtn" , function(e){
+        		 
+        		 e.stopPropagation();
+        		 var commentText = $(this).parent().find("#modifyCommentText").val();
+        		 
+        		if(commentText){
+
+                  	$.ajax({
+                 		url : '${pageContext.servletContext.contextPath}/communty/ajaxcommentModify',
+         		        type : 'get',  
+         		        data : { 
+         		        		postNo: postNo,
+         		        		comtNo : comtNo,
+         		        		commentText : commentText
+         		        		},
+         		        success : function(data) {
+         		        	
+         		        	 
+         		        	
+         		        	 $(".communty-comment-div").html("");
+         		        	comment(data);
+         		        	
+         		        	
+         		        },
+         		        error: function(error){
+         		        	
+         		        }
+                 	}) 
+        		}
+        	 })
+        	 
+        	  $(document).on('click',"#modifyCancelBtn" , function(e){
+        		  e.stopPropagation();
+        		  $de.html("");
+        		  $de.text(detail);
+        		 
+        		 
+        	 })
+        	 
+        	 
+         })
+         
+         //답글 수정
+          $(document).on('click',"#responseModifyBtn" , function(e){
+        	 var postNo = $(".communty-detail-header").attr('id');
+        	 var reComtNo = $(this).parent().attr('id');
+        	 var detail = $(this).parent().find(".comment-detail").text();
+        	
+        	 
+        	 e.stopPropagation();
+
+        	 
+        	 
+        	 $modiv = $('<div class="modify-comment">');
+        	 $motext = $('<input type="text" id="modifyCommentText" value="'+ detail.trim() +'">');
+        	 $registBtn = $('<input type="button" id="modifyCommentBtn" value="수정하기">');
+        	 $cancelBtn = $('<input type="button" id="modifyCancelBtn" value="수정 취소">');
+        	 
+        	 
+        	 var $de = $(this).parent().find(".comment-detail");
+        	 $de.html("");
+        	 $modiv.append($motext).append($registBtn).append($cancelBtn)
+        	 $de.append($modiv);
+        	 
+        	
+        	 
+         	 $(document).on('click',"#modifyCommentBtn" , function(e){
+        		 
+        		 e.stopPropagation();
+        		 var commentText = $(this).parent().find("#modifyCommentText").val();
+        		 
+        		if(commentText){
+
+                  	$.ajax({
+                 		url : '${pageContext.servletContext.contextPath}/communty/ajaxresponseModify',
+         		        type : 'get',  
+         		        data : { 
+         		        		postNo: postNo,
+         		        		reComtNo : reComtNo,
+         		        		commentText : commentText
+         		        		},
+         		        success : function(data) {
+         		        	
+         		        	 
+         		        	
+         		        	 $(".communty-comment-div").html("");
+         		        	comment(data);
+         		        	
+         		        	
+         		        },
+         		        error: function(error){
+         		        	
+         		        }
+                 	}) 
+        		}
+        	 })
+        	 
+        	  $(document).on('click',"#modifyCancelBtn" , function(e){
+        		  e.stopPropagation();
+        		  $de.html("");
+        		  $de.text(detail);
+        		 
+        		 
+        	 }) 
+        	 
+        	 
+         })
+        
+        
+       function comment(data){
+        	
+        	
+        	var loginUser = "${sessionScope.loginMember.userId}";
+        	
+        	var $div = $(".communty-comment-div");
+        	
+        	for(var i in data){
+        	
+        	var $comment = $('<div class="communty-comment" id='+ data[i].comtNo+'>');
+        	$img = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/images/profile.png');
+        	$coIdP = $("<p>").text(data[i].user.userId);
+        	$coDateP = $("<p>").text(data[i].comtDate);
+        	$coModifyP = $("<p id='commentModifyBtn'>").text("수정 / ");
+        	$coDeleteP = $("<p id='commentDeleteBtn'>").text("삭제");
+        	$coDetail = $('<div class="comment-detail1">').text(data[i].comtDetail);
+        	$reponseBtn = $('<input type="button" value="답글달기" class="responseBtn">') 
+        	
+             
+        	
+        	if(data[i].user.userId == loginUser){
+        		
+        	  $comment.append($img).append($coIdP).append($coDateP).append($coModifyP).append($coDeleteP).append($coDetail).append($reponseBtn);
+        	}else{
+        	  $comment.append($img).append($coIdP).append($coDateP).append($coDetail).append($reponseBtn);
+        	}
+        	
+        	$responseDiv = $('<div class="communty-response-div">');
+        	
+        	 
+	        	if(data[i].reCommentList.length != 0){
+	        		
+	        		var reCommentList = data[i].reCommentList;
+	        		console.log(reCommentList);
+	        		for(var j in reCommentList){
+	        			
+		        		
+		        		$communtyResponse = $('<div class="communty-response" id="'+ reCommentList[j].reComtNo +'">')
+		        		$iTg = $('<i class="xi-subdirectory"></i>');
+		        		$img1 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/images/profile.png');
+		            	$recoIdP = $("<p>").text(reCommentList[j].user.userId);
+		            	$recoDateP = $("<p>").text(reCommentList[j].reComtDate);
+		            	$recoModifyP = $("<p id='responseModifyBtn'>").text("수정 / ");
+		            	$recoDeleteP = $("<p id='responseDeleteBtn'>").text("삭제");
+		            	$recoDetail = $('<div clas="comment-detail">').text(reCommentList[j].reComtDetail);
+		            	
+		                 
+		            	if(data[i].reCommentList[j].user.userId == loginUser){
+		            		
+		            	  $communtyResponse.append($iTg).append($img1).append($recoIdP).append($recoDateP).append($recoModifyP).append($recoDeleteP).append($recoDetail);
+		            	  $responseDiv.append( $communtyResponse);
+		            	}else{
+		            	  $communtyResponse.append($iTg).append($img1).append($recoIdP).append($recoDateP).append($recoDetail);
+		            	  $responseDiv.append( $communtyResponse);
+		            	}
+		            	
+		            	
+	        	
+	        		}
+	        		
+	        		$responseRegist = $('<div class="response-regist">')
+	        		$repon = $("");
+	        		if(loginUser != ""){
+	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" id="reposeRegistText" ><input type="button" id="reposeRegistBtn" value="등록하기">');
+	        		}else{
+	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">');
+	        		}
+	        		$responseRegist.append($repon);
+	        		$comment.append($responseDiv).append($responseRegist);
+	        		$div.append($comment);
+	        		
+	        	}else{ 
+	        		$responseRegist = $('<div class="response-regist">')
+	        		$repon = $("");
+	        		if(loginUser != ""){
+	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" id="reposeRegistText" ><input type="button" id="reposeRegistBtn" value="등록하기">');
+	        		}else{
+	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">');
+	        		}
+	        		
+	        		$responseRegist.append($repon);
+	        		$comment.append($responseDiv).append($responseRegist);
+	        		$div.append($comment);
+	         	} 
+        	
+        	 
+        	}
+        } 
+        
+        
+        
+        
 
     </script>
 </body>

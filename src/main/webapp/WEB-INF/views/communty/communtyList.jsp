@@ -407,6 +407,12 @@
 		    	location.href="${ pageContext.servletContext.contextPath }/communty/communtyRegist";
 		    })
 		    
+		    $(document).on('click',".communty-list-div" , function(){
+		    	var postNo = $(this).attr('id');
+		    	
+		    	location.href="${ pageContext.servletContext.contextPath }/communty/communtyDetail?postNo=" +postNo;
+		    })
+		    
 		    
     
     </script>

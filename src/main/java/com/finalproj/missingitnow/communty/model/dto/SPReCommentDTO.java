@@ -13,6 +13,10 @@ public class SPReCommentDTO {
 	private java.sql.Timestamp reComtDate;
 	private String reComtStatus;
 	
+	public SPReCommentDTO() {
+		
+	}
+	
 	public SPReCommentDTO(String reComtNo, PrivateMemberDTO user, SPCommentDTO comment, String reComtDetail,
 			Timestamp reComtDate, String reComtStatus) {
 		super();
@@ -21,6 +25,56 @@ public class SPReCommentDTO {
 		this.comment = comment;
 		this.reComtDetail = reComtDetail;
 		this.reComtDate = reComtDate;
+		this.reComtStatus = reComtStatus;
+	}
+	
+	
+
+	public String getReComtNo() {
+		return reComtNo;
+	}
+
+	public void setReComtNo(String reComtNo) {
+		this.reComtNo = reComtNo;
+	}
+
+	public PrivateMemberDTO getUser() {
+		return user;
+	}
+
+	public void setUser(PrivateMemberDTO user) {
+		this.user = user;
+	}
+
+	public SPCommentDTO getComment() {
+		return comment;
+	}
+
+	public void setComment(SPCommentDTO comment) {
+		this.comment = comment;
+	}
+
+	public String getReComtDetail() {
+		return reComtDetail;
+	}
+
+	public void setReComtDetail(String reComtDetail) {
+		this.reComtDetail = reComtDetail;
+	}
+
+	public java.sql.Timestamp getReComtDate() {
+		return reComtDate;
+	}
+
+	public void setReComtDate(java.sql.Timestamp reComtDate) {
+		this.reComtDate = reComtDate;
+	}
+
+	public String getReComtStatus() {
+		return reComtStatus;
+	}
+
+	public void setReComtStatus(String reComtStatus) {
 		this.reComtStatus = reComtStatus;
 	}
 

@@ -127,7 +127,7 @@
                                 <tr> 
                                     <td><a></a>
                                     	<input type="hidden" name="userBirth">
-                                        <input type="number" min="1910" max="2021" id="yearInput" name="userBirthYear" placeholder="선택" onchange="getUserBirth()" required>년
+                                        <input type="number" min="1910" max="2021" id="yearInput" name="userBirthYear" placeholder="선택" onchange="getUserBirth()" required> 
                                         <select id="month" name="userBirthMonth" onchange="getUserBirth()" required>
                                            <option id="monthSelect" value="">선택</option>
                                         </select>

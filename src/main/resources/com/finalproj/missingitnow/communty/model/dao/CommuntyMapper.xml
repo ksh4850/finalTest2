@@ -117,8 +117,8 @@
  		<result property="comtDate" column="POST_COMT_DATE"/>
  		<result property="comtStatus" column="POST_COMT_STATUS"/>
  		<association property="user" resultMap="SmemberResulMap"></association>
- 		<association property="post" resultMap="SPostResultMap"></association>
- 		<collection property="reCommentList" resultMap="SPReCommentResultMap"></collection>
+ 		<!-- <association property="post" resultMap="SPostResultMap"></association>-->
+ 		<collection property="reCommentList" resultMap="SPReCommentResultMap"></collection> 
  	</resultMap>
  	
  	<resultMap type="SPReCommentDTO" id="SPReCommentResultMap">
@@ -126,7 +126,7 @@
  		<result property="reComtDetail" column="POST_RECOMT_DETAILS"/>
  		<result property="reComtDate" column="POST_RECOMT_DATE"/>
  		<result property="reComtStatus" column="POST_RECOMT_STATUS"/>
- 		<association property="user" resultMap="SmemberResulMap"></association>
+ 		<association property="user" resultMap="SmemberResulMap3"></association>
  		<!-- <association property="comment" resultMap="SPCommentMap"></association> -->
  	</resultMap>
  	
@@ -210,6 +210,255 @@
                                 ) 
  	
  	</select>
+ 	
+  	<resultMap type="SPostDTO" id="SPostDetailResultMap">
+ 		<id property="postNo" column="POST_NO"/>
+ 		<result property="housingType" column="POST_HOUSING_TYPE"/>
+ 		<result property="acreage" column="POST_ACREAGE"/>
+ 		<result property="residenceType" column="POST_RESIDENCE_TYPE"/>
+ 		<result property="cost" column="POST_COST_TYPE"/>
+ 		<result property="postDetail" column="POST_DETAILS"/>
+ 		<result property="postDate" column="POST_DATE"/>
+ 		<result property="postStatus" column="POST_STATUS"/>
+ 		<result property="postHits" column="POST_HITS"/>
+ 		<result property="postLikes" column="POST_LIKES"/>
+ 		<association property="user" resultMap="SmemberResulMap1"></association>
+ 		<collection property="commentList" resultMap="SPDCommentMap"></collection>
+ 	</resultMap>
+ 	
+ 	<resultMap id="SmemberResulMap1" type="privateMemeberDTO">
+		<id column="POST_USER_NO" property="userNo" />
+		<result column="POST_USER_NO" property="userId" />
+	</resultMap>
+ 	
+ 	<resultMap type="SPCommentDTO" id="SPDCommentMap">
+ 		<id property="comtNo" column="POST_COMT_NO"/>
+ 		<result property="comtDetail" column="POST_COMT_DETAILS"/>
+ 		<result property="comtDate" column="POST_COMT_DATE"/>
+ 		<result property="comtStatus" column="POST_COMT_STATUS"/>
+ 		<association property="user" resultMap="SmemberResulMap2"></association>
+ 		<!-- <association property="post" resultMap="SPostResultMap"></association> -->
+ 		<collection property="reCommentList" resultMap="SPReCommentResultMap"></collection> 
+ 	</resultMap>
+ 	
+ 	<resultMap id="SmemberResulMap2" type="privateMemeberDTO">
+		<id column="COMM_USER_NO" property="userNo" />
+		<result column="COMM_USER_ID" property="userId" />
+	</resultMap>
+	
+	<resultMap id="SmemberResulMap3" type="privateMemeberDTO">
+		<id column="RECO_USER_NO" property="userNo" />
+		<result column="RECO_USER_ID" property="userId" />
+	</resultMap> 
+ 	
+ 	<select id="selectCommunryDetail" resultMap="SPostDetailResultMap" parameterType="string">
+ 	
+      <!--       
+		SELECT           
+		        G.*
+		      , H.* 
+		 FROM (SELECT
+				       A.POST_NO 
+		             , A.POST_DETAILS 
+				     , A.POST_DATE
+				     , A.POST_STATUS
+				     , A.POST_HITS
+				     , A.POST_LIKES
+				     , A.POST_HOUSING_TYPE
+				     , A.POST_ACREAGE
+				     , A.POST_RESIDENCE_TYPE
+				     , A.POST_COST_TYPE
+				     , B.USER_NO AS POST_USER_NO
+				     , B.USER_ID AS POST_USER_ID
+				  FROM TBL_POST A
+		          JOIN TBL_USER B ON(A.USER_NO = B.USER_NO) 
+		          WHERE A.POST_NO = #{postNo}
+		           ) G 
+		           ,
+		          (SELECT
+		               C.POST_COMT_NO
+		             , C.POST_NO 
+		             , C.POST_COMT_DETAILS
+		             , C.POST_COMT_DATE
+		             , C.POST_COMT_STATUS
+		             , E.USER_NO  AS COMM_USER_NO
+		             , E.USER_ID  AS COMM_USER_ID
+		             , D.POST_RECOMT_NO
+		             , D.POST_COMT_NO AS RECO_COMT_NO
+		             , D.POST_RECOMT_DETAILS
+		             , D.POST_RECOMT_DATE
+		             , D.POST_RECOMT_STATUS
+		             , F.USER_NO  AS RECO_USER_NO
+		             , F.USER_ID  AS RECO_USER_ID
+		          FROM TBL_POST A
+		          JOIN TBL_POST_COMMENTS C ON(A.POST_NO = C.POST_NO)
+		          JOIN TBL_POST_RECOMMENT D ON(C.POST_COMT_NO = D.POST_COMT_NO)
+		          JOIN TBL_USER E ON(C.USER_NO = E.USER_NO)
+		          JOIN TBL_USER F ON(D.USER_NO = F.USER_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_STATUS = 'Y'
+		            AND  C.POST_COMT_STATUS = 'Y'
+		            AND  D.POST_RECOMT_STATUS='Y'
+		            ORDER BY C.POST_COMT_NO DESC) H  
+		        WHERE G.POST_NO = H.POST_NO(+)   -->
+		  SELECT           
+		        G.*
+		      , H.* 
+              , I.*
+		 FROM (SELECT
+				       A.POST_NO 
+                     , A.POST_DETAILS 
+				     , A.POST_DATE
+				     , A.POST_STATUS
+				     , A.POST_HITS
+				     , A.POST_LIKES
+				     , A.POST_HOUSING_TYPE
+				     , A.POST_ACREAGE
+				     , A.POST_RESIDENCE_TYPE
+				     , A.POST_COST_TYPE
+				     , B.USER_NO AS POST_USER_NO
+				     , B.USER_ID AS POST_USER_ID
+				  FROM TBL_POST A
+		          JOIN TBL_USER B ON(A.USER_NO = B.USER_NO) 
+		          WHERE A.POST_NO =  #{postNo}
+		           ) G 
+		           ,
+                   (SELECT
+					       C.POST_COMT_NO
+			             , C.POST_NO 
+			             , C.POST_COMT_DETAILS
+			             , C.POST_COMT_DATE
+			             , C.POST_COMT_STATUS
+			             , E.USER_NO AS COMM_USER_NO
+			             , E.USER_ID AS COMM_USER_ID
+			          FROM TBL_POST_COMMENTS C
+			          JOIN TBL_USER E ON(C.USER_NO = E.USER_NO)
+			          WHERE  C.POST_NO =  #{postNo}
+			            AND  C.POST_COMT_STATUS = 'Y'
+			            ORDER BY C.POST_COMT_NO DESC) H
+			        ,
+			      (SELECT
+			               D.POST_RECOMT_NO
+			             , D.POST_COMT_NO
+			             , D.POST_RECOMT_DETAILS
+			             , D.POST_RECOMT_DATE
+			             , D.POST_RECOMT_STATUS
+			             , F.USER_NO AS RECO_USER_NO
+			             , F.USER_ID AS RECO_USER_ID
+			          FROM TBL_POST_COMMENTS C
+			          JOIN TBL_POST_RECOMMENT D ON(C.POST_COMT_NO = D.POST_COMT_NO)
+			          JOIN TBL_USER F ON(D.USER_NO = F.USER_NO)
+			          WHERE  C.POST_NO =  #{postNo}
+			            AND  C.POST_COMT_STATUS = 'Y'
+			            AND  D.POST_RECOMT_STATUS='Y'
+			            ORDER BY C.POST_COMT_NO DESC) I
+       WHERE G.POST_NO = H.POST_NO(+)
+        AND  H.POST_COMT_NO = I.POST_COMT_NO(+)
+ 	</select>
+ 	
+ 	<insert id="insertAjaxCommentRegist" parameterType="SPCommentDTO">
+ 		INSERT
+ 		 INTO TBL_POST_COMMENTS
+ 		 VALUES
+ 		 (
+ 		   'PSTC'||LPAD(SEQ_POST_COMMENTS.NEXTVAL , 4 , 0)
+ 		 , #{user.userNo}
+ 		 , #{post.postNo} 
+ 		 , #{comtDetail}
+ 		 , #{comtDate}
+ 		 , 'Y'
+ 		 )
+ 		 
+ 	
+ 	</insert>
+ 	
+ 	
+ 	<select id="selectAjaxCommunryDetail" resultMap="SPCommentMap" parameterType="string">
+ 		SELECT
+		      E.*
+		    , F.*
+		 FROM (SELECT
+				       A.POST_COMT_NO
+		             , A.POST_NO 
+		             , A.POST_COMT_DETAILS
+		             , A.POST_COMT_DATE
+		             , A.POST_COMT_STATUS
+		             , C.USER_NO
+		             , C.USER_ID
+		          FROM TBL_POST_COMMENTS A
+		          JOIN TBL_USER C ON(C.USER_NO = A.USER_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+		            ORDER BY A.POST_COMT_NO DESC) E
+		        ,
+		      (SELECT
+		               B.POST_RECOMT_NO
+		             , B.POST_COMT_NO
+		             , B.POST_RECOMT_DETAILS
+		             , B.POST_RECOMT_DATE
+		             , B.POST_RECOMT_STATUS
+		             , D.USER_NO AS RECO_USER_NO
+		             , D.USER_ID AS RECO_USER_ID
+		          FROM TBL_POST_COMMENTS A
+		          JOIN TBL_POST_RECOMMENT B ON(A.POST_COMT_NO = B.POST_COMT_NO)
+		          JOIN TBL_USER D ON(D.USER_NO = B.USER_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+		            AND  B.POST_RECOMT_STATUS='Y'
+		            ORDER BY A.POST_COMT_NO DESC) F
+		     WHERE  E.POST_COMT_NO = F.POST_COMT_NO(+)     
+		            
+ 	
+ 	</select>
+ 	
+ 	<insert id="insetAjaxResponseCommentRegist" parameterType="SPReCommentDTO">
+ 		INSERT
+ 		  INTO TBL_POST_RECOMMENT
+ 		 VALUES
+ 		 (
+ 		   'PSTR'||LPAD(SEQ_POST_RECOMMENT.NEXTVAL , 4 , 0)
+ 		 , #{user.userNo}
+ 		 , #{comment.comtNo} 
+ 		 , #{reComtDetail}
+ 		 , #{reComtDate}
+ 		 , 'Y'
+ 		 )
+ 	
+ 	</insert>
+ 	
+ 	
+ 	<update id="deleteAjaxComment" parameterType="string">
+ 		UPDATE TBL_POST_COMMENTS A
+ 		   SET A.POST_COMT_STATUS = 'N'
+ 		 WHERE A.POST_COMT_NO=#{comtNo}
+ 	</update>
+ 	
+ 	
+ 	<update id="deleteAjaxCommentAndResponse" parameterType="string">
+ 		UPDATE TBL_POST_RECOMMENT A
+ 		   SET A.POST_RECOMT_STATUS = 'N'
+ 		 WHERE A.POST_COMT_NO=#{comtNo}
+ 	</update>
+ 	
+ 	<update id="deleteAjaxResponse" parameterType="string">
+ 		UPDATE TBL_POST_RECOMMENT A
+ 		   SET A.POST_RECOMT_STATUS = 'N'
+ 		 WHERE A.POST_RECOMT_NO=#{reComtNo}
+ 	</update>
+ 	
+ 	<update id="modifyAjaxCommentDetail" parameterType="SPCommentDTO" >
+ 		UPDATE TBL_POST_COMMENTS A
+ 		   SET A.POST_COMT_DETAILS = #{comtDetail}
+ 		 WHERE A.POST_COMT_NO=#{comtNo}
+ 	</update>
+ 	
+ 	<update id="modifyAjaxResponsetDetail" parameterType="SPReCommentDTO">
+ 		UPDATE TBL_POST_RECOMMENT A
+ 		   SET A.POST_RECOMT_DETAILS = #{reComtDetail}
+ 		 WHERE A.POST_RECOMT_NO=#{reComtNo}
+ 	</update>
+ 	
+ 	
  	
  	
  	

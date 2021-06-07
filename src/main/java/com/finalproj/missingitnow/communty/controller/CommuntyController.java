@@ -16,11 +16,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.finalproj.missingitnow.communty.model.dto.SPCommentDTO;
+import com.finalproj.missingitnow.communty.model.dto.SPReCommentDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostListDTO;
@@ -232,8 +235,176 @@ public class CommuntyController {
 	}
 	
 	
+	@GetMapping("communtyDetail")
+	public String getCoommuntyDetail(Model model , @RequestParam String postNo) {
+//		System.out.println(postNo);
+		
+		SPostDTO post = communtyService.selectCommunryDetail(postNo);
+		
+//		System.out.println(post);
+		
+		
+		
+		model.addAttribute("post", post);
+		
+	
+		
+		return "communty/communtyDetail";
+	}
 	
 	
+	@GetMapping(value="ajaxcommentRegist", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxCommentRegist(@RequestParam String postNo , @RequestParam String commentText ,HttpServletRequest request) {
+		System.out.println(postNo);
+		System.out.println(commentText);
+		
+	
+		
+		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
+	 	SPCommentDTO comment = new SPCommentDTO();
+	 	comment.setUser(user);
+	 	comment.setComtDate(new java.sql.Timestamp(System.currentTimeMillis()));
+	 	comment.setPost( new SPostDTO());
+	 	comment.getPost().setPostNo(postNo);
+	 	comment.setComtDetail(commentText);
+		
+		 int result = communtyService.insertAjaxCommentRegist(comment); 
+		 
+		 String gson = "";
+		 
+		 if(result >  0) {
+			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+				/* System.out.println(post); */
+			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+		 }
+		 
+		 
+	 	
+		return gson;
+		
+	}
+	
+	@GetMapping(value="ajaxresponseRegist", produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxResponseRegist(@RequestParam String comtNo , @RequestParam String reposeRegistText , @RequestParam String postNo ,HttpServletRequest request) {
+		
+		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
+		SPReCommentDTO recomment = new SPReCommentDTO();
+		recomment.setUser(user);
+		recomment.setReComtDate(new java.sql.Timestamp(System.currentTimeMillis()));
+		recomment.setComment(new SPCommentDTO());
+		recomment.getComment().setComtNo(comtNo);
+		recomment.setReComtDetail(reposeRegistText);
+		
+		int result = communtyService.insetAjaxResponseCommentRegist(recomment);
+		
+		String gson = "";
+		 
+		 if(result >  0) {
+			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+				/* System.out.println(post); */
+			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+		 }
+		
+		
+		
+		
+		return gson;
+	}
+	
+	@GetMapping(value="ajaxcommentDelete" ,produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxCommentDelete(@RequestParam String comtNo , @RequestParam String postNo ) {
+		
+		int result = communtyService.deleteAjaxComment(comtNo);
+		
+		
+		String gson = "";
+		 
+		 if(result >  0) {
+			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+				
+			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+		 }
+		 
+		return gson;
+	}
+	
+	
+	
+	
+	@GetMapping(value="ajaxresponseDelete" ,produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxResponseDelete(@RequestParam String reComtNo , @RequestParam String postNo ) {
+		
+		int result = communtyService.deleteAjaxResponse(reComtNo);
+		
+		
+		String gson = "";
+		 
+		 if(result >  0) {
+			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+				
+			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+		 }
+		 
+		return gson;
+	
+	}
+	
+	
+	@GetMapping(value="ajaxcommentModify" ,produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxCommentModify(@RequestParam String comtNo , @RequestParam String postNo ,  @RequestParam String commentText ) {
+		
+		SPCommentDTO comment = new SPCommentDTO();
+		comment.setComtDetail(commentText);
+		comment.setComtNo(comtNo);
+		
+		
+		
+		int result = communtyService.modifyAjaxCommentDetail(comment);
+		
+		
+		String gson = "";
+		 
+		 if(result >  0) {
+			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+				
+			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+		 }
+		 
+		return gson;
+	
+	}
+	
+	
+	
+	@GetMapping(value="ajaxresponseModify" ,produces="application/json; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxResponseModify(@RequestParam String reComtNo , @RequestParam String postNo ,  @RequestParam String commentText ) {
+		
+		
+		SPReCommentDTO recomment = new SPReCommentDTO();
+		recomment.setReComtDetail(commentText);
+		recomment.setReComtNo(reComtNo);
+		
+		
+		int result = communtyService.modifyAjaxResponsetDetail(recomment);
+		
+		
+		String gson = "";
+		 
+		 if(result >  0) {
+			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+				
+			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+		 }
+		 
+		return gson;
+	
+	}
 	
 
 }

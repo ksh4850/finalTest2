@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.finalproj.missingitnow.communty.model.dao.CommuntyMapper;
+import com.finalproj.missingitnow.communty.model.dto.SPCommentDTO;
+import com.finalproj.missingitnow.communty.model.dto.SPReCommentDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostImgDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostListDTO;
@@ -61,6 +63,55 @@ public class CommuntyServiceImpl implements CommuntyService{
 	@Override
 	public List<SPostListDTO> selectAajxPostList(Map<String, Integer> map) {
 		return communtyMapper.selectAajxPostList(map);
+	}
+
+	@Override
+	public SPostDTO selectCommunryDetail(String postNo) {
+		return communtyMapper.selectCommunryDetail(postNo);
+	}
+
+	@Override
+	public int insertAjaxCommentRegist(SPCommentDTO comment) {
+		return communtyMapper.insertAjaxCommentRegist(comment);
+	}
+
+	@Override
+	public  List<SPCommentDTO> selectAjaxCommunryDetail(String postNo) {
+		return communtyMapper.selectAjaxCommunryDetail(postNo);
+	}
+
+	@Override
+	public int insetAjaxResponseCommentRegist(SPReCommentDTO recomment) {
+		return communtyMapper.insetAjaxResponseCommentRegist(recomment);
+	}
+
+	@Override
+	public int deleteAjaxComment(String comtNo) {
+		int commentResult = communtyMapper.deleteAjaxComment(comtNo);
+		
+		int responseResult = communtyMapper.deleteAjaxCommentAndResponse(comtNo);
+		
+		int result = 0;
+		
+		if(commentResult > 0 && responseResult > 0) {
+			result = 1;
+		}
+		return result;
+	}
+
+	@Override
+	public int deleteAjaxResponse(String reComtNo) {
+		return communtyMapper.deleteAjaxResponse(reComtNo);
+	}
+
+	@Override
+	public int modifyAjaxCommentDetail(SPCommentDTO comment) {
+		return communtyMapper.modifyAjaxCommentDetail(comment);
+	}
+
+	@Override
+	public int modifyAjaxResponsetDetail(SPReCommentDTO recomment) {
+		return communtyMapper.modifyAjaxResponsetDetail(recomment);
 	}
 
 	
