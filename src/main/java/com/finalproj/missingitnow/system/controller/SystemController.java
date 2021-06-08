@@ -35,6 +35,7 @@ public class SystemController {
 		this.systemService = systemService;
 	}
 	
+	/*기업회원 조회*/
 	@GetMapping("comInfo")
 	public String getComInfo(Model model , @ModelAttribute CorpPageDTO corpPage ) {
 //		System.out.println(corpPage.getCorpLv());
@@ -72,7 +73,7 @@ public class SystemController {
 		return "system/comInfo";
 	}
 	
-	
+	/*기업회원 승인  ajax*/
 	@GetMapping(value="regstAccpet" , produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getModifyRegstAccpet(@ModelAttribute CorpPageDTO corpPage , @RequestParam String corpNo) {
@@ -104,7 +105,7 @@ public class SystemController {
 	}
 	
 
-	
+	/*예치금 조회 */
 	@GetMapping("depositInfo")
 	public String getSelectDepositInfo(Model model , @ModelAttribute DepositPageDTO depositPage) {
 		
@@ -169,7 +170,7 @@ public class SystemController {
 		
 		return "system/deposit";
 	}
-	
+	/*주문내역 조회*/
 	@GetMapping("orderInfo" )
 	public String getSelectOrderInfo(Model model, @ModelAttribute OrderPageDTO orderPage) {
 		
@@ -238,6 +239,7 @@ public class SystemController {
 		return "system/orderInfo";
 	}
 	
+	/*기업회원  판매 통계  */
 	@GetMapping(value="corpSalesInfo" , produces="application/json; charset=UTF-8")
 	public String getSelectCorpSalesInfo(Model model , @ModelAttribute CorpSellPageDTO corpSellPage ) {
 		
@@ -343,15 +345,15 @@ public class SystemController {
 	}
 	
 	
-	
+	/*통계 ajax */
 	@GetMapping(value="ajaxSalseInfo" , produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxSalseInfo(@ModelAttribute CorpSellPageDTO corpSellPage) {
 		
-		System.out.println(corpSellPage.getStartDate());
-		System.out.println(corpSellPage.getEndDate());
-		System.out.println(corpSellPage.getCondition());
-		System.out.println(corpSellPage.getCorpSellText());
+//		System.out.println(corpSellPage.getStartDate());
+//		System.out.println(corpSellPage.getEndDate());
+//		System.out.println(corpSellPage.getCondition());
+//		System.out.println(corpSellPage.getCorpSellText());
 		
 		
        List<Map<String , String>> daySalseInfo = systemService.selectAjaxDaySalseInfo(corpSellPage);

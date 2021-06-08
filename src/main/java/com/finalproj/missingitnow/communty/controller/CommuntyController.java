@@ -48,6 +48,7 @@ public class CommuntyController {
 		return "communty/communtyRegist";
 	}
 	
+	/*커뮤니티 등록*/
 	@PostMapping("communtyRegist")
 	public String postCommuntyRegist(@ModelAttribute SPostDTO post  ,Model model ,@RequestParam String reName  , @RequestParam String originName ,HttpServletRequest request) {
 		
@@ -105,7 +106,7 @@ public class CommuntyController {
 		
 	}
 	
-	
+	/*커뮤니티 ajax파일 업로드*/
 	@PostMapping(value="imgUpload" , produces ="application/json; charset=UTF-8")
 	@ResponseBody
 	public String uploadFiles(List<MultipartFile> uploadFiles ,HttpServletRequest request) throws IOException {
@@ -170,7 +171,7 @@ public class CommuntyController {
 
 	}
 	
-	
+	/*커뮤니티 ajax파일 업로드한 파일 삭제*/
 	@GetMapping(value="ajaxDelete" , produces ="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxImgDelete(@RequestParam String reName , HttpServletRequest request ) {
@@ -190,7 +191,7 @@ public class CommuntyController {
 		return "삭제완료";
 	}
 	
-	
+	/*커뮤니티 리스트 조회*/
 	@GetMapping("communtyList")
 	public String getCommuntyList(Model model , HttpServletRequest request) {
 		
@@ -221,7 +222,7 @@ public class CommuntyController {
 		return "communty/communtyList";
 	}
 	
-	
+	/*스크롤 페이징 처리 ajax 커뮤니티 리스트 조회*/
 	@GetMapping(value="ajaxCommuntyList" , produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxCommuntyList(@RequestParam int pageNo , HttpServletRequest request) {
@@ -261,7 +262,7 @@ public class CommuntyController {
 		
 	}
 	
-	
+	/*커뮤니티 디테일 조회*/
 	@GetMapping("communtyDetail")
 	public String getCoommuntyDetail(Model model , @RequestParam String postNo , HttpServletRequest request) {
 //		System.out.println(postNo);
@@ -290,7 +291,7 @@ public class CommuntyController {
 		return "communty/communtyDetail";
 	}
 	
-	
+	/*커뮤니티 댓글 등록 ajax*/
 	@GetMapping(value="ajaxcommentRegist", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxCommentRegist(@RequestParam String postNo , @RequestParam String commentText ,HttpServletRequest request) {
@@ -321,7 +322,7 @@ public class CommuntyController {
 		return gson;
 		
 	}
-	
+	/*커뮤니티 대댓글 등록 ajax*/
 	@GetMapping(value="ajaxresponseRegist", produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxResponseRegist(@RequestParam String comtNo , @RequestParam String reposeRegistText , @RequestParam String postNo ,HttpServletRequest request) {
@@ -349,7 +350,7 @@ public class CommuntyController {
 		
 		return gson;
 	}
-	
+	/*커뮤니티 댓글 삭제 ajax*/
 	@GetMapping(value="ajaxcommentDelete" ,produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxCommentDelete(@RequestParam String comtNo , @RequestParam String postNo ) {
@@ -373,7 +374,7 @@ public class CommuntyController {
 	
 	
 	
-	
+	/*커뮤니티 대댓글 삭제 ajax*/
 	@GetMapping(value="ajaxresponseDelete" ,produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxResponseDelete(@RequestParam String reComtNo , @RequestParam String postNo ) {
@@ -393,7 +394,7 @@ public class CommuntyController {
 	
 	}
 	
-	
+	/*커뮤니티 댓글 수정 ajax*/
 	@GetMapping(value="ajaxcommentModify" ,produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxCommentModify(@RequestParam String comtNo , @RequestParam String postNo ,  @RequestParam String commentText ) {
@@ -420,7 +421,7 @@ public class CommuntyController {
 	}
 	
 	
-	
+	/*커뮤니티 대댓글 수정 ajax*/
 	@GetMapping(value="ajaxresponseModify" ,produces="application/json; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxResponseModify(@RequestParam String reComtNo , @RequestParam String postNo ,  @RequestParam String commentText ) {
@@ -445,7 +446,7 @@ public class CommuntyController {
 		return gson;
 	
 	}
-	
+	/*커뮤니티 종아요 수정 ajax*/
 	@GetMapping(value="ajaxLikeModify" ,produces="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxLikeStatusModify(@RequestParam String likeStatus , @RequestParam String postNo , HttpServletRequest request) {
@@ -480,6 +481,7 @@ public class CommuntyController {
 	
 	}
 	
+	/*커뮤니티 종하요 등록 ajax*/
 	@GetMapping(value="ajaxLikeinsert" ,produces="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxLikeStatusInsert(  @RequestParam String postNo , HttpServletRequest request) {
@@ -507,6 +509,7 @@ public class CommuntyController {
 	
 	}
 	
+	/*커뮤니티 댓글수  조회 ajax*/
 	@GetMapping(value="ajaxCommentCount" ,produces="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxCommentCount(  @RequestParam String postNo ) {
