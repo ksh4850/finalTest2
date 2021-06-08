@@ -498,8 +498,8 @@
           $(document).on('click',"#commentDeleteBtn" , function(e){
         	 var postNo = $(".communty-detail-header").attr('id');
         	 var comtNo = $(this).parent().attr('id');
-        	 console.log(postNo);
-        	 console.log(comtNo);
+        	 /* console.log(postNo);
+        	 console.log(comtNo); */
         	 e.stopPropagation();
         	 
         	 
@@ -570,7 +570,7 @@
         	 var comtNo = $(this).parents(".communty-comment").attr('id');
         	 var detail = $(this).parent().find(".comment-detail1").text();
         	
-        	 console.log(detail);
+        	 
         	 e.stopPropagation();
 
         	 
@@ -638,7 +638,7 @@
         	 var detail = $(this).parent().find(".comment-detail").text();
         	
         	
-        	 console.log(reComtNo);
+        	 /* console.log(reComtNo); */
         	 e.stopPropagation();
 
         	 
