@@ -52,10 +52,10 @@
  		  (
  		  	POST_IMG_NO
 		  ,	POST_NO
-		  ,	P_IMG_ORIGIN_NAME
-		  ,	P_IMG_RENAME
-		  ,	P_IMG_THN_NAME
-		  ,	P_IMG_PATH
+		  ,	POST_IMG_ORIGIN_NAME
+		  ,	POST_IMG_RENAME
+		  ,	POST_IMG_THN_NAME
+		  ,	POST_IMG_PATH
  		  )
  		  VALUES
  		  (
@@ -104,10 +104,10 @@
  	<resultMap type="SPostImgDTO" id="SPostImgResultMap">
  		<id property="imgNo" column="POST_IMG_NO"/>
  		<result property="postNo" column="POST_NO"/>
- 		<result property="originName" column="P_IMG_ORIGIN_NAME"/>
- 		<result property="reName" column="P_IMG_RENAME"/>
- 		<result property="thnbName" column="P_IMG_THN_NAME"/>
- 		<result property="path" column="P_IMG_PATH"/>
+ 		<result property="originName" column="POST_IMG_ORIGIN_NAME"/>
+ 		<result property="reName" column="POST_IMG_RENAME"/>
+ 		<result property="thnbName" column="POST_IMG_THN_NAME"/>
+ 		<result property="path" column="POST_IMG_PATH"/>
  	</resultMap>
  	
  	
@@ -162,7 +162,7 @@
 		     , A.POST_COST_TYPE
 		     , B.USER_NO
 		     , B.USER_ID
-		     , C.P_IMG_RENAME
+		     , C.POST_IMG_RENAME
 		  FROM TBL_POST A
 		  JOIN TBL_USER B ON(A.USER_NO = B.USER_NO)
 		  JOIN TBL_POST_IMG C ON(A.POST_NO = C.POST_NO)
@@ -194,7 +194,7 @@
 		     , A.POST_COST_TYPE
 		     , B.USER_NO
 		     , B.USER_ID
-		     , C.P_IMG_RENAME
+		     , C.POST_IMG_RENAME
 		  FROM TBL_POST A
 		  JOIN TBL_USER B ON(A.USER_NO = B.USER_NO)
 		  JOIN TBL_POST_IMG C ON(A.POST_NO = C.POST_NO)
@@ -522,6 +522,27 @@
  		  )
  
  	</insert>
+ 	
+ 	<select id="selectAjaxCommentCount" resultType="_int" parameterType="string">
+ 		SELECT
+		      E.COUNT1 + F.COUNT2
+		 FROM (SELECT
+				     count(*) as COUNT1
+		          FROM TBL_POST_COMMENTS A
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y') E
+		        ,
+		      (SELECT
+		              count(*) as COUNT2
+		          FROM TBL_POST_COMMENTS A
+		          JOIN TBL_POST_RECOMMENT B ON(A.POST_COMT_NO = B.POST_COMT_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+		            AND  B.POST_RECOMT_STATUS='Y'
+		           ) F
+ 	
+ 	
+ 	</select>
  	
  	
  	

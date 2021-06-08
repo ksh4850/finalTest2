@@ -109,15 +109,9 @@ public class CommuntyServiceImpl implements CommuntyService{
 
 	@Override
 	public int deleteAjaxComment(String comtNo) {
-		int commentResult = communtyMapper.deleteAjaxComment(comtNo);
+		int result = communtyMapper.deleteAjaxComment(comtNo);
 		
-		int responseResult = communtyMapper.deleteAjaxCommentAndResponse(comtNo);
 		
-		int result = 0;
-		
-		if(commentResult > 0 && responseResult > 0) {
-			result = 1;
-		}
 		return result;
 	}
 
@@ -154,6 +148,11 @@ public class CommuntyServiceImpl implements CommuntyService{
 	@Override
 	public int insertLikeStatus(Map<String, String> map) {
 		return communtyMapper.insertLikeStatus(map);
+	}
+
+	@Override
+	public int selectAjaxCommentCount(String postNo) {
+		return communtyMapper.selectAjaxCommentCount(postNo);
 	}
 
 	

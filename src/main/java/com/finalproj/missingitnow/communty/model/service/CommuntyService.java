@@ -41,6 +41,8 @@ public interface CommuntyService {
 	int selectAjaxLike(String postNo);
 
 	int insertLikeStatus(Map<String, String> map);
+
+	int selectAjaxCommentCount(String postNo);
 	
 
 	

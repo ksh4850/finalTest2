@@ -48,4 +48,6 @@ public interface CommuntyMapper {
 
 	int insertLikeStatus(Map<String, String> map);
 
+	int selectAjaxCommentCount(String postNo);
+
 }

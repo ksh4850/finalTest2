@@ -298,11 +298,20 @@
 
         		
             </div>
-
+			
+			
 
             <div class="communty-comment-count" > 
-                <div><i class="xi-heart-o xi-2x"></i><p><c:out value="${post.postLikes }"/></p></div>
-                <div><i class="xi-comment-o xi-2x"></i><p><c:out value="${post.communtCount }"/></p></div>
+            	<c:if test="${empty post.likeStatus }">
+                	<div id="${post.likeStatus }" ><i class="xi-heart-o xi-2x"  id="likeBtn"></i><p><c:out value="${post.postLikes }"/></p></div>
+                </c:if>
+                 <c:if test="${post.likeStatus eq 'N' }">
+	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	             </c:if>
+	              <c:if test="${post.likeStatus eq 'Y' }">
+	                <div id="${post.likeStatus }"><i class="xi-heart xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	             </c:if>
+                <div><i class="xi-comment-o xi-2x"></i><p id="communtCount"><c:out value="${post.communtCount }"/></p></div>
             </div>
 			<c:if test="${!empty sessionScope.loginMember }">
              <div class="communty-comment-regist">
@@ -359,7 +368,7 @@
 				</div>
 						<c:if test="${!empty sessionScope.loginMember }">
 	                        <div class="response-regist">
-	                                <i class="xi-subdirectory"></i><input type="text" id="reposeRegistText"><input type="button" id="reposeRegistBtn" value="등록하기">
+	                                <i class="xi-subdirectory"></i><input type="text" class="reposeRegistText"><input type="button" id="reposeRegistBtn" value="등록하기">
 	                        </div>
                     	</c:if>
                     	<c:if test="${empty sessionScope.loginMember }">
@@ -420,10 +429,12 @@
 		        success : function(data) {
 		        	
 		        	/* console.log(data); */
+		        	$('#commentText').html();
 		        	 $("#commentText").text("");
 		        	 $(".communty-comment-div").html("");
 		        	comment(data);
-		        	
+		        	console.log(postNo);
+		        	commentCountAjax(postNo);
 		        	
 		        },
 		        error: function(error){
@@ -441,7 +452,7 @@
         	 
         	 var postNo = $(".communty-detail-header").attr('id');
         	 var comtNo = $(this).parent().parent().attr('id');
-        	 var reposeRegistText =  $(this).parent().find("#reposeRegistText").val();
+        	 var reposeRegistText =  $(this).parent().find(".reposeRegistText").val();
 
         	 
         	 if(reposeRegistText){
@@ -459,7 +470,7 @@
      		        	
      		        	 $(".communty-comment-div").html("");
      		        	comment(data);
-     		        	
+     		        	commentCountAjax();
      		        	
      		        },
      		        error: function(error){
@@ -476,11 +487,11 @@
           $(document).on('click',"#commentDeleteBtn" , function(e){
         	 var postNo = $(".communty-detail-header").attr('id');
         	 var comtNo = $(this).parent().attr('id');
-        	
+        	 console.log(postNo);
         	 console.log(comtNo);
         	 e.stopPropagation();
         	 
-        	 if(reposeRegistText){
+        	 
              	$.ajax({
              		url : '${pageContext.servletContext.contextPath}/communty/ajaxcommentDelete',
      		        type : 'get',  
@@ -490,11 +501,11 @@
      		        		},
      		        success : function(data) {
      		        	
-     		        	/* console.log(data); */
+     		        	/*  console.log(data);  */
      		        	
-     		        	 $(".communty-comment-div").html("");
+     		        	$(".communty-comment-div").html("");
      		        	comment(data);
-     		        	
+     		        	commentCountAjax();
      		        	
      		        },
      		        error: function(error){
@@ -502,7 +513,7 @@
      		        }
              	})
              	
-             	}
+             	
         	 
         	 
          })
@@ -515,7 +526,7 @@
         	 
         	 e.stopPropagation();
         	 
-        	 if(reposeRegistText){
+        	 
              	$.ajax({
              		url : '${pageContext.servletContext.contextPath}/communty/ajaxresponseDelete',
      		        type : 'get',  
@@ -525,11 +536,11 @@
      		        		},
      		        success : function(data) {
      		        	
-     		        	/* console.log(data); */
+     		        	 console.log(data); 
      		        	
      		        	 $(".communty-comment-div").html("");
      		        	comment(data);
-     		        	
+     		        	commentCountAjax();
      		        	
      		        },
      		        error: function(error){
@@ -537,7 +548,7 @@
      		        }
              	})
              	
-             	}
+             	
         	 
         	 
          })
@@ -545,10 +556,10 @@
          //댓글 수정
            $(document).on('click',"#commentModifyBtn" , function(e){
         	 var postNo = $(".communty-detail-header").attr('id');
-        	 var reComtNo = $(this).parents(".communty-response").attr('id');
+        	 var comtNo = $(this).parents(".communty-comment").attr('id');
         	 var detail = $(this).parent().find(".comment-detail1").text();
         	
-        	 
+        	 console.log(detail);
         	 e.stopPropagation();
 
         	 
@@ -610,11 +621,13 @@
          
          //답글 수정
           $(document).on('click',"#responseModifyBtn" , function(e){
+        	  
         	 var postNo = $(".communty-detail-header").attr('id');
         	 var reComtNo = $(this).parent().attr('id');
         	 var detail = $(this).parent().find(".comment-detail").text();
         	
-        	 
+        	
+        	 console.log(reComtNo);
         	 e.stopPropagation();
 
         	 
@@ -673,6 +686,26 @@
         	 
         	 
          })
+         
+       function commentCountAjax(){
+    	
+    	var postNo ="${post.postNo}";
+    		
+	    	$.ajax({
+	    		url:'${pageContext.servletContext.contextPath}/communty/ajaxCommentCount',
+	    		type:'get',
+	    		data:{postNo : postNo},
+	    		success: function(data){
+	    			console.log(data);
+	    			$('#communtCount').text(data);
+	    		},
+	    		error: function(error){
+	    			
+	    		}
+	    	})
+        
+    
+       }
         
         
        function comment(data){
@@ -719,7 +752,7 @@
 		            	$recoDateP = $("<p>").text(reCommentList[j].reComtDate);
 		            	$recoModifyP = $("<p id='responseModifyBtn'>").text("수정 / ");
 		            	$recoDeleteP = $("<p id='responseDeleteBtn'>").text("삭제");
-		            	$recoDetail = $('<div clas="comment-detail">').text(reCommentList[j].reComtDetail);
+		            	$recoDetail = $('<div class="comment-detail">').text(reCommentList[j].reComtDetail);
 		            	
 		                 
 		            	if(data[i].reCommentList[j].user.userId == loginUser){
@@ -738,7 +771,7 @@
 	        		$responseRegist = $('<div class="response-regist">')
 	        		$repon = $("");
 	        		if(loginUser != ""){
-	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" id="reposeRegistText" ><input type="button" id="reposeRegistBtn" value="등록하기">');
+	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" class="reposeRegistText" ><input type="button" id="reposeRegistBtn" value="등록하기">');
 	        		}else{
 	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">');
 	        		}
@@ -750,7 +783,7 @@
 	        		$responseRegist = $('<div class="response-regist">')
 	        		$repon = $("");
 	        		if(loginUser != ""){
-	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" id="reposeRegistText" ><input type="button" id="reposeRegistBtn" value="등록하기">');
+	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" class="reposeRegistText" ><input type="button" id="reposeRegistBtn" value="등록하기">');
 	        		}else{
 	        			$repon = $('<i class="xi-subdirectory"></i><input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">');
 	        		}
@@ -764,7 +797,78 @@
         	}
         } 
         
-    
+    $(document).on('click',"#likeBtn" , function(e){
+  	  
+  	  e.stopPropagation();
+  	  
+  	  var likeStatus = $(this).parent().attr('id');
+  	  var $like = $(this).parent().children('p');
+  	  var postNo = $(".communty-detail-header").attr('id');
+  	  var $likeItg = $(this);
+  	  
+  	  
+  	  if(likeStatus == 'Y' || likeStatus == 'N'){
+  		 
+  			$.ajax({
+           		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeModify',
+   		        type : 'get',  
+   		        data : { 
+   		        		postNo: postNo,
+   		        		likeStatus : likeStatus
+   		        		
+   		        		},
+   		        success : function(data) {
+   		        	
+   		        	if(likeStatus == 'Y'){
+   		        		 $likeItg.attr('class','xi-heart-o xi-2x');
+   		        		 $likeItg.parent().attr('id','N');
+   		        	}else{
+   		        		 $likeItg.attr('class','xi-heart xi-2x');
+   		        		 $likeItg.parent().attr('id','Y');
+   		        	}
+   		        	  
+   		        	 $like.text(data);
+   		        	 
+   		      
+   		        	
+   		        	
+   		        },
+   		        error: function(error){
+   		        	
+   		        }
+           	}) 
+  		  
+  	  }else{
+  		  console.log("인설트");
+  		  
+  		  $.ajax({
+           		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeinsert',
+   		        type : 'get',  
+   		        data : { 
+   		        		postNo: postNo,
+   		        		
+   		        		},
+   		        success : function(data) {
+   		        	
+   		        	 $likeItg.attr('class','xi-heart xi-2x');
+   		        	 $likeItg.parent().attr('id','Y');
+   		        	 $like.text(data);
+   		        	 
+   		      
+   		        	
+   		        	
+   		        },
+   		        error: function(error){
+   		        	
+   		        }
+           	}) 
+  		  
+  		  
+  		  
+  	  }
+  	  
+  	
+  })
     
         
         
