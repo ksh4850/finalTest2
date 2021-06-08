@@ -277,6 +277,7 @@
 		        <hr>
 		        
 	            <div class="communty-list-count" align="center"> 
+	            
 	            <c:if test="${empty post.likeStatus }">
 	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
 	             </c:if>
@@ -316,7 +317,7 @@
 		    		        		},
 		    		        success : function(data) {
 		    		        	
-		    		        	console.log(data);
+		    		        	/* console.log(data); */
 		    		        	
 		    		        	var $listsection = $(".communty-list-section");
 		    		        	
@@ -442,8 +443,10 @@
 		    	  var postNo = $(this).parents(".communty-list-div").attr('id');
 		    	  var $likeItg = $(this);
 		    	  
-		    	 
-		    	  
+		    	  var $login = "${sessionScope.loginMember}";
+		      	  
+		      	  if($login != ""){
+		      		
 		    	  if(likeStatus == 'Y' || likeStatus == 'N'){
 		    		 
 		    			$.ajax({
@@ -504,7 +507,7 @@
 		    		  
 		    	  }
 		    	  
-		    	
+		      	  }
 		    })
 		    
 		    

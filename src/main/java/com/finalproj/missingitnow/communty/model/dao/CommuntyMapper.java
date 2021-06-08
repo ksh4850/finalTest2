@@ -50,4 +50,8 @@ public interface CommuntyMapper {
 
 	int selectAjaxCommentCount(String postNo);
 
+	int ajaxCommentTotalCount(String postNo);
+
+	List<SPCommentDTO> selectAjaxCommentPageList(Map<String, Object> map);
+
 }

@@ -540,8 +540,50 @@
 		            AND  A.POST_COMT_STATUS = 'Y'
 		            AND  B.POST_RECOMT_STATUS='Y'
 		           ) F
+ 	</select>
  	
  	
+ 	<select id="ajaxCommentTotalCount" resultType="_int" parameterType="string">
+ 		 SELECT
+				     count(*) 
+		          FROM TBL_POST_COMMENTS A
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+ 				
+ 	</select>
+ 	
+ 	
+ 	<select id="selectAjaxCommentPageList" parameterType="hashmap" resultMap="SPCommentMap">
+ 		 SELECT
+               F.*
+           FROM ( 
+                 SELECT
+                       ROWNUM RNUM
+                     ,  E.*                   
+                  FROM (SELECT
+                               A.POST_COMT_NO
+                             , A.POST_NO 
+                             , A.POST_COMT_DETAILS
+                             , A.POST_COMT_DATE
+                             , A.POST_COMT_STATUS
+                             , C.USER_NO
+                             , C.USER_ID
+                             , B.POST_RECOMT_NO
+                             , B.POST_RECOMT_DETAILS
+                             , B.POST_RECOMT_DATE
+                             , B.POST_RECOMT_STATUS
+                             , D.USER_NO AS RECO_USER_NO
+                             , D.USER_ID AS RECO_USER_ID
+                          FROM TBL_POST_COMMENTS A
+                          JOIN TBL_USER C ON(C.USER_NO = A.USER_NO)
+                          LEFT JOIN TBL_POST_RECOMMENT B ON(A.POST_COMT_NO = B.POST_COMT_NO)
+                          LEFT JOIN TBL_USER D ON(D.USER_NO = B.USER_NO)
+                          WHERE  A.POST_NO = #{postNo}
+                            AND  A.POST_COMT_STATUS = 'Y'
+                        ORDER BY A.POST_COMT_NO  ) E
+                        
+                        )F            
+                WHERE F.RNUM BETWEEN #{page.startRow} AND {page.endRow};       
  	</select>
  	
  	

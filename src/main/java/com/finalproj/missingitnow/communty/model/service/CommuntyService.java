@@ -43,6 +43,10 @@ public interface CommuntyService {
 	int insertLikeStatus(Map<String, String> map);
 
 	int selectAjaxCommentCount(String postNo);
+
+	int ajaxCommentTotalCount(String postNo);
+
+	List<SPCommentDTO> selectAjaxCommentPageList(Map<String, Object> map);
 	
 
 	

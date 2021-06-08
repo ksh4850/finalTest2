@@ -16,12 +16,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.finalproj.missingitnow.common.page.PageInfoDTO;
+import com.finalproj.missingitnow.common.page.Pagenation;
 import com.finalproj.missingitnow.communty.model.dto.SPCommentDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPReCommentDTO;
 import com.finalproj.missingitnow.communty.model.dto.SPostDTO;
@@ -102,7 +103,7 @@ public class CommuntyController {
 		model.addAttribute("post",post);
 		
 		
-		return "communty/communtyDetail";
+		return "redirect:communtyList";
 		
 	}
 	
@@ -490,19 +491,21 @@ public class CommuntyController {
 		
 		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
 		
-		Map<String ,String > map = new HashMap<>();
-		
-		map.put("userNo", user.getUserNo());
-		map.put("postNo", postNo);
-		
-		int result = communtyService.insertLikeStatus(map);
-		
 		String like = "";
 		
-		if(result > 0) {
-			like = communtyService.selectAjaxLike(postNo) + "";
-					
-		}
+			Map<String ,String > map = new HashMap<>();
+			
+			map.put("userNo", user.getUserNo());
+			map.put("postNo", postNo);
+			
+			int result = communtyService.insertLikeStatus(map);
+			
+			
+			
+			if(result > 0) {
+				like = communtyService.selectAjaxLike(postNo) + "";
+						
+			}
 		
 		 
 		return like;
@@ -520,6 +523,49 @@ public class CommuntyController {
 		 
 		return CommentCount;
 	
+	}
+	
+	
+	@GetMapping(value="ajaxCommentPage" ,produces="text/plain; charset=UTF-8")
+	@ResponseBody
+	public String getAjaxCommentPage  ( @RequestParam int currentPage , @RequestParam String postNo) {
+		
+		int pageNo = 1;
+		
+		if(currentPage != 0) {
+			pageNo = currentPage;
+			
+			if(pageNo <= 0) {
+				pageNo = 1;
+			}
+		}
+		
+		
+		
+		int totalCount = communtyService.ajaxCommentTotalCount(postNo);
+		
+		int limit = 10;
+	
+		int buttonAmount = 5;
+		
+		
+		PageInfoDTO page = Pagenation.getPageInfo(pageNo, totalCount, limit, buttonAmount);
+		
+		Map<String ,Object> map = new HashMap<>();
+		
+		map.put("postNo", postNo);
+		map.put("page", page );
+		
+		 List<SPCommentDTO> comments = communtyService.selectAjaxCommentPageList(map); 
+		 
+		 Map<String,Object> pageComment = new HashMap<>();
+		 pageComment.put("page", page);
+		 pageComment.put("comments", comments);
+		 
+		String gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(pageComment);
+		
+		return gson;
+		
 	}
 	
 	

@@ -155,6 +155,16 @@ public class CommuntyServiceImpl implements CommuntyService{
 		return communtyMapper.selectAjaxCommentCount(postNo);
 	}
 
+	@Override
+	public int ajaxCommentTotalCount(String postNo) {
+		return communtyMapper.ajaxCommentTotalCount(postNo);
+	}
+
+	@Override
+	public List<SPCommentDTO> selectAjaxCommentPageList(Map<String, Object> map) {
+		return communtyMapper.selectAjaxCommentPageList(map);
+	}
+
 	
 
 }

@@ -246,6 +246,12 @@
             margin-left: 15px;
             width: 60px;
         }
+        
+          .pagingArea button{
+         	border: 1px solid  rgb(119, 94, 238); 
+            color: rgb(47, 16, 201);
+            padding: 5px;
+        }
 
 
     </style>
@@ -269,30 +275,30 @@
                 </div>
             </div>
 			
-			
-            <div class="communty-info2">
-                <table>
-                <c:if test="${!empty post.housingType  or !empty post.acreage }">
-                    <tr>
-                        <td width="100px";>기본정보</td>
-                        <td>${post.housingType } / ${post.acreage}  </td>
-                    </tr>
-                </c:if>
-                 <c:if test="${!empty post.residenceType }">
-                    <tr>
-                        <td width="100px">주거형태</td>
-                        <td><c:out value="${post.residenceType }"/></td>
-                    </tr>
-                  </c:if>
-                   <c:if test="${!empty post.cost }">   
-                    <tr>
-                        <td width="100px">가구/소품비</td>
-                        <td><c:out value="${post.cost }"/>만원</td>
-                    </tr>
-                   </c:if>
-                </table>
-            </div>
-		 
+			 <c:if test="${!empty post.housingType  or !empty post.acreage or !empty post.residenceType or !empty post.cost}">
+	            <div class="communty-info2">
+	                <table>
+	                <c:if test="${!empty post.housingType  or !empty post.acreage }">
+	                    <tr>
+	                        <td width="100px";>기본정보</td>
+	                        <td>${post.housingType } / ${post.acreage}  </td>
+	                    </tr>
+	                </c:if>
+	                 <c:if test="${!empty post.residenceType }">
+	                    <tr>
+	                        <td width="100px">주거형태</td>
+	                        <td><c:out value="${post.residenceType }"/></td>
+	                    </tr>
+	                  </c:if>
+	                   <c:if test="${!empty post.cost }">   
+	                    <tr>
+	                        <td width="100px">가구/소품비</td>
+	                        <td><c:out value="${post.cost }"/></td>
+	                    </tr>
+	                   </c:if>
+	                </table>
+	            </div>
+		 	</c:if>
             <div class="communty-detail-detail">
                 ${post.postDetail }
 
@@ -387,9 +393,12 @@
         </div>
 
      </div>     
-
+		
+		
+		<div class="pagingArea" align="center">
+		</div>
     <br>
-
+			
 	
        
     </section>
@@ -398,6 +407,8 @@
 
 
     <script>
+    
+    //답글창 열기 
     $(document).on('click',".responseBtn" , function(){
        
 
@@ -686,7 +697,8 @@
         	 
         	 
          })
-         
+        
+        // 댓글이 추가 삭제 될때 마다 댓글 수 업데이트 ajax
        function commentCountAjax(){
     	
     	var postNo ="${post.postNo}";
@@ -706,8 +718,43 @@
         
     
        }
+    
+       function pageBtn(page){
+    	  var $page = $(".pagingArea");
+    	  
+    	   $page.append('<button id="startPage"><<</button>');
+    	   
+    	   if(page.pageNo == 1){
+    		   $page.append('<button disabled><</button>');
+    	   }else if(page.pageNo > 0){
+    		   $page.append('<button id="prevPage"><</button>');
+    	   }
+    	   
+		  
+		   for(var i = 0 ; i < page.pageNo ; i++ ){
+			  
+			   if( i+1 == 1 ){
+				   
+     				$page.append('<button disabled>1</button>');
+     				   
+     			}else{
+     				$page.append('<button onclick="pageButtonAction(this.innerText);">'+ (i+1) +'</button>');
+     			}
+		   }
+		   
+		 
+		   
+		   if(page.pageNo == pageNo.maxPage){
+			   $page.append('<button disabled>></button>');
+		   }else if(page.pageNo < page.maxPage){
+			   $page.append('<button id="nextPage">></button>');
+		   }
+		  
+		   $page.append('<button id="maxPage">>></button>');
+       } 
+       
         
-        
+       // 댓글 append function
        function comment(data){
         	
         	
@@ -792,83 +839,92 @@
 	        		$comment.append($responseDiv).append($responseRegist);
 	        		$div.append($comment);
 	         	} 
+	        	
+	        	
         	
         	 
         	}
         } 
-        
-    $(document).on('click',"#likeBtn" , function(e){
-  	  
-  	  e.stopPropagation();
-  	  
-  	  var likeStatus = $(this).parent().attr('id');
-  	  var $like = $(this).parent().children('p');
-  	  var postNo = $(".communty-detail-header").attr('id');
-  	  var $likeItg = $(this);
-  	  
-  	  
-  	  if(likeStatus == 'Y' || likeStatus == 'N'){
-  		 
-  			$.ajax({
-           		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeModify',
-   		        type : 'get',  
-   		        data : { 
-   		        		postNo: postNo,
-   		        		likeStatus : likeStatus
-   		        		
-   		        		},
-   		        success : function(data) {
-   		        	
-   		        	if(likeStatus == 'Y'){
-   		        		 $likeItg.attr('class','xi-heart-o xi-2x');
-   		        		 $likeItg.parent().attr('id','N');
-   		        	}else{
-   		        		 $likeItg.attr('class','xi-heart xi-2x');
-   		        		 $likeItg.parent().attr('id','Y');
-   		        	}
-   		        	  
-   		        	 $like.text(data);
-   		        	 
-   		      
-   		        	
-   		        	
-   		        },
-   		        error: function(error){
-   		        	
-   		        }
-           	}) 
-  		  
-  	  }else{
-  		  console.log("인설트");
-  		  
-  		  $.ajax({
-           		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeinsert',
-   		        type : 'get',  
-   		        data : { 
-   		        		postNo: postNo,
-   		        		
-   		        		},
-   		        success : function(data) {
-   		        	
-   		        	 $likeItg.attr('class','xi-heart xi-2x');
-   		        	 $likeItg.parent().attr('id','Y');
-   		        	 $like.text(data);
-   		        	 
-   		      
-   		        	
-   		        	
-   		        },
-   		        error: function(error){
-   		        	
-   		        }
-           	}) 
-  		  
-  		  
-  		  
-  	  }
-  	  
-  	
-  })
+      
+     //좋아요 ajax
+	  $(document).on('click',"#likeBtn" , function(e){
+	  	  
+	  	  e.stopPropagation();
+	  	  
+	  	  var likeStatus = $(this).parent().attr('id');
+	  	  var $like = $(this).parent().children('p');
+	  	  var postNo = $(".communty-detail-header").attr('id');
+	  	  var $likeItg = $(this);
+		  var $login = "${sessionScope.loginMember}";
+	  	  
+	  	  if($login != ""){
+	  	  
+		  	  if(likeStatus == 'Y' || likeStatus == 'N'){
+		  		 
+		  			$.ajax({
+		           		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeModify',
+		   		        type : 'get',  
+		   		        data : { 
+		   		        		postNo: postNo,
+		   		        		likeStatus : likeStatus
+		   		        		
+		   		        		},
+		   		        success : function(data) {
+		   		        	
+		   		        	if(likeStatus == 'Y'){
+		   		        		 $likeItg.attr('class','xi-heart-o xi-2x');
+		   		        		 $likeItg.parent().attr('id','N');
+		   		        	}else{
+		   		        		 $likeItg.attr('class','xi-heart xi-2x');
+		   		        		 $likeItg.parent().attr('id','Y');
+		   		        	}
+		   		        	  
+		   		        	 $like.text(data);
+		   		        	 
+		   		      
+		   		        	
+		   		        	
+		   		        },
+		   		        error: function(error){
+		   		        	
+		   		        }
+		           	}) 
+		  		  
+		  	  }else{
+		  		  
+		  		  
+		  		  $.ajax({
+		           		url : '${pageContext.servletContext.contextPath}/communty/ajaxLikeinsert',
+		   		        type : 'get',  
+		   		        data : { 
+		   		        		postNo: postNo,
+		   		        		
+		   		        		},
+		   		        success : function(data) {
+		   		        	
+		   		        	 $likeItg.attr('class','xi-heart xi-2x');
+		   		        	 $likeItg.parent().attr('id','Y');
+		   		        	 $like.text(data);
+		   		        	 
+		   		      
+		   		        	
+		   		        	
+		   		        },
+		   		        error: function(error){
+		   		        	
+		   		        }
+		           	}) 
+		  		  
+		  	  }
+	  	  
+	  	  }
+	  	 
+	  	
+	  })
+	  
+	  function commentList()
+	  
+	  
     
         
         
