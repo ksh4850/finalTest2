@@ -206,6 +206,15 @@
             padding: 8px;
         }
         
+        .postNo{
+        	display:none;
+        		
+        } 
+        
+        .postlist-likeStatus{
+        	visibility: hidden;
+        }
+        
        
     </style>
 </head>
@@ -228,10 +237,11 @@
     	
     	
     	<c:forEach var="post" items="${postList}">
-	        <div class="communty-list-div" id="${post.postNo}">
+	        <div class="communty-list-div" >
 	            <div class="communty-list-info">
 	                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
 	                <div class="communty-info">
+	                	<p class="postNo">${post.postNo}</p>
 	                    <p><c:out value="${post.user.userId} "></c:out></p>
 	                    <p><fmt:formatDate value="${post.postDate }" pattern="yyyy-MM-dd HH:mm:ss"/></p>
 	                </div>
@@ -279,13 +289,13 @@
 	            <div class="communty-list-count" align="center"> 
 	            
 	            <c:if test="${empty post.likeStatus }">
-	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	                <div ><p class="postlist-likeStatus" >${post.likeStatus }</p><i class="xi-heart-o xi-2x" id="likeBtn"></i><p class="postlist-likes"> <c:out value="${post.postLikes} "></c:out> </p></div>
 	             </c:if>
 	             <c:if test="${post.likeStatus eq 'N' }">
-	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	                <div ><p class="postlist-likeStatus" >${post.likeStatus }</p><i class="xi-heart-o xi-2x" id="likeBtn"></i><p class="postlist-likes"> <c:out value="${post.postLikes} "></c:out> </p></div>
 	             </c:if>
 	             <c:if test="${post.likeStatus eq 'Y' }">
-	                <div id="${post.likeStatus }"><i class="xi-heart xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	                <div ><p class="postlist-likeStatus" >${post.likeStatus }</p><i class="xi-heart xi-2x" id="likeBtn"></i><p class="postlist-likes"> <c:out value="${post.postLikes} "></c:out> </p></div>
 	             </c:if>
 	                <div><i class="xi-comment-o xi-2x"></i><p> <c:out value="${post.communtCount}"></c:out> </p></div>
 	            </div>
@@ -324,16 +334,17 @@
 		    		        	for(var i in data){
 		    		        		
 		    		        	
-		    		        		 $listdiv = $("<div class='communty-list-div'>").attr('id',data[i].postNo);
+		    		        		 $listdiv = $("<div class='communty-list-div'>");
 		    		        		
 		    		        		 $listinfo = $("<div class='communty-list-info'>");	
 		    		        		 $info = $("<div class='communty-info'>");	
 		    		        		
 		    		        		 $img1 =  $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/images/profile.png');
+		    		        		 $postIdP = $("<p class='postNo'>").text(data[i].postNo);
 		    		        		 $nameP = $("<p>").text(data[i].user.userId);
 		    		        		 $dateP = $("<p>").text(data[i].postDate);
 		    		        		 
-		    		        		 $info.append($nameP).append($dateP);
+		    		        		 $info.append($postIdP).append($nameP).append($dateP);
 		    		        	     $listinfo.append($img1).append($info);
 		    		        		 $listdiv.append($listinfo);
 		    		        		 
@@ -344,13 +355,15 @@
 		    		        		
 		    		        		
 		    		        		 $listcount = $("<div class='communty-list-count' align='center'> ");
-		    		        		 $divC1 = $("<div id='" + data[i].likeStatus + "'>");
+		    		        		 $divC1 = $("<div>");
 		    		        		 $divC2 = $("<div>");
 		    		        		 
 		    		        		 $iheart = "";
+		    		        		 $likeStatusP = $("<p class='postlist-likeStatus'>").text(data[i].likeStatus);
 		    		        		 
 		    		        		 if(data[i].likeStatus == 'Y'){
 		    		        			 $iheart = $("<i class='xi-heart xi-2x' id='likeBtn' >");
+		    		        			
 		    		        		 }else if(data[i].likeStatus == 'N'){
 		    		        			 $iheart = $("<i class='xi-heart-o xi-2x' id='likeBtn'>");
 		    		        		 }else{
@@ -361,10 +374,10 @@
 		    		        		 
 		    		        		 $icomment = $("<i class='xi-comment-o xi-2x'>");
 		    		        		 
-		    		        		 $pLike = $("<p>").text(data[i].postLikes);
+		    		        		 $pLike = $("<p class='postlist-likes'>").text(data[i].postLikes);
 		    		        		 $pcount = $("<p>").text(data[i].communtCount);
 		    		        		 
-		    		        		 $divC1.append($iheart).append($pLike);
+		    		        		 $divC1.append($likeStatusP).append($iheart).append($pLike);
 		    		        		 $divC2.append($icomment).append($pcount);
 		    		        		 
 		    		        		 $listcount.append($divC1).append($divC2);
@@ -429,23 +442,25 @@
 		    })
 		    
 		    $(document).on('click',".communty-list-div" , function(){
-		    	var postNo = $(this).attr('id');
+		    	var postNo = $(this).find('.postNo').text();
 		    	
-		    	location.href="${ pageContext.servletContext.contextPath }/communty/communtyDetail?postNo=" +postNo;
+		    	console.log(postNo)
+		    	
+		    	 location.href="${ pageContext.servletContext.contextPath }/communty/communtyDetail?postNo=" +postNo; 
 		    })
 		    
 		      $(document).on('click',"#likeBtn" , function(e){
 		    	  
 		    	  e.stopPropagation();
 		    	  
-		    	  var likeStatus = $(this).parent().attr('id');
-		    	  var $like = $(this).parent().children('p');
-		    	  var postNo = $(this).parents(".communty-list-div").attr('id');
+		    	  var likeStatus = $(this).parent().children('.postlist-likeStatus').text();;
+		    	  var $like = $(this).parent().children('.postlist-likes');
+		    	  var postNo = $(this).parents(".communty-list-div").find('.postNo').text();
 		    	  var $likeItg = $(this);
 		    	  
 		    	  var $login = "${sessionScope.loginMember}";
-		      	  
-		      	  if($login != ""){
+		    	  console.log(likeStatus);
+		      	   if($login != ""){
 		      		
 		    	  if(likeStatus == 'Y' || likeStatus == 'N'){
 		    		 
@@ -461,10 +476,10 @@
 	         		        	
 	         		        	if(likeStatus == 'Y'){
 	         		        		 $likeItg.attr('class','xi-heart-o xi-2x');
-	         		        		 $likeItg.parent().attr('id','N');
+	         		        		 $likeItg.parent().children('.postlist-likeStatus').text('N');
 	         		        	}else{
 	         		        		 $likeItg.attr('class','xi-heart xi-2x');
-	         		        		 $likeItg.parent().attr('id','Y');
+	         		        		 $likeItg.parent().children('.postlist-likeStatus').text('Y');
 	         		        	}
 	         		        	  
 	         		        	 $like.text(data);
@@ -491,7 +506,7 @@
 	         		        success : function(data) {
 	         		        	
 	         		        	 $likeItg.attr('class','xi-heart xi-2x');
-	         		        	 $likeItg.parent().attr('id','Y');
+	         		        	 $likeItg.parent().children('.postlist-likeStatus').text('Y');
 	         		        	 $like.text(data);
 	         		        	 
 	         		      
@@ -507,7 +522,7 @@
 		    		  
 		    	  }
 		    	  
-		      	  }
+		      	  } 
 		    })
 		    
 		    

@@ -45,6 +45,7 @@
 
         .communty-info p{
             margin: 10px;
+            
         }
 
         .communty-info2{
@@ -247,12 +248,32 @@
             width: 60px;
         }
         
+        .pagingArea{
+         margin-left: 315px;
+        }
+        
           .pagingArea button{
          	border: 1px solid  rgb(119, 94, 238); 
             color: rgb(47, 16, 201);
             padding: 5px;
+            
         }
-
+        
+        .postDetatil-comtNo{
+        	visibility: hidden;
+        	margin-left: 130px;
+        }
+        
+        .postDetatil-reComtNo{
+        	visibility: hidden;
+        	margin-left: 120px;
+        }
+        
+        .postDetail-likeStatus{
+        	visibility: hidden;
+        }
+        
+        
 
     </style>
 </head>
@@ -266,7 +287,7 @@
     </aside>
     <section>
         <div class="communty-detail-div">
-            <div class="communty-detail-header" id="${post.postNo}">
+            <div class="communty-detail-header">
                	 <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
                 <div class="communty-info">
                     <p><c:out value="${post.user.userId}"></c:out></p>
@@ -308,14 +329,14 @@
 			
 
             <div class="communty-comment-count" > 
-            	<c:if test="${empty post.likeStatus }">
-                	<div id="${post.likeStatus }" ><i class="xi-heart-o xi-2x"  id="likeBtn"></i><p><c:out value="${post.postLikes }"/></p></div>
-                </c:if>
-                 <c:if test="${post.likeStatus eq 'N' }">
-	                <div id="${post.likeStatus }"><i class="xi-heart-o xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+            	 <c:if test="${empty post.likeStatus }">
+	                <div ><i class="xi-heart-o xi-2x" id="likeBtn"></i><p class="postlist-likes"> <c:out value="${post.postLikes} "></c:out> </p><p class="postDetail-likeStatus" >${post.likeStatus }</p></div>
 	             </c:if>
-	              <c:if test="${post.likeStatus eq 'Y' }">
-	                <div id="${post.likeStatus }"><i class="xi-heart xi-2x" id="likeBtn"></i><p > <c:out value="${post.postLikes} "></c:out> </p></div>
+	             <c:if test="${post.likeStatus eq 'N' }">
+	                <div ><i class="xi-heart-o xi-2x" id="likeBtn"></i><p class="postlist-likes"> <c:out value="${post.postLikes} "></c:out> </p><p class="postDetail-likeStatus" >${post.likeStatus }</p></div>
+	             </c:if>
+	             <c:if test="${post.likeStatus eq 'Y' }">
+	                <div ><i class="xi-heart xi-2x" id="likeBtn"></i><p class="postlist-likes"> <c:out value="${post.postLikes} "></c:out> </p><p class="postDetail-likeStatus" >${post.likeStatus }</p></div>
 	             </c:if>
                 <div><i class="xi-comment-o xi-2x"></i><p id="communtCount"><c:out value="${post.communtCount }"/></p></div>
             </div>
@@ -334,9 +355,10 @@
              <div class="communty-comment-div">
 			
 			<c:forEach var="comm" items="${post.commentList}">
-                <div class="communty-comment" id="${comm.comtNo}">
+                <div class="communty-comment">
                     <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
                     <p><c:out value="${comm.user.userId }"></c:out></p>
+                    <p class="postDetatil-comtNo">${comm.comtNo}</p>
                     <p><fmt:formatDate value="${comm.comtDate }" pattern="yyyy-MM-dd HH:mm:ss"/></p>
                     <c:if test="${sessionScope.loginMember.userNo eq  comm.user.userNo }">
                     <p id="commentModifyBtn">수정 / </p> <p id="commentDeleteBtn">삭제</p>
@@ -355,10 +377,11 @@
                <c:if test="${!empty comm.reCommentList }">
                
                <c:forEach var="reco" items="${comm.reCommentList}"> 
-                            <div class="communty-response" id="${reco.reComtNo }">
+                            <div class="communty-response" >
                             
                                 <i class="xi-subdirectory"></i><img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
                                 <p><c:out value="${reco.user.userId }"></c:out></p>
+                                <p class="postDetatil-reComtNo"><c:out value="${reco.reComtNo }"></c:out></p>
                                 <p><fmt:formatDate value="${reco.reComtDate  }" pattern="yyyy-MM-dd HH:mm:ss"/> </p>
                                  <c:if test="${sessionScope.loginMember.userNo eq  reco.user.userNo }">
 	                             	<p id="responseModifyBtn">수정 / </p><p id="responseDeleteBtn">삭제</p>	
@@ -395,7 +418,33 @@
      </div>     
 		
 		
-		<div class="pagingArea" align="center">
+		<div class="pagingArea" >
+			<button id="startPage"><<</button>
+			
+					<c:if test="${ page.pageNo == 1 }">
+						<button disabled><</button>
+					</c:if>
+					 <c:if test="${ page.pageNo > 1 }">
+						<button id="prevPage"><</button>
+					</c:if>
+			
+					<c:forEach var="p" begin="${ page.startPage }" end="${ page.endPage }" step="1">
+					<c:if test="${ page.pageNo eq p }">
+						<button disabled><c:out value="${ p }"/></button>
+					</c:if>
+					<c:if test="${ page.pageNo ne p }">
+						<button id="pageActionBtn"><c:out value="${ p }"/></button>
+					</c:if>
+					</c:forEach>
+			
+					<c:if test="${ page.pageNo == page.maxPage }">
+						<button disabled>></button>	
+					</c:if>
+					<c:if test="${ page.pageNo < page.maxPage }">
+						<button id="nextPage">></button>
+					</c:if> 
+			
+					<button id="maxPage">>></button>
 		</div>
     <br>
 			
@@ -407,6 +456,91 @@
 
 
     <script>
+    
+   
+    var Page = 0;
+    var maxPage = 0;
+    	
+    	
+    	
+    	$(document).on('click',"#startPage" , function(){
+    		
+    		var postNo="${post.postNo}";
+    		var currentPage = 1 ;
+    		var isTrue = false;
+
+    		
+    		commentListPage(currentPage);
+    		
+    		
+    	})
+    	
+    	$(document).on('click',"#pageActionBtn" , function(){
+    		
+    		var postNo="${post.postNo}";
+    		var currentPage =  $(this).text();
+
+    		
+    		commentListPage(currentPage);
+    		
+    	})
+    	
+    	$(document).on('click',"#maxPage" , function(){
+    		var postNo="${post.postNo}";
+    		var currentPage = maxPage;
+    		
+    		commentListPage(currentPage);
+		
+    	})
+    	
+    	$(document).on('click',"#prevPage" , function(){
+    		var postNo="${post.postNo}";
+    		var currentPage = Page - 1 ;
+    		
+    		commentListPage(currentPage);
+		
+		})
+	
+		$(document).on('click',"#nextPage" , function(){
+			var postNo="${post.postNo}";
+			var currentPage = Page + 1 ;
+		
+			commentListPage(currentPage);
+		
+		})
+    	
+    	
+    	function commentListPage(currentPage){
+    		
+    		var postNo="${post.postNo}";
+    		var isTrue = false;
+    		
+    		if(isTrue == true){ 
+      			 return; 
+      			 } 
+      		 	isTrue = true;
+    		
+    		$.ajax({
+          		 url:'${pageContext.servletContext.contextPath}/communty/ajaxCommentPage',
+          		 type: 'get',
+          		 data:{postNo:postNo,
+          			currentPage:currentPage},
+          		 success : function(data) {
+          			    $(".communty-comment-div").html("");
+          			 	comment(data.comments);
+      		        	pageBtn(data.page)
+      		        	
+      		        	Page = data.page.pageNo;
+      		        	maxPage = data.page.maxPage; 
+      		        },
+      		        error: function(error){
+      		        	
+      		        }
+          	 }) 
+    		
+    	}
+    	
+    
     
     //답글창 열기 
     $(document).on('click',".responseBtn" , function(){
@@ -424,9 +558,10 @@
         })
         
         //댓글 달기
-        $("#commentRegistBtn").click(function(){
+         $("#commentRegistBtn").click(function(){
         	
-        	var postNo = $(".communty-detail-header").attr('id');
+        	/* var postNo = $(".communty-detail-header").attr('id'); */
+			var postNo = "${post.postNo}"; 
         	var commentText = $("#commentText").val();
         	
         	if(commentText){
@@ -439,14 +574,15 @@
 		        		},
 		        success : function(data) {
 		        	
-		        	/* console.log(data); */
-		        	$('#commentText').html();
-		        	 $("#commentText").text("");
-		        	 $(".communty-comment-div").html("");
-		        	comment(data);
-		        	console.log(postNo);
-		        	commentCountAjax(postNo);
-		        	
+		            if(data > 0){
+			        	$('#commentText').val("");
+			        	/* $("#commentText").text(""); */
+			        	$(".communty-comment-div").html("");
+			        	commentListPage(1);
+			        	 commentCountAjax();  
+		         	 }else{
+		         		 alert("댓글 작성에 실패 하셨습니다.")
+		         	 }
 		        },
 		        error: function(error){
 		        	
@@ -455,18 +591,18 @@
         	
         	}
         	
-        })
+        })  
         
-        //탑글달기
+        //답글달기
          $(document).on('click',"#reposeRegistBtn" , function(){
         	 
         	 
-        	 var postNo = $(".communty-detail-header").attr('id');
-        	 var comtNo = $(this).parent().parent().attr('id');
+        	 var postNo = "${post.postNo}"; 
+        	 var comtNo = $(this).parent().parent().children(".postDetatil-comtNo").text();
         	 var reposeRegistText =  $(this).parent().find(".reposeRegistText").val();
 
-        	 
-        	 if(reposeRegistText){
+        	 console.log(comtNo)
+        	  if(reposeRegistText){
              	$.ajax({
              		url : '${pageContext.servletContext.contextPath}/communty/ajaxresponseRegist',
      		        type : 'get',  
@@ -477,11 +613,15 @@
      		        		},
      		        success : function(data) {
      		        	
-     		        	/* console.log(data); */
      		        	
+     		        	if(data > 0){
      		        	 $(".communty-comment-div").html("");
-     		        	comment(data);
+     		        	
+     		        	commentListPage(Page);
      		        	commentCountAjax();
+     		        	}else{
+   		         		 alert("대댓글 작성에 실패 하셨습니다.")
+   		         	 }
      		        	
      		        },
      		        error: function(error){
@@ -489,15 +629,15 @@
      		        }
              	})
              	
-             	}
+             	} 
         	 
         	 
          })
          
          //댓글 삭제
           $(document).on('click',"#commentDeleteBtn" , function(e){
-        	 var postNo = $(".communty-detail-header").attr('id');
-        	 var comtNo = $(this).parent().attr('id');
+        	 var postNo = "${post.postNo}"; 
+        	 var comtNo = $(this).parent().children(".postDetatil-comtNo").text();
         	 /* console.log(postNo);
         	 console.log(comtNo); */
         	 e.stopPropagation();
@@ -512,11 +652,14 @@
      		        		},
      		        success : function(data) {
      		        	
-     		        	/*  console.log(data);  */
+     		        	if(data > 0){
+        		        	 $(".communty-comment-div").html("");
+        		        	 commentListPage(Page);
+        		        	 commentCountAjax();
+        		        }else{
+      		         		 alert("댓글 삭제에 실패 하셨습니다.")
+      		         	 }
      		        	
-     		        	$(".communty-comment-div").html("");
-     		        	comment(data);
-     		        	commentCountAjax();
      		        	
      		        },
      		        error: function(error){
@@ -532,8 +675,9 @@
          
          //답글삭제
           $(document).on('click',"#responseDeleteBtn" , function(e){
-        	 var postNo = $(".communty-detail-header").attr('id');
-        	 var reComtNo = $(this).parents(".communty-response").attr('id');
+        	 var postNo = "${post.postNo}"; 
+        	 /* var reComtNo = $(this).parents(".communty-response").attr('id'); */
+        	 var reComtNo = $(this).parent().children(".postDetatil-reComtNo").text();
         	 
         	 e.stopPropagation();
         	 
@@ -548,10 +692,15 @@
      		        success : function(data) {
      		        	
      		        	 console.log(data); 
+     		        	 
+     		        	if(data > 0){
+	       		        	 $(".communty-comment-div").html("");
+	       		        	 commentListPage(Page);
+	       		        	 commentCountAjax();
+       		        	}else{
+     		         		 alert("대댓글 삭제에 실패 하셨습니다.")
+     		         	 }
      		        	
-     		        	 $(".communty-comment-div").html("");
-     		        	comment(data);
-     		        	commentCountAjax();
      		        	
      		        },
      		        error: function(error){
@@ -566,15 +715,16 @@
          
          //댓글 수정
            $(document).on('click',"#commentModifyBtn" , function(e){
-        	 var postNo = $(".communty-detail-header").attr('id');
-        	 var comtNo = $(this).parents(".communty-comment").attr('id');
+        	 var postNo = "${post.postNo}"; 
+        	 var comtNo = $(this).parents(".communty-comment").children(".postDetatil-comtNo").text();
         	 var detail = $(this).parent().find(".comment-detail1").text();
-        	
+        	 var isTrue = false;
+
         	 
         	 e.stopPropagation();
 
         	 
-        	 
+
         	 $modiv = $('<div class="modify-comment">');
         	 $motext = $('<input type="text" id="modifyCommentText" value="'+ detail.trim() +'">');
         	 $registBtn = $('<input type="button" id="modifyCommentBtn" value="수정하기">');
@@ -590,11 +740,18 @@
         	 
         	 $(document).on('click',"#modifyCommentBtn" , function(e){
         		 
-        		 e.stopPropagation();
+        		 if(isTrue == true){ 
+        			 return; 
+        			 } 
+        		 isTrue = true;
+
+        		
+        		 
         		 var commentText = $(this).parent().find("#modifyCommentText").val();
         		 
         		if(commentText){
-
+					
+        			
                   	$.ajax({
                  		url : '${pageContext.servletContext.contextPath}/communty/ajaxcommentModify',
          		        type : 'get',  
@@ -605,10 +762,16 @@
          		        		},
          		        success : function(data) {
          		        	
-         		        	 
+         		        	if(data > 0){
+         		        	 $de.html("");
+           		        	 $(".communty-comment-div").html("");
+           		        	 commentListPage(Page);
+	           		        	
+           		        	}else{
+         		         		 alert("댓글 수정에 실패 하셨습니다.")
+         		         	 }
          		        	
-         		        	 $(".communty-comment-div").html("");
-         		        	comment(data);
+
          		        	
          		        	
          		        },
@@ -617,6 +780,7 @@
          		        }
                  	}) 
         		}
+        		
         	 })
         	 
         	  $(document).on('click',"#modifyCancelBtn" , function(e){
@@ -632,20 +796,19 @@
          
          //답글 수정
           $(document).on('click',"#responseModifyBtn" , function(e){
-        	  
-        	 var postNo = $(".communty-detail-header").attr('id');
-        	 var reComtNo = $(this).parent().attr('id');
+        	 
+        	 var postNo = "${post.postNo}"; 
+        	 var reComtNo = $(this).parent().children(".postDetatil-reComtNo").text();
         	 var detail = $(this).parent().find(".comment-detail").text();
+        	 var isTrue = false;
         	
-        	
-        	 /* console.log(reComtNo); */
         	 e.stopPropagation();
 
         	 
         	 
         	 $modiv = $('<div class="modify-comment">');
         	 $motext = $('<input type="text" id="modifyCommentText" value="'+ detail.trim() +'">');
-        	 $registBtn = $('<input type="button" id="modifyCommentBtn" value="수정하기">');
+        	 $registBtn = $('<input type="button" id="modifyResponseBtn" value="수정하기">');
         	 $cancelBtn = $('<input type="button" id="modifyCancelBtn" value="수정 취소">');
         	 
         	 
@@ -656,10 +819,16 @@
         	 
         	
         	 
-         	 $(document).on('click',"#modifyCommentBtn" , function(e){
+         	 $(document).on('click',"#modifyResponseBtn" , function(e){
+         		 
+         		if(isTrue == true){ 
+       			 return; 
+       			 } 
+       		 	isTrue = true;
         		 
         		 e.stopPropagation();
         		 var commentText = $(this).parent().find("#modifyCommentText").val();
+        		 
         		 
         		if(commentText){
 
@@ -672,12 +841,14 @@
          		        		commentText : commentText
          		        		},
          		        success : function(data) {
-         		        	
-         		        	 
-         		        	
-         		        	 $(".communty-comment-div").html("");
-         		        	comment(data);
-         		        	
+         		        	console.log(data);
+         		       		if(data > 0){
+          		        	 $(".communty-comment-div").html("");
+          		        	  commentListPage(Page);
+	           		        	
+          		        	}else{
+        		         		 alert("대댓글 수정에 실패 하셨습니다.")
+        		         	 }
          		        	
          		        },
          		        error: function(error){
@@ -764,22 +935,23 @@
         	
         	for(var i in data){
         	
-        	var $comment = $('<div class="communty-comment" id='+ data[i].comtNo+'>');
+        	var $comment = $('<div class="communty-comment" >');
         	$img = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/images/profile.png');
         	$coIdP = $("<p>").text(data[i].user.userId);
+        	$comtNoP = $("<p class='postDetatil-comtNo'>").text(data[i].comtNo);
         	$coDateP = $("<p>").text(data[i].comtDate);
         	$coModifyP = $("<p id='commentModifyBtn'>").text("수정 / ");
         	$coDeleteP = $("<p id='commentDeleteBtn'>").text("삭제");
         	$coDetail = $('<div class="comment-detail1">').text(data[i].comtDetail);
         	$reponseBtn = $('<input type="button" value="답글달기" class="responseBtn">') 
         	
-             
+            
         	
         	if(data[i].user.userId == loginUser){
         		
-        	  $comment.append($img).append($coIdP).append($coDateP).append($coModifyP).append($coDeleteP).append($coDetail).append($reponseBtn);
+        	  $comment.append($img).append($coIdP).append($comtNoP).append($coDateP).append($coModifyP).append($coDeleteP).append($coDetail).append($reponseBtn);
         	}else{
-        	  $comment.append($img).append($coIdP).append($coDateP).append($coDetail).append($reponseBtn);
+        	  $comment.append($img).append($coIdP).append($comtNoP).append($coDateP).append($coDetail).append($reponseBtn);
         	}
         	
         	$responseDiv = $('<div class="communty-response-div">');
@@ -788,14 +960,15 @@
 	        	if(data[i].reCommentList.length != 0){
 	        		
 	        		var reCommentList = data[i].reCommentList;
-	        		console.log(reCommentList);
+
 	        		for(var j in reCommentList){
 	        			
 		        		
-		        		$communtyResponse = $('<div class="communty-response" id="'+ reCommentList[j].reComtNo +'">')
+		        		$communtyResponse = $('<div class="communty-response" >')
 		        		$iTg = $('<i class="xi-subdirectory"></i>');
 		        		$img1 = $('<img>').attr('src','${ pageContext.servletContext.contextPath }/resources/images/profile.png');
 		            	$recoIdP = $("<p>").text(reCommentList[j].user.userId);
+		            	$recomtNoP = $("<p class='postDetatil-reComtNo'>").text(reCommentList[j].reComtNo);
 		            	$recoDateP = $("<p>").text(reCommentList[j].reComtDate);
 		            	$recoModifyP = $("<p id='responseModifyBtn'>").text("수정 / ");
 		            	$recoDeleteP = $("<p id='responseDeleteBtn'>").text("삭제");
@@ -804,10 +977,10 @@
 		                 
 		            	if(data[i].reCommentList[j].user.userId == loginUser){
 		            		
-		            	  $communtyResponse.append($iTg).append($img1).append($recoIdP).append($recoDateP).append($recoModifyP).append($recoDeleteP).append($recoDetail);
+		            	  $communtyResponse.append($iTg).append($img1).append($recoIdP).append($recomtNoP).append($recoDateP).append($recoModifyP).append($recoDeleteP).append($recoDetail);
 		            	  $responseDiv.append( $communtyResponse);
 		            	}else{
-		            	  $communtyResponse.append($iTg).append($img1).append($recoIdP).append($recoDateP).append($recoDetail);
+		            	  $communtyResponse.append($iTg).append($img1).append($recoIdP).append($recomtNoP).append($recoDateP).append($recoDetail);
 		            	  $responseDiv.append( $communtyResponse);
 		            	}
 		            	
@@ -851,13 +1024,15 @@
 	  	  
 	  	  e.stopPropagation();
 	  	  
-	  	  var likeStatus = $(this).parent().attr('id');
-	  	  var $like = $(this).parent().children('p');
-	  	  var postNo = $(".communty-detail-header").attr('id');
+	  	  var likeStatus = $(this).parent().children('.postDetail-likeStatus').text();
+	  	  var $like = $(this).parent().children('.postlist-likes');
+	  	  var postNo = "${post.postNo}"; 
 	  	  var $likeItg = $(this);
 		  var $login = "${sessionScope.loginMember}";
+
+		  
 	  	  
-	  	  if($login != ""){
+	  	   if($login != ""){
 	  	  
 		  	  if(likeStatus == 'Y' || likeStatus == 'N'){
 		  		 
@@ -873,10 +1048,10 @@
 		   		        	
 		   		        	if(likeStatus == 'Y'){
 		   		        		 $likeItg.attr('class','xi-heart-o xi-2x');
-		   		        		 $likeItg.parent().attr('id','N');
+		   		        		 $likeItg.parent().children('.postDetail-likeStatus').text('N');
 		   		        	}else{
 		   		        		 $likeItg.attr('class','xi-heart xi-2x');
-		   		        		 $likeItg.parent().attr('id','Y');
+		   		        		 $likeItg.parent().children('.postDetail-likeStatus').text('Y');
 		   		        	}
 		   		        	  
 		   		        	 $like.text(data);
@@ -903,7 +1078,7 @@
 		   		        success : function(data) {
 		   		        	
 		   		        	 $likeItg.attr('class','xi-heart xi-2x');
-		   		        	 $likeItg.parent().attr('id','Y');
+		   		        	 $likeItg.parent().children('.postDetail-likeStatus').text('Y');
 		   		        	 $like.text(data);
 		   		        	 
 		   		      
@@ -917,13 +1092,83 @@
 		  		  
 		  	  }
 	  	  
-	  	  }
+	  	  } 
 	  	 
 	  	
 	  })
 	  
-	  function commentList()
-	  
+	   function commentList(){
+    	 
+    	  var postNo = "${post.postNo}"; 
+    	  
+    	 
+    	 $.ajax({
+    		 url:'${pageContext.servletContext.contextPath}/communty/ajaxCommentPage',
+    		 type: 'get',
+    		 data:{postNo:postNo},
+    		 success : function(data) {
+    			 	comment(data.comments);
+		        	$('.pagingArea').html("");
+		        	pageBtn(data.page)
+		        },
+		        error: function(error){
+		        	
+		        }
+    	 })
+    	 
+    	 
+     } 
+     
+     
+     function pageBtn(page){
+    	   $('.pagingArea').html("");
+    	   $pageInfo = $('.pagingArea');
+
+		   
+		   $pageInfo.append('<button id="startPage"><<</button>');
+		   
+		   if(page.pageNo == 1){
+			   $pageInfo.append('<button disabled><</button>');
+		   }else if(page.pageNo > 1){
+			   $pageInfo.append('<button id="prevPage"><</button>');
+		   }
+		   
+			   
+			   for(var i = page.startPage ; i <= page.endPage ; i++){
+				   
+				   if( i == 1 ){
+    				   if(page.pageNo == 1){
+    					   $pageInfo.append('<button disabled>1</button>');
+    				   }else{
+    					   $pageInfo.append('<button id="pageActionBtn">'+ i +'</button>');
+    				   }
+          				
+          				   
+          			}else{
+          				$pageInfo.append('<button id="pageActionBtn">'+ i +'</button>');
+          			}
+				   
+				   
+			   }
+			   
+		   
+		   
+		   if(page.pageNo == page.maxPage ){
+			   $pageInfo.append('<button disabled>></button>');
+			  
+		   }else if(page.pageNo < page.maxPage){
+			   $pageInfo.append('<button id="nextPage">></button>');
+		   }
+		  	
+		   
+		   $pageInfo.append('<button id="maxPage">>></button>');
+		   
+	   
+	   }
+    	 
+     
+     
+	   
 	  
     
         

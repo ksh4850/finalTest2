@@ -253,57 +253,9 @@
 		<result column="RECO_USER_ID" property="userId" />
 	</resultMap> 
  	
- 	<select id="selectCommunryDetail" resultMap="SPostDetailResultMap" parameterType="string">
+ 	<select id="selectCommunryDetail" resultMap="SPostDetailResultMap" parameterType="hashmap">
  	
-      <!--       
-		SELECT           
-		        G.*
-		      , H.* 
-		 FROM (SELECT
-				       A.POST_NO 
-		             , A.POST_DETAILS 
-				     , A.POST_DATE
-				     , A.POST_STATUS
-				     , A.POST_HITS
-				     , A.POST_LIKES
-				     , A.POST_HOUSING_TYPE
-				     , A.POST_ACREAGE
-				     , A.POST_RESIDENCE_TYPE
-				     , A.POST_COST_TYPE
-				     , B.USER_NO AS POST_USER_NO
-				     , B.USER_ID AS POST_USER_ID
-				  FROM TBL_POST A
-		          JOIN TBL_USER B ON(A.USER_NO = B.USER_NO) 
-		          WHERE A.POST_NO = #{postNo}
-		           ) G 
-		           ,
-		          (SELECT
-		               C.POST_COMT_NO
-		             , C.POST_NO 
-		             , C.POST_COMT_DETAILS
-		             , C.POST_COMT_DATE
-		             , C.POST_COMT_STATUS
-		             , E.USER_NO  AS COMM_USER_NO
-		             , E.USER_ID  AS COMM_USER_ID
-		             , D.POST_RECOMT_NO
-		             , D.POST_COMT_NO AS RECO_COMT_NO
-		             , D.POST_RECOMT_DETAILS
-		             , D.POST_RECOMT_DATE
-		             , D.POST_RECOMT_STATUS
-		             , F.USER_NO  AS RECO_USER_NO
-		             , F.USER_ID  AS RECO_USER_ID
-		          FROM TBL_POST A
-		          JOIN TBL_POST_COMMENTS C ON(A.POST_NO = C.POST_NO)
-		          JOIN TBL_POST_RECOMMENT D ON(C.POST_COMT_NO = D.POST_COMT_NO)
-		          JOIN TBL_USER E ON(C.USER_NO = E.USER_NO)
-		          JOIN TBL_USER F ON(D.USER_NO = F.USER_NO)
-		          WHERE  A.POST_NO = #{postNo}
-		            AND  A.POST_STATUS = 'Y'
-		            AND  C.POST_COMT_STATUS = 'Y'
-		            AND  D.POST_RECOMT_STATUS='Y'
-		            ORDER BY C.POST_COMT_NO DESC) H  
-		        WHERE G.POST_NO = H.POST_NO(+)   -->
-		  SELECT           
+         SELECT           
 		        G.*
 		      , H.* 
               , I.*
@@ -322,7 +274,7 @@
 				     , B.USER_ID AS POST_USER_ID
 				  FROM TBL_POST A
 		          JOIN TBL_USER B ON(A.USER_NO = B.USER_NO) 
-		          WHERE A.POST_NO =  #{postNo}
+		          WHERE A.POST_NO = #{postNo}
 		          
 		           ) G 
 		           ,
@@ -336,9 +288,20 @@
 			             , E.USER_ID AS COMM_USER_ID
 			          FROM TBL_POST_COMMENTS C
 			          JOIN TBL_USER E ON(C.USER_NO = E.USER_NO)
-			          WHERE  C.POST_NO =  #{postNo}
-			            AND  C.POST_COMT_STATUS = 'Y'
-			            ORDER BY  C.POST_COMT_NO DESC) H
+			          WHERE  C.POST_COMT_NO  IN (SELECT
+                                                      K.POST_COMT_NO
+                                                FROM (SELECT
+                                                            ROWNUM RUNM
+                                                           , J.POST_COMT_NO
+                                                        FROM TBL_POST_COMMENTS J
+                                                        WHERE J.POST_NO = #{postNo}
+                                                        AND  J.POST_COMT_STATUS = 'Y'
+                                                        ORDER BY J.POST_COMT_NO DESC
+                                                 ) K
+                                               WHERE K.RUNM BETWEEN #{page.startRow} AND #{page.endRow}
+                                              ) 
+			            
+			            ) H
 			        ,
 			      (SELECT
 			               D.POST_RECOMT_NO
@@ -351,12 +314,13 @@
 			          FROM TBL_POST_COMMENTS C
 			          JOIN TBL_POST_RECOMMENT D ON(C.POST_COMT_NO = D.POST_COMT_NO)
 			          JOIN TBL_USER F ON(D.USER_NO = F.USER_NO)
-			          WHERE  C.POST_NO =  #{postNo}
-			            AND  C.POST_COMT_STATUS = 'Y'
-			            AND  D.POST_RECOMT_STATUS='Y'
+			          WHERE  D.POST_RECOMT_STATUS='Y'
+			            AND  c.POST_NO = #{postNo}
+                        
 			            ) I
        WHERE G.POST_NO = H.POST_NO(+)
         AND  H.POST_COMT_NO = I.POST_COMT_NO(+)
+        ORDER BY H.POST_COMT_NO DESC
  	</select>
  	
  	<insert id="insertAjaxCommentRegist" parameterType="SPCommentDTO">
@@ -554,36 +518,53 @@
  	
  	
  	<select id="selectAjaxCommentPageList" parameterType="hashmap" resultMap="SPCommentMap">
- 		 SELECT
-               F.*
-           FROM ( 
-                 SELECT
-                       ROWNUM RNUM
-                     ,  E.*                   
-                  FROM (SELECT
-                               A.POST_COMT_NO
-                             , A.POST_NO 
-                             , A.POST_COMT_DETAILS
-                             , A.POST_COMT_DATE
-                             , A.POST_COMT_STATUS
-                             , C.USER_NO
-                             , C.USER_ID
-                             , B.POST_RECOMT_NO
-                             , B.POST_RECOMT_DETAILS
-                             , B.POST_RECOMT_DATE
-                             , B.POST_RECOMT_STATUS
-                             , D.USER_NO AS RECO_USER_NO
-                             , D.USER_ID AS RECO_USER_ID
-                          FROM TBL_POST_COMMENTS A
-                          JOIN TBL_USER C ON(C.USER_NO = A.USER_NO)
-                          LEFT JOIN TBL_POST_RECOMMENT B ON(A.POST_COMT_NO = B.POST_COMT_NO)
-                          LEFT JOIN TBL_USER D ON(D.USER_NO = B.USER_NO)
-                          WHERE  A.POST_NO = #{postNo}
-                            AND  A.POST_COMT_STATUS = 'Y'
-                        ORDER BY A.POST_COMT_NO  ) E
-                        
-                        )F            
-                WHERE F.RNUM BETWEEN #{page.startRow} AND {page.endRow};       
+ 		SELECT
+		      E.*
+		    , F.*
+		 FROM (SELECT
+				       A.POST_COMT_NO
+		             , A.POST_NO 
+		             , A.POST_COMT_DETAILS
+		             , A.POST_COMT_DATE
+		             , A.POST_COMT_STATUS
+		             , C.USER_NO
+		             , C.USER_ID
+		          FROM TBL_POST_COMMENTS A
+		          JOIN TBL_USER C ON(C.USER_NO = A.USER_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+		            AND  A.POST_COMT_NO  IN (SELECT
+                                                      H.POST_COMT_NO
+                                                FROM (SELECT
+                                                            ROWNUM RUNM
+                                                           , G.POST_COMT_NO
+                                                        FROM TBL_POST_COMMENTS G
+                                                        WHERE G.POST_NO = #{postNo}
+                                                        AND  G.POST_COMT_STATUS = 'Y'
+                                                        ORDER BY G.POST_COMT_NO DESC
+                                                 ) H
+                                              WHERE H.RUNM BETWEEN #{page.startRow} AND #{page.endRow} 
+                                              ) 
+                    ) E
+		        ,
+		      (SELECT
+		               B.POST_RECOMT_NO
+		             , B.POST_COMT_NO
+		             , B.POST_RECOMT_DETAILS
+		             , B.POST_RECOMT_DATE
+		             , B.POST_RECOMT_STATUS
+		             , D.USER_NO AS RECO_USER_NO
+		             , D.USER_ID AS RECO_USER_ID
+		          FROM TBL_POST_COMMENTS A
+		          JOIN TBL_POST_RECOMMENT B ON(A.POST_COMT_NO = B.POST_COMT_NO)
+		          JOIN TBL_USER D ON(D.USER_NO = B.USER_NO)
+		          WHERE  A.POST_NO = #{postNo}
+		            AND  A.POST_COMT_STATUS = 'Y'
+		            AND  B.POST_RECOMT_STATUS='Y'
+		            ) F
+		     WHERE  E.POST_COMT_NO = F.POST_COMT_NO(+)
+             ORDER BY E.POST_COMT_NO DESC
+  
  	</select>
  	
  	

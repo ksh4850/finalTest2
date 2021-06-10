@@ -82,9 +82,9 @@ public class CommuntyServiceImpl implements CommuntyService{
 	}
 
 	@Override
-	public SPostDTO selectCommunryDetail(String postNo) {
+	public SPostDTO selectCommunryDetail( Map<String ,Object> map) {
 		
-		SPostDTO post = communtyMapper.selectCommunryDetail(postNo);
+		SPostDTO post = communtyMapper.selectCommunryDetail(map);
 		
 		post.setCommuntCount(communtyMapper.selectCommentCounnt( post.getPostNo()));
 		

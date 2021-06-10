@@ -196,12 +196,13 @@ public class CommuntyController {
 	@GetMapping("communtyList")
 	public String getCommuntyList(Model model , HttpServletRequest request) {
 		
-		int pageNo = 0;
 		
 		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
 		
-		
+
 		List<SPostListDTO> postList = communtyService.selectPostList();
+		
+	
 		
 		if(user != null) {
 			for(int i = 0 ; i < postList.size()  ;i ++) {
@@ -214,9 +215,9 @@ public class CommuntyController {
 				
 			}
 		}
-		/*
-		 * for(SPostListDTO post : postList) { System.out.println(post); }
-		 */
+		
+		
+		 
 		
 		model.addAttribute("postList", postList);
 		
@@ -265,10 +266,35 @@ public class CommuntyController {
 	
 	/*커뮤니티 디테일 조회*/
 	@GetMapping("communtyDetail")
-	public String getCoommuntyDetail(Model model , @RequestParam String postNo , HttpServletRequest request) {
+	public String getCoommuntyDetail(Model model , @RequestParam String postNo ,@RequestParam(defaultValue = "0") int currentPage , HttpServletRequest request) {
+		
+		int pageNo = 1;
+		
+		if(currentPage != 0) {
+			pageNo = currentPage;
+			
+			if(pageNo <= 0) {
+				pageNo = 1;
+			}
+		}
+		
+		int totalCount = communtyService.ajaxCommentTotalCount(postNo);
+		
+		int limit = 10;
+	
+		int buttonAmount = 5;
+		
+		
+		PageInfoDTO page = Pagenation.getPageInfo(pageNo, totalCount, limit, buttonAmount);
+		
+		Map<String ,Object> map = new HashMap<>();
+		
+		map.put("postNo", postNo);
+		map.put("page", page );
+		
 //		System.out.println(postNo);
 		
-		SPostDTO post = communtyService.selectCommunryDetail(postNo);
+		SPostDTO post = communtyService.selectCommunryDetail(map);
 		
 		PrivateMemberDTO user =	 (PrivateMemberDTO)request.getSession().getAttribute("loginMember");
 		
@@ -286,6 +312,7 @@ public class CommuntyController {
 		
 		
 		model.addAttribute("post", post);
+		model.addAttribute("page", page);
 		
 	
 		
@@ -293,7 +320,7 @@ public class CommuntyController {
 	}
 	
 	/*커뮤니티 댓글 등록 ajax*/
-	@GetMapping(value="ajaxcommentRegist", produces="application/json; charset=UTF-8")
+	@GetMapping(value="ajaxcommentRegist", produces="text/plain; charset=UTF-8")
 	@ResponseBody
 	public String getAjaxCommentRegist(@RequestParam String postNo , @RequestParam String commentText ,HttpServletRequest request) {
 
@@ -310,13 +337,13 @@ public class CommuntyController {
 		
 		 int result = communtyService.insertAjaxCommentRegist(comment); 
 		 
-		 String gson = "";
+		 String gson = result +"";
 		 
-		 if(result >  0) {
-			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
-				/* System.out.println(post); */
-			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
-		 }
+//		 if(result >  0) {
+//			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
+//				/* System.out.println(post); */
+//			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
+//		 }
 		 
 		 
 	 	
@@ -338,13 +365,9 @@ public class CommuntyController {
 		
 		int result = communtyService.insetAjaxResponseCommentRegist(recomment);
 		
-		String gson = "";
+		String gson = result + "";
 		 
-		 if(result >  0) {
-			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
-				/* System.out.println(post); */
-			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
-		 }
+
 		
 		
 		
@@ -360,15 +383,9 @@ public class CommuntyController {
 		
 		System.out.println(result);
 		
-		String gson = "";
+		String gson = result + "";
 		 
-		 if(result >  0) {
-			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
-			 
-			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
-			 
-			 System.out.println(gson);
-		 }
+		 
 		 
 		return gson;
 	}
@@ -383,13 +400,9 @@ public class CommuntyController {
 		int result = communtyService.deleteAjaxResponse(reComtNo);
 		
 		
-		String gson = "";
+		String gson = result + "";
 		 
-		 if(result >  0) {
-			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
-				
-			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
-		 }
+		
 		 
 		return gson;
 	
@@ -400,6 +413,8 @@ public class CommuntyController {
 	@ResponseBody
 	public String getAjaxCommentModify(@RequestParam String comtNo , @RequestParam String postNo ,  @RequestParam String commentText ) {
 		
+
+		
 		SPCommentDTO comment = new SPCommentDTO();
 		comment.setComtDetail(commentText);
 		comment.setComtNo(comtNo);
@@ -409,14 +424,9 @@ public class CommuntyController {
 		int result = communtyService.modifyAjaxCommentDetail(comment);
 		
 		
-		String gson = "";
+		String gson = result + "";
 		 
-		 if(result >  0) {
-			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
-				
-			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
-		 }
-		 
+
 		return gson;
 	
 	}
@@ -436,13 +446,8 @@ public class CommuntyController {
 		int result = communtyService.modifyAjaxResponsetDetail(recomment);
 		
 		
-		String gson = "";
-		 
-		 if(result >  0) {
-			 List<SPCommentDTO> post = communtyService.selectAjaxCommunryDetail(postNo);
-				
-			 gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(post);
-		 }
+		String gson = result + "";
+	
 		 
 		return gson;
 	
@@ -526,9 +531,11 @@ public class CommuntyController {
 	}
 	
 	
-	@GetMapping(value="ajaxCommentPage" ,produces="text/plain; charset=UTF-8")
+	@GetMapping(value="ajaxCommentPage" ,produces="application/json;  charset=UTF-8")
 	@ResponseBody
-	public String getAjaxCommentPage  ( @RequestParam int currentPage , @RequestParam String postNo) {
+	public String getAjaxCommentPage  ( @RequestParam(defaultValue = "0") int currentPage , @RequestParam String postNo) {
+		
+		
 		
 		int pageNo = 1;
 		
@@ -563,6 +570,7 @@ public class CommuntyController {
 		 pageComment.put("comments", comments);
 		 
 		String gson =  new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(pageComment);
+//		System.out.println(gson);
 		
 		return gson;
 		

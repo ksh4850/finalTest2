@@ -20,7 +20,7 @@ public interface CommuntyMapper {
 
 	List<SPostListDTO> selectAajxPostList(Map<String, Integer> map);
 
-	SPostDTO selectCommunryDetail(String postNo);
+	SPostDTO selectCommunryDetail( Map<String ,Object> map);
 
 	int insertAjaxCommentRegist(SPCommentDTO comment);
 
