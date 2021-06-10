@@ -322,12 +322,19 @@ public class SystemController {
 		
 		
 //		System.out.println("인초"+categoryTopInfo );
+				
+		Map<String,Object> ageSalseInfo = systemService.selectAgeSalseInfo(corpSellPage);
+		
+		
+		List<Map<String,Object>> categorySalseInfo = systemService.selectCategorySalseInfo(corpSellPage);
 		
 		Map<String ,Object> map = new HashMap<>();
 		
 		map.put("daySalseInfo", daySalseInfo);
 		map.put("productTopInfo", productTopInfo);
 		map.put("categoryTopInfo", categoryTopInfo);
+		map.put("ageSalseInfo", ageSalseInfo);
+		map.put("categorySalseInfo", categorySalseInfo);
 		
 		 String selseJson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setPrettyPrinting().create().toJson(map);
 		
@@ -397,15 +404,23 @@ public class SystemController {
 		
 		
 //		System.out.println("인초"+categoryTopInfo );
+				
+		Map<String,Object> ageSalseInfo = systemService.selectAJaxAgeSalseInfo(corpSellPage);
+		
+		/* System.out.println(ageSalseInfo); */
+		
+		List<Map<String,Object>> categorySalseInfo = systemService.selectAjaxCategorySalseInfo(corpSellPage);
 		
 		Map<String ,Object> map = new HashMap<>();
 		
 		map.put("daySalseInfo", daySalseInfo);
 		map.put("productTopInfo", productTopInfo);
 		map.put("categoryTopInfo", categoryTopInfo);
+		map.put("ageSalseInfo", ageSalseInfo);
+		map.put("categorySalseInfo", categorySalseInfo);
 		
 		String selseJson = new GsonBuilder().setDateFormat("yyyy-MM-dd").setPrettyPrinting().create().toJson(map);
-		System.out.println(selseJson);
+		/* System.out.println(selseJson); */
 		
 		return selseJson;
 	}
