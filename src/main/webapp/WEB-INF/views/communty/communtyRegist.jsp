@@ -62,12 +62,26 @@
             overflow-y: auto; 
             outline-style: none;
              float: left;
+             -moz-appearance: textfield-multiline;
+		
+		    -webkit-appearance: textarea;
+		
+		    font: medium -moz-fixed;
+		
+		    font: -webkit-small-control;
+		
+		    overflow: auto;
+		
+		    padding: 2px;
+		
+		    resize: both;
              
             
         }
         
         .communty-regist-datail *{
         	margin : 5px;
+        	
         }
 
 
@@ -240,7 +254,12 @@
             <textarea name="postDetail" id="postDetail" cols="30" rows="10"></textarea>
             
 			<div class="communty-regist-bar">
-			<input type="button" id="fileBtn" value="이미지업로드">
+			<i class="xi-align-left xi-2x" id="textLeftBtn"></i>
+			<button type="button"  id="textCenterBtn"><i class="xi-align-center xi-2x" ></i></button>
+			<i class="xi-align-right xi-2x" id="textRightBtn"></i>
+			 <i class="xi-image-o xi-2x" id="fileBtn"></i>
+			
+			<!-- <input type="button" id="Btn" value="이미지업로드"> -->
 			</div>
 			 
 			<div class="communty-regist">
@@ -270,17 +289,43 @@
     </section>
     
     
-    <script type="text/javascript">
-    	document.execCommand('defaultParagraphSeparator', false, 'p');
+    <script >
+    
+    	
+    document.execCommand('defaultParagraphSeparator', false, 'p');
+    	
     	
     	$(function(){
     		$("#detail").append("<p>&nbsp;</p>");
+    		
+    		$("#textLeftBtn").click(function(){
+        		console.log("하이1");
+        		
+        		
+        	})
+        	
+        	$("#textCenterBtn").click(function(e){
+        		
+        		e.stopPropagation();
+        		document.execCommand('formatBlock', false, 'h1');
+        	})
+        	
+        	$("#textRightBtn").click(function(){
+        		
+        	
+        	})
+    		
     	})
     	
+
     	$("#fileBtn").click(function(){
     		
     		$("#imgfile").click();
     	})
+    	
+    	
+    	
+    	
     	
     	$(function(){
     		
@@ -376,7 +421,7 @@
 	     	console.log(reNameArr);
 	     	 console.log(originNameArr); 
        	 
-       	 $("#reName").val(reNameArr);
+       	  $("#reName").val(reNameArr);
        	  $("#originName").val(originNameArr); 
        	 
        	  if(reNameArr.length > 0){
@@ -391,7 +436,7 @@
         })
         
         $("#tt").click(function(){
-        	 console.log("하이!!!"); 
+        	
 			
         	 /* originFileName.substring(originFileName.lastIndexOf(".")) */
         	 
