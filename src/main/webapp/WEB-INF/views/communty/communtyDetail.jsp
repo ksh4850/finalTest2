@@ -719,7 +719,6 @@
         	 var comtNo = $(this).parents(".communty-comment").children(".postDetatil-comtNo").text();
         	 var detail = $(this).parent().find(".comment-detail1").text();
         	 var isTrue = false;
-
         	 
         	 e.stopPropagation();
 

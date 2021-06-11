@@ -161,7 +161,7 @@
         	display: none;
         }
         
-          #originName{
+        #originName{
         	display: none;
         }
         
@@ -307,12 +307,12 @@
         
         
 		       <div id="imgMenuBar">
-		        <button type="button"><i class="xi-align-left xi-2x" ></i></button>
-		        <button type="button"><i class="xi-align-center xi-2x" ></i></button>
-		        <button type="button"><i class="xi-align-right xi-2x" ></i></button>
-		        <button type="button"><b class="b1">25%</b></button>
-		        <button type="button"><b class="b1">50%</b></button>
-		        <button type="button"><b class="b1">100%</b></button>
+		        <button type="button" id="imgMenuLeft"><i class="xi-align-left xi-2x" ></i></button>
+		        <button type="button" id="imgMenucenter"><i class="xi-align-center xi-2x" ></i></button>
+		        <button type="button" id="imgMenuRight"><i class="xi-align-right xi-2x" ></i></button>
+		        <button type="button" id="imgMenu50"><b class="b1">50%</b></button>
+		        <button type="button" id="imgMenu100"><b class="b1">100%</b></button>
+		        <button type="button" id="imgMenuFull"><b class="b1">full</b></button>
 		        <button type="button" id="imgMenuDelete"><i class="xi-trash xi-2x"></i></button>
 		        <button type="button" id="imgMenuClose"><i class="xi-close xi-2x"></i></button>
 		      
@@ -390,8 +390,6 @@
 		  $("#imgfile").change(function(){
 			  
 			 var imgLangth =  $(".detailImg").length;
-			 console.log(imgLangth);
-			 
 			
 				
 			var formData = new FormData();
@@ -434,7 +432,7 @@
 							var $detailImgDiv  =$("<div class='detailImg-div'>");
 							var $itag1 = $('<i class="xi-close xi-2x">').css('display',"none");
 							var $itag2 = $('<i class="xi-close xi-2x">');
-							var $detailImg = $('<img class="detailImg" >').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","500px").css("height","500px").attr('id',data[i].originFileName);
+							var $detailImg = $('<img class="detailImg" >').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","500px").css("height","500px").attr('data-filename',data[i].originFileName);
 							var $thumbImg = $('<img class="thumbImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","120px").css("height","120px");
 							
 							/* $detailImgDiv.append($detailImg).append($itag1).append("<p>&nbsp;</p>"); */
@@ -466,7 +464,7 @@
        	var originNameArr = new Array() ;
       	 $(".detailImg").filter(function(){
       		var reName = $(this).attr("src");
-      		 var originName = $(this).attr("id"); 
+      		 var originName = $(this).attr("data-filename"); 
       		var re = reName.substring(reName.lastIndexOf("/"));
       		
       		
@@ -523,7 +521,7 @@
 
                  
                  
-                 $.ajax({
+                  $.ajax({
                 	 type:"GET",
               	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
               	      data: {reName:reName},
@@ -539,104 +537,176 @@
               	   error:function(error){
               		   
               	   }
-                 })
+                 }) 
                  
                  
 
             })
             
-            
-            
+            /* $(document).on('click','.detailImg', function() {
+            	
+			     alert('클릭');
+			}) */
+			
+			
 		  
-          /* $(document).on('click',".detailImg-div i" , function(){
-
-            var reName =  $(this).parent().find("img").attr("src");
-             var reSaveName = saveName; 
-            $(this).parent().remove();
-            $(".thumbImg").filter(function(){
-                return $(this).attr("src") == reName;          
-            }).parent().remove(); 
-
-           
-            
-            
-            $.ajax({
-           	 type:"GET",
-         	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
-         	      data: {reName:reName},
-         	   success:function(data){
-         		  var length =  $(".thumbImg").length;
-        		  if(length == 0 ){
-        		    	$(".communty-regist-thumb").css("display","none");
-        		    }
-         		   alert(data);
-         		   
-         	   },
-         	   error:function(error){
-         		   
-         	   }
-            })
-
-            })*/
-            
-             $(document).on('click',".detailImg" , function(e){
-            	 
-            	 var reName =  $(this).attr("src");
-            	 
-            	 x = e.pageX;
-                 y = e.pageY; 
-                 
-                 x1= $(this).pagex;
-                 console.log(x1)
-                 
-
-                 $("#imgMenuBar").css('top',y-100).css('left',x).css('display','inline-block');
-
-                //이미지 메뉴바 닫기
-            	 $("#imgMenuClose").click(function(e){
-            		 
-            		 e.stopPropagation();
-            		 
-            		 $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
-            	 })
+		
+			var arrImg1 = new Array();
+    		
+    		$(document).on("click", ".detailImg", function (e) {
+    			
+    		
+				    	
+				    	const $img = $(this); 
+				    	const imgidx =  $img.index();
+				    	
+				    	console.log(imgidx);
+				    	
+				    	arrImg1.unshift(imgidx);
+				    	
+				    	console.log(arrImg1);
+				    	
+				    	
+				    		
+				    	
+		            	 var isTrue = false;
+		            	 
+		            	 x = e.pageX;
+		                 y = e.pageY; 
+		                 
+		                 
+		                 $("#imgMenuBar").css('top',y).css('left',x).css('display','inline-block'); 
+		                 
+ 						
+				    	
+				             
+				    });
+    		
+    		$("#imgMenuLeft").click(function(e){
+       		 
 				
-            	 //이미지 메뉴바 이미지 삭제
-            	 $("#imgMenuDelete").click(function(e){  
-            		 
-            		 e.stopPropagation();
-            		 
-            		  $(".detailImg").filter(function(){
-                          return $(this).attr("src") == reName;          
-                      }).remove();
-		             
-			         $(".thumbImg").filter(function(){
-			                return $(this).attr("src") == reName;          
-			          }).parent().remove(); 
-		           
-		            
-		            $.ajax({
-		           	 type:"GET",
-		         	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
-		         	      data: {reName:reName},
-		         	   success:function(data){
-		         		   
-		         		  var length =  $(".thumbImg").length;
-		         		  
-		        		  if(length == 0 ){
-		        		    	$(".communty-regist-thumb").css("display","none");
-		        		    }
-		         		   alert(data);
-		         		   
-		         		   $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
-		         	   },
-		         	   error:function(error){
-		         		   
-		         	   }
-		            }) 
-		            
-            	 }) 
+    		 
+			$('.detailImg').eq(arrImg1[0] - 1).css('float','left');
+     		
+     		
+     		
+     	 	}) 
+     	 
+     	 
+     	 	$("#imgMenucenter").click(function(e){
+        		 
+					
+        		 
+    			$('.detailImg').eq(arrImg1[0] - 1).css('text-align','center');
+         		
+         		
+         		
+         	 }) 
+         	 
+         	 $("#imgMenuRight").click(function(e){
+        		 
+					
+        		 
+    			$('.detailImg').eq(arrImg1[0] - 1).css('float','right');
+         		
+         		
+         		
+         	 }) 
+    		
+    		
+    		$("#imgMenu50").click(function(e){
+        		 
+					
+        		 
+    			$('.detailImg').eq(arrImg1[0] - 1).css('width','250px').css("height","250px");
+         		
+         		
+         		
+         	 }) 
+             
+             
+				$("#imgMenu100").click(function(e){
+         		 
+         		
+         		 
+				$('.detailImg').eq(arrImg1[0] - 1).css('width','500px').css("height","500px");
+         		
+         	 }) 
+             
+             
+        	 $("#imgMenuFull").click(function(e){
+         		 
+         		 
+         		 
+        		 $('.detailImg').eq(arrImg1[0] - 1).css('width','800px').css("height","500px");
+         		
+         	 }) 
 
-            })
+             //이미지 메뉴바 닫기
+         	 $("#imgMenuClose").click(function(e){
+         		 
+         		 
+         		 
+         		 $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+         		
+         	 })
+			
+             
+             //이미지 메뉴바 이미지 삭제
+         	 $("#imgMenuDelete").click(function(e){  
+         		 
+         		 const reName =  $('.detailImg').eq(arrImg1[0] - 1).attr('src');
+         		 
+         		 
+         		 
+         		  $(".detailImg").filter(function(){
+                       return $(this).attr("src") == reName;          
+                   }).remove();
+    	             
+    		       $(".thumbImg").filter(function(){
+    		                return $(this).attr("src") == reName;          
+    		       }).parent().remove(); 
+    		        
+    		         
+    	            
+    	    		 console.log(reName);
+    	    		
+    	    	
+    	    		 
+    	            $.ajax({
+    	           	 type:"GET",
+    	         	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
+    	         	      data: {reName:reName},
+    	         	   success:function(data){
+    	         		   
+    	         		   console.log(data);
+    	         		   
+    	         		  var length =  $(".thumbImg").length;
+    	         		  
+    	        		  if(length == 0 ){
+    	        		    	$(".communty-regist-thumb").css("display","none");
+    	        		    }
+    	         		  
+    	         		   
+    	         		   $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+    	         	   },
+    	         	   error:function(error){
+    	         		   
+    	         	   }
+    	            }) 
+    	            
+         	 }) 
+       
+			
+    	
+    	
+    	
+    	
+       
+       
+
+            	
+ 
             
             
             

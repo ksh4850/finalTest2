@@ -115,7 +115,7 @@ public class CommuntyController {
 		
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		
-//		System.out.println(root);
+
 		
 		String filePath = root + "\\uploadFiles";
 		
@@ -180,7 +180,8 @@ public class CommuntyController {
 		
 		String deleteName = reName.substring(reName.lastIndexOf("/"));
 		
-//		System.out.println(reName);
+		System.out.println(reName);
+		
 		String root = request.getSession().getServletContext().getRealPath("resources");
 		
 		String filePath = root + "\\uploadFiles";
