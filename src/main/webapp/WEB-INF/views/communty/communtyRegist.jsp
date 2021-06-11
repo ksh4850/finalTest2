@@ -169,10 +169,10 @@
         	border: 2px solid rgb(119, 94, 238);
         	background-color: rgb(119, 94, 238);
             display: none;
-            position: fixed;
             top: 100px;
             left: 100px;
             z-index: 3;
+            position: absolute;
             
         }
         
@@ -558,11 +558,11 @@
     		
 				    	
 				    	const $img = $(this); 
-				    	const imgidx =  $img.index();
+				    	const imgsrc =  $img.attr('src');
 				    	
-				    	console.log(imgidx);
+				    	console.log(imgsrc);
 				    	
-				    	arrImg1.unshift(imgidx);
+				    	arrImg1.unshift(imgsrc);
 				    	
 				    	console.log(arrImg1);
 				    	
@@ -582,13 +582,23 @@
 				             
 				    });
     		
+    		
+    		
+    		
+    		$('.communty-regist-datail').click(function(){
+    			$("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+    		})
+    		
+    		
     		$("#imgMenuLeft").click(function(e){
        		 
 				
     		 
-			$('.detailImg').eq(arrImg1[0] - 1).css('float','left');
+    			  $(".detailImg").filter(function(){
+                      return $(this).attr("src") == arrImg1[0];          
+                   }).css('float','left');
      		
-     		
+    			  arrImg1=[];
      		
      	 	}) 
      	 
@@ -596,31 +606,34 @@
      	 	$("#imgMenucenter").click(function(e){
         		 
 					
-        		 
-    			$('.detailImg').eq(arrImg1[0] - 1).css('text-align','center');
+
+  			  $(".detailImg").filter(function(){
+                    return $(this).attr("src") == arrImg1[0];          
+                 }).css('margin-left','auto').css('margin-right','auto');
          		
-         		
+  			 	arrImg1=[];
          		
          	 }) 
          	 
          	 $("#imgMenuRight").click(function(e){
         		 
-					
-        		 
-    			$('.detailImg').eq(arrImg1[0] - 1).css('float','right');
+
+   			  $(".detailImg").filter(function(){
+                     return $(this).attr("src") == arrImg1[0];          
+                  }).css('float','right');
          		
-         		
+   			 arrImg1=[];
          		
          	 }) 
     		
     		
     		$("#imgMenu50").click(function(e){
         		 
-					
-        		 
-    			$('.detailImg').eq(arrImg1[0] - 1).css('width','250px').css("height","250px");
+    			$(".detailImg").filter(function(){
+                    return $(this).attr("src") == arrImg1[0];          
+                 }).css('width','250px').css("height","250px");
          		
-         		
+    			 arrImg1=[];
          		
          	 }) 
              
@@ -629,16 +642,21 @@
          		 
          		
          		 
-				$('.detailImg').eq(arrImg1[0] - 1).css('width','500px').css("height","500px");
+					$(".detailImg").filter(function(){
+	                    return $(this).attr("src") == arrImg1[0];          
+	                 }).css('width','500px').css("height","500px");
+					 arrImg1=[];
          		
          	 }) 
              
              
         	 $("#imgMenuFull").click(function(e){
          		 
-         		 
-         		 
-        		 $('.detailImg').eq(arrImg1[0] - 1).css('width','800px').css("height","500px");
+
+   			  $(".detailImg").filter(function(){
+                     return $(this).attr("src") == arrImg1[0];          
+                  }).css('width','800px').css("height","500px");
+   			 	arrImg1=[];
          		
          	 }) 
 
@@ -646,8 +664,8 @@
          	 $("#imgMenuClose").click(function(e){
          		 
          		 
-         		 
          		 $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+         		 arrImg1=[];
          		
          	 })
 			
@@ -655,7 +673,10 @@
              //이미지 메뉴바 이미지 삭제
          	 $("#imgMenuDelete").click(function(e){  
          		 
-         		 const reName =  $('.detailImg').eq(arrImg1[0] - 1).attr('src');
+         		 const reName =  
+    			  $(".detailImg").filter(function(){
+                      return $(this).attr("src") == arrImg1[0];          
+                   }).attr('src');
          		 
          		 
          		 
@@ -689,6 +710,7 @@
     	         		  
     	         		   
     	         		   $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+    	         		  	arrImg1=[];
     	         	   },
     	         	   error:function(error){
     	         		   

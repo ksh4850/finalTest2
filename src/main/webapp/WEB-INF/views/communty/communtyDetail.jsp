@@ -18,13 +18,13 @@
         .communty-detail-div{
             width: 700px;
             /* border: 2px solid rgb(119, 94, 238); */
-            margin-left: 300px;
+            margin-left: 250px;
             margin-top: 130px;
         }
 
         .communty-detail-header{
             margin-top: 10px;
-            margin-left: 20px;
+            margin-left: 80px;
             height: 60px;
            
 
@@ -61,11 +61,17 @@
         }
         
 
-        .communty-detail-detail > img{
-
-            width: 680px;
+         .communty-detail-detail > img{
             margin-top: 10px;
             margin-left: 10px;
+        } 
+        
+        
+        .communty-detail-detail{
+			/* border: 2px solid rgb(119, 94, 238); */
+            width: 800px;
+            margin-top: 10px;
+           
         }
 
         .communty-detail-contents{
@@ -326,7 +332,7 @@
         		
             </div>
 			
-			
+			<br clear="both">
 
             <div class="communty-comment-count" > 
             	 <c:if test="${empty post.likeStatus }">
@@ -417,7 +423,7 @@
 
      </div>     
 		
-		
+		<c:if test="${!empty post.commentList}">
 		<div class="pagingArea" >
 			<button id="startPage"><<</button>
 			
@@ -446,6 +452,7 @@
 			
 					<button id="maxPage">>></button>
 		</div>
+		</c:if>
     <br>
 			
 	
