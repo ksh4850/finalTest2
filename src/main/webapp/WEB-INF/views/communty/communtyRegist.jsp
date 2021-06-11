@@ -58,23 +58,13 @@
             margin-left: 300px;
             border: 2px solid rgb(119, 94, 238);
             width:800px;
-            height:700px;
+            height:600px;
             overflow-y: auto; 
             outline-style: none;
-             float: left;
-            -moz-appearance: textfield-multiline;
-		
-		    -webkit-appearance: textarea;
-		
-		    font: medium -moz-fixed;
-		
-		    font: -webkit-small-control;
-		
-		    overflow: auto;
-		
-		    padding: 2px;
-		
-		    resize: both; 
+            float: left; 
+            /* position: absolute;
+            z-index:1; */
+          
              
             
         }
@@ -93,8 +83,8 @@
         }
 
         .communty-regist-btn{
-            margin-top: 50px;
-            margin-left: 650px;
+            margin-top: 700px;
+            margin-left: 630px;
             clear: both;
         }
 
@@ -175,6 +165,23 @@
         	display: none;
         }
         
+        #imgMenuBar{
+        	border: 2px solid rgb(119, 94, 238);
+        	background-color: rgb(119, 94, 238);
+            display: none;
+            position: fixed;
+            top: 100px;
+            left: 100px;
+            z-index: 3;
+            
+        }
+        
+        .b1{
+         	line-height: 2;
+         	
+         }
+
+        
  
 
     </style>
@@ -189,6 +196,7 @@
 
     </aside>
     <section>
+   
         <div class="system-communtyRegist-head">커뮤니티 등록</div>
 
         <form action="${ pageContext.servletContext.contextPath }/communty/communtyRegist" method="post" id="communtyRegist">
@@ -284,9 +292,8 @@
 	            <div class="communty-regist-thumb">
 	              
 	            </div>
-            </div> 
-
-			  <br clear="both">
+		</div>
+			  
 
             <div class="communty-regist-btn">
                 <input type="button" name="" id="tt" value="등록취소">
@@ -299,6 +306,18 @@
         </form>
         
         
+		       <div id="imgMenuBar">
+		        <button type="button"><i class="xi-align-left xi-2x" ></i></button>
+		        <button type="button"><i class="xi-align-center xi-2x" ></i></button>
+		        <button type="button"><i class="xi-align-right xi-2x" ></i></button>
+		        <button type="button"><b class="b1">25%</b></button>
+		        <button type="button"><b class="b1">50%</b></button>
+		        <button type="button"><b class="b1">100%</b></button>
+		        <button type="button" id="imgMenuDelete"><i class="xi-trash xi-2x"></i></button>
+		        <button type="button" id="imgMenuClose"><i class="xi-close xi-2x"></i></button>
+		      
+		    </div>
+     
     </section>
     
     
@@ -418,8 +437,8 @@
 							var $detailImg = $('<img class="detailImg" >').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","500px").css("height","500px").attr('id',data[i].originFileName);
 							var $thumbImg = $('<img class="thumbImg">').attr('src','${ pageContext.servletContext.contextPath }/resources/uploadFiles/'+data[i].reName).css("width","120px").css("height","120px");
 							
-							$detailImgDiv.append($detailImg).append($itag1).append("<p>&nbsp;</p>");
-							$detail.append($detailImgDiv);
+							/* $detailImgDiv.append($detailImg).append($itag1).append("<p>&nbsp;</p>"); */
+							$detail.append($detailImg);
 							
 							$thumDiv.append($thumbImg).append($itag2);
 							$thumb.append($thumDiv);
@@ -491,13 +510,16 @@
            	 console.log($("#imgName").val());
         })
         
+        
+        
+        //썸네일 이미지 삭제
         $(document).on('click',".thum-div i" , function(){
 
                 var reName =  $(this).parent().find("img").attr("src");
                 $(this).parent().remove();
                 $(".detailImg").filter(function(){
                     return $(this).attr("src") == reName;          
-                 }).parent().remove();
+                 }).remove();
 
                  
                  
@@ -522,15 +544,18 @@
                  
 
             })
+            
+            
+            
 		  
-          $(document).on('click',".detailImg-div i" , function(){
+          /* $(document).on('click',".detailImg-div i" , function(){
 
             var reName =  $(this).parent().find("img").attr("src");
-           /*  var reSaveName = saveName; */
+             var reSaveName = saveName; 
             $(this).parent().remove();
             $(".thumbImg").filter(function(){
                 return $(this).attr("src") == reName;          
-            }).parent().remove();
+            }).parent().remove(); 
 
            
             
@@ -552,27 +577,70 @@
          	   }
             })
 
+            })*/
+            
+             $(document).on('click',".detailImg" , function(e){
+            	 
+            	 var reName =  $(this).attr("src");
+            	 
+            	 x = e.pageX;
+                 y = e.pageY; 
+                 
+                 x1= $(this).pagex;
+                 console.log(x1)
+                 
+
+                 $("#imgMenuBar").css('top',y-100).css('left',x).css('display','inline-block');
+
+                //이미지 메뉴바 닫기
+            	 $("#imgMenuClose").click(function(e){
+            		 
+            		 e.stopPropagation();
+            		 
+            		 $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+            	 })
+				
+            	 //이미지 메뉴바 이미지 삭제
+            	 $("#imgMenuDelete").click(function(e){  
+            		 
+            		 e.stopPropagation();
+            		 
+            		  $(".detailImg").filter(function(){
+                          return $(this).attr("src") == reName;          
+                      }).remove();
+		             
+			         $(".thumbImg").filter(function(){
+			                return $(this).attr("src") == reName;          
+			          }).parent().remove(); 
+		           
+		            
+		            $.ajax({
+		           	 type:"GET",
+		         	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
+		         	      data: {reName:reName},
+		         	   success:function(data){
+		         		   
+		         		  var length =  $(".thumbImg").length;
+		         		  
+		        		  if(length == 0 ){
+		        		    	$(".communty-regist-thumb").css("display","none");
+		        		    }
+		         		   alert(data);
+		         		   
+		         		   $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+		         	   },
+		         	   error:function(error){
+		         		   
+		         	   }
+		            }) 
+		            
+            	 }) 
+
             })
             
             
             
-            
-              $(document).on('mouseover',".detailImg-div" , function(e){
-            	  
-            	  
-            	  
-            	  $(this).parent().find("i").css("display","inline-block");
-            	  
-              })
-              
-               $(document).on('mouseout',".detailImg-div" , function(e){
-            	  
-            	  
-            	  
-            	  $(this).parent().find("i").css("display","none");
-            	  
-              })
-            
+
             
             
             
