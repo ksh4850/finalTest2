@@ -62,7 +62,7 @@
             overflow-y: auto; 
             outline-style: none;
              float: left;
-             -moz-appearance: textfield-multiline;
+            -moz-appearance: textfield-multiline;
 		
 		    -webkit-appearance: textarea;
 		
@@ -74,7 +74,7 @@
 		
 		    padding: 2px;
 		
-		    resize: both;
+		    resize: both; 
              
             
         }
@@ -254,9 +254,22 @@
             <textarea name="postDetail" id="postDetail" cols="30" rows="10"></textarea>
             
 			<div class="communty-regist-bar">
-			<i class="xi-align-left xi-2x" id="textLeftBtn"></i>
-			<button type="button"  id="textCenterBtn"><i class="xi-align-center xi-2x" ></i></button>
-			<i class="xi-align-right xi-2x" id="textRightBtn"></i>
+			<button type="button"  id="bold"><i class="xi-bold xi-2x" ></i></button>
+			<button type="button"  id="italic"><i class="xi-italic xi-2x" ></i></button>
+			<button type="button"  id="underline"><i class="xi-underline xi-2x" ></i></button>
+			<button type="button"  id="justifyLeft"><i class="xi-align-left xi-2x" ></i></button>
+			<button type="button"  id="justifyCenter"><i class="xi-align-center xi-2x" ></i></button>
+			<button type="button"  id="justifyRight"><i class="xi-align-right xi-2x" ></i></button>
+			
+			<select id="fontSize">
+				<option value="7">30px</option>		
+				<option value="6">20px</option>		
+				<option value="5">16px</option>		
+				<option value="4">12px</option>		
+				<option value="3">10px</option>		
+				<option value="" selected> -- </option>		
+			</select>
+			
 			 <i class="xi-image-o xi-2x" id="fileBtn"></i>
 			
 			<!-- <input type="button" id="Btn" value="이미지업로드"> -->
@@ -298,21 +311,45 @@
     	$(function(){
     		$("#detail").append("<p>&nbsp;</p>");
     		
-    		$("#textLeftBtn").click(function(){
-        		console.log("하이1");
-        		
-        		
-        	})
-        	
-        	$("#textCenterBtn").click(function(e){
+    		
+			$("#bold").click(function(e){
         		
         		e.stopPropagation();
-        		document.execCommand('formatBlock', false, 'h1');
+        		document.execCommand('bold', false, true);
         	})
         	
-        	$("#textRightBtn").click(function(){
+        	$("#italic").click(function(e){
         		
+        		e.stopPropagation();
+        		document.execCommand('italic', false, true);
+        	})
         	
+        	$("#underline").click(function(e){
+        		
+        		e.stopPropagation();
+        		document.execCommand('underline', false, true);
+        	})
+        	
+        	$("#fontSize").change(function(){
+        		document.execCommand('fontSize', false, $(this).val());
+        	})
+        	
+    		
+    		$("#justifyLeft").click(function(){
+        		
+    			document.execCommand('justifyLeft');
+        		
+        	})
+        	
+        	$("#justifyCenter").click(function(e){
+        		
+        		e.stopPropagation();
+        		document.execCommand('justifyCenter');
+        	})
+        	
+        	$("#justifyRight").click(function(){
+        		
+        		document.execCommand('justifyRight');
         	})
     		
     	})
