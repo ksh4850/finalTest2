@@ -896,7 +896,7 @@
     
        }
     
-       function pageBtn(page){
+       /* function pageBtn(page){
     	  var $page = $(".pagingArea");
     	  
     	   $page.append('<button id="startPage"><<</button>');
@@ -928,7 +928,7 @@
 		   }
 		  
 		   $page.append('<button id="maxPage">>></button>');
-       } 
+       }  */
        
         
        // 댓글 append function
@@ -1171,7 +1171,8 @@
 		   
 	   
 	   }
-    	 
+     
+    
      
      
 	   

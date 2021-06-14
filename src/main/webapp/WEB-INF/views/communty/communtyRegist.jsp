@@ -542,12 +542,6 @@
                  
 
             })
-            
-            /* $(document).on('click','.detailImg', function() {
-            	
-			     alert('클릭');
-			}) */
-			
 			
 		  
 		
@@ -560,36 +554,27 @@
 				    	const $img = $(this); 
 				    	const imgsrc =  $img.attr('src');
 				    	
-				    	console.log(imgsrc);
-				    	
 				    	arrImg1.unshift(imgsrc);
-				    	
-				    	console.log(arrImg1);
-				    	
-				    	
-				    		
+				    	/* console.log(imgsrc);
+				    	console.log(arrImg1);  */
 				    	
 		            	 var isTrue = false;
 		            	 
 		            	 x = e.pageX;
 		                 y = e.pageY; 
 		                 
-		                 
 		                 $("#imgMenuBar").css('top',y).css('left',x).css('display','inline-block'); 
 		                 
- 						
-				    	
-				             
 				    });
     		
     		
     		
-    		
+    		//이미말고 다른곳 누르면 박스 삭제
     		$('.communty-regist-datail').click(function(){
     			$("#imgMenuBar").css('top','0').css('left','0').css('display','none');
     		})
     		
-    		
+    		//이미지 왼쪽정렬
     		$("#imgMenuLeft").click(function(e){
        		 
 				
@@ -602,19 +587,20 @@
      		
      	 	}) 
      	 
-     	 
+     	 	//이미지 센터
      	 	$("#imgMenucenter").click(function(e){
         		 
 					
 
   			  $(".detailImg").filter(function(){
                     return $(this).attr("src") == arrImg1[0];          
-                 }).css('margin-left','auto').css('margin-right','auto');
+                 }).css('margin-left','auto').css('margin-right','auto').css('margin-left','auto');
          		
   			 	arrImg1=[];
          		
          	 }) 
          	 
+         	 //이미지 오른쪽 정렬
          	 $("#imgMenuRight").click(function(e){
         		 
 
@@ -626,7 +612,7 @@
          		
          	 }) 
     		
-    		
+    		//이미지 크기 50싸이즈
     		$("#imgMenu50").click(function(e){
         		 
     			$(".detailImg").filter(function(){
@@ -637,7 +623,7 @@
          		
          	 }) 
              
-             
+             //이미지 크기원본
 				$("#imgMenu100").click(function(e){
          		 
          		
@@ -649,7 +635,7 @@
          		
          	 }) 
              
-             
+             //이미지 크기 풀사이즈
         	 $("#imgMenuFull").click(function(e){
          		 
 
@@ -673,12 +659,12 @@
              //이미지 메뉴바 이미지 삭제
          	 $("#imgMenuDelete").click(function(e){  
          		 
-         		 const reName =  
+         		 var reName =  
     			  $(".detailImg").filter(function(){
                       return $(this).attr("src") == arrImg1[0];          
                    }).attr('src');
          		 
-         		 
+         		 console.log(reName);
          		 
          		  $(".detailImg").filter(function(){
                        return $(this).attr("src") == reName;          
@@ -688,11 +674,6 @@
     		                return $(this).attr("src") == reName;          
     		       }).parent().remove(); 
     		        
-    		         
-    	            
-    	    		 console.log(reName);
-    	    		
-    	    	
     	    		 
     	            $.ajax({
     	           	 type:"GET",
@@ -718,6 +699,97 @@
     	            }) 
     	            
          	 }) 
+
+         	 //키업 이미지 관련
+         	 $(".communty-regist-datail").keyup(function(e){
+         		 
+         		 
+	             var detailImgLength = $('.detailImg').length;
+	 			 /* var detailImgArr = new Array();    */      			
+	 			 var thumbImgArr = new Array();         			
+	 			 var thumbImgLength =  $(".thumbImg").length;
+	         		 
+	 			 	//딜리트 키로 이미지 지울때
+	         		 if(e.keyCode == 46){
+	         	
+	         			 if(detailImgLength != thumbImgLength && thumbImgLength > 0){
+	         				 
+	         				for(var i = 0 ; i < thumbImgLength ; i++){
+	         					thumbImgArr.push( $('.thumbImg').eq(i).attr('src') );
+		         				 
+		         			}
+	         				
+	         				for(var i = 0; i < detailImgLength ; i++ ){
+	         					var img = thumbImgArr.indexOf($('.detailImg').eq(i).attr('src'));
+	         					thumbImgArr.splice(img,1);
+	         				}
+	         				
+	         				keyImgDelete(thumbImgArr[0]);
+	         				 
+	         			 }
+		         			
+	         			 
+	         			
+	         			 
+	         			
+	         		 }
+	         		 //백스페이스로 이미지 지울때
+	         		 if(e.keyCode == 8){
+	         			 
+	         			 if(detailImgLength != thumbImgLength && thumbImgLength > 0){
+	         				 
+		         				for(var i = 0 ; i < thumbImgLength ; i++){
+		         					thumbImgArr.push( $('.thumbImg').eq(i).attr('src') );
+			         				 
+			         			}
+		         				
+		         				for(var i = 0; i < detailImgLength ; i++ ){
+		         					var img = thumbImgArr.indexOf($('.detailImg').eq(i).attr('src'));
+		         					thumbImgArr.splice(img,1);
+		         				}
+		         				
+		         				keyImgDelete(thumbImgArr[0]);
+		         				 
+		         			 }
+	         			 
+	         		 }
+         	 })
+         	 
+         	 
+         	 
+         	 function keyImgDelete(re){
+    			
+    			
+    			   var reName =  re;
+    			
+		    	   $(".thumbImg").filter(function(){
+			                return $(this).attr("src") == reName;          
+			       }).parent().remove(); 
+			        
+		    		 
+		            $.ajax({
+		           	 type:"GET",
+		         	   	  url: "${ pageContext.servletContext.contextPath}/communty/ajaxDelete",
+		         	      data: {reName:reName},
+		         	   success:function(data){
+		         		   
+		         		   console.log(data);
+		         		   
+		         		  var length =  $(".thumbImg").length;
+		         		  
+		        		  if(length == 0 ){
+		        		    	$(".communty-regist-thumb").css("display","none");
+		        		    }
+		         		  
+		         		   
+		         		   $("#imgMenuBar").css('top','0').css('left','0').css('display','none');
+		         		  	arrImg1=[];
+		         	   },
+		         	   error:function(error){
+		         		   
+		         	   }
+		            }) 
+    		}
        
 			
     	
