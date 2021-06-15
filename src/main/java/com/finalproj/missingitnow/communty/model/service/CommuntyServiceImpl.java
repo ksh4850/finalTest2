@@ -166,5 +166,18 @@ public class CommuntyServiceImpl implements CommuntyService{
 	}
 
 	
+	//
+	@Override
+	public SPostDTO selectCommuntyModify(String postNo) {
+		
+		return communtyMapper.selectCommuntyModify(postNo);
+	}
+
+	@Override
+	public List<SPostImgDTO> selectImgList(String postNo) {
+		return communtyMapper.selectImgList(postNo);
+	}
+
+	
 
 }

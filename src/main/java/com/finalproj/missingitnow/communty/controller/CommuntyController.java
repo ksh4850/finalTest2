@@ -577,6 +577,25 @@ public class CommuntyController {
 		
 	}
 	
+	@GetMapping("communtyModify")
+	public String getCommuntyModify(Model model ,@RequestParam String postNo) {
+		
+		System.out.println(postNo);
+		
+		 SPostDTO post = communtyService.selectCommuntyModify(postNo); 
+		
+			/* System.out.println(post); */
+		
+		List<SPostImgDTO> imgList = communtyService.selectImgList(postNo);
+		
+		model.addAttribute("post",post);
+		model.addAttribute("imgList",imgList);
+		
+		return "communty/communtyModify";
+	}
+	
+	
+	
 	
 	
 	

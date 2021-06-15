@@ -48,6 +48,12 @@ public interface CommuntyService {
 
 	List<SPCommentDTO> selectAjaxCommentPageList(Map<String, Object> map);
 	
+	//
+
+	SPostDTO selectCommuntyModify(String postNo);
+
+	List<SPostImgDTO> selectImgList(String postNo);
+	
 
 	
 	

@@ -389,7 +389,7 @@
     		
 		  $("#imgfile").change(function(){
 			  
-			 var imgLangth =  $(".detailImg").length;
+			var imgLangth =  $(".detailImg").length;
 			
 				
 			var formData = new FormData();

@@ -292,6 +292,8 @@
 
     </aside>
     <section>
+    
+    	
         <div class="communty-detail-div">
             <div class="communty-detail-header">
                	 <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png" alt="">
@@ -349,6 +351,7 @@
 			<c:if test="${!empty sessionScope.loginMember }">
              <div class="communty-comment-regist">
                 <input type="text" id="commentText"><input type="button" value="등록하기" id="commentRegistBtn">
+                <input type="button" value="수정" id="test">
              </div>
             </c:if>
             
@@ -356,6 +359,7 @@
              <div class="communty-comment-regist">
                 <input type="text" value="로그인이 필요한 서비스 입니다." readonly><input type="button" value="등록하기">
              </div>
+             
             </c:if>
 
              <div class="communty-comment-div">
@@ -1173,7 +1177,13 @@
 	   }
      
     
-     
+     $(document).on('click',"#test" , function(){
+ 		var postNo="${post.postNo}";
+ 		
+ 		
+ 		location.href="${pageContext.servletContext.contextPath}/communty/communtyModify?postNo=" + postNo;
+		
+ 	})
      
 	   
 	  

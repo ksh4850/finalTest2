@@ -567,6 +567,47 @@
   
  	</select>
  	
+ 	<resultMap type="SPostDTO" id="SPostmodifytMap">
+ 		<id property="postNo" column="POST_NO"/>
+ 		<result property="housingType" column="POST_HOUSING_TYPE"/>
+ 		<result property="acreage" column="POST_ACREAGE"/>
+ 		<result property="residenceType" column="POST_RESIDENCE_TYPE"/>
+ 		<result property="cost" column="POST_COST_TYPE"/>
+ 		<result property="postDetail" column="POST_DETAILS"/>
+ 		<result property="postDate" column="POST_DATE"/>
+ 		<result property="postStatus" column="POST_STATUS"/>
+ 		<result property="postHits" column="POST_HITS"/>
+ 		<result property="postLikes" column="POST_LIKES"/>
+ 	</resultMap>
+ 	
+ 	<select id="selectCommuntyModify" parameterType="string" resultMap="SPostmodifytMap" >
+ 		SELECT
+		       A.POST_NO
+		     , A.POST_DETAILS 
+		     , A.POST_DATE
+		     , A.POST_STATUS
+		     , A.POST_HITS
+		     , A.POST_LIKES
+		     , A.POST_HOUSING_TYPE
+		     , A.POST_ACREAGE
+		     , A.POST_RESIDENCE_TYPE
+		     , A.POST_COST_TYPE
+		  FROM TBL_POST A
+ 		  WHERE A.POST_NO = #{postNo}
+ 	</select>
+ 	
+ 	
+ 	<select id="selectImgList" parameterType="string" resultMap="SPostImgResultMap" >
+ 		SELECT
+ 		    POST_IMG_NO
+		  ,	POST_NO
+		  ,	POST_IMG_ORIGIN_NAME
+		  ,	POST_IMG_RENAME
+ 		  FROM TBL_POST_IMG
+ 		  WHERE POST_NO = #{postNo}
+ 		  ORDER BY POST_NO
+ 	</select>
+ 	
  	
  	
  	
